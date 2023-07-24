@@ -50,8 +50,8 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: craft-your-knowledge.jar
-          path: backend/target/craft-your-knowledge.jar
+          name: app.jar
+          path: backend/target/app.jar
 
   push-to-docker-hub:
     runs-on: ubuntu-latest
@@ -61,7 +61,7 @@ jobs:
 
       - uses: actions/download-artifact@v2
         with:
-          name: craft-your-knowledge.jar
+          name: app.jar
           path: backend/target
 
       - name: Login to DockerHub
@@ -94,11 +94,11 @@ jobs:
           #Set dockerhub project (replace "bartfastiel/java-capstone-project.de-example-app")
           #Set IP (replace "10.0.1.99" with your ip address)
           script: |
-            sudo docker stop craft-your-knowledge
-            sudo docker rm craft-your-knowledge
-            sudo docker run --pull=always --name craft-your-knowledge --network capstones --ip 10.0.5.11 --restart always --detach --env MONGO_DB_URI=${{ secrets.MONGO_DB_URI }} satttoshi/craft-your-knowledge:latest
+            sudo docker stop cgn-java-23-2-joshua
+            sudo docker rm cgn-java-23-2-joshua
+            sudo docker run --pull=always --name cgn-java-23-2-joshua --network capstones --ip 10.0.5.11 --restart always --detach --env MONGO_DB_URI=${{ secrets.MONGO_DB_URI }} satttoshi/craft-your-knowledge:latest
             sleep 15s
-            sudo docker logs craft-your-knowledge
+            sudo docker logs cgn-java-23-2-joshua
 
       - name: Check the deployed service URL
         uses: jtalk/url-health-check-action@v3
