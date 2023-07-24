@@ -11,10 +11,10 @@ public class WorkshopService {
     private final WorkshopRepository workshopRepository;
     private final IdService idService;
 
-    public Workshop addWorkshop(Workshop workshop) {
+    public Workshop createWorkshop(WorkshopWithoutIdAndLikes workshop) {
         Workshop workshopToSave = new Workshop(
                 idService.createId(),
-                workshop.mainTopic(),
+                workshop.topic(),
                 workshop.subTopic(),
                 workshop.buzzWords(),
                 0,
