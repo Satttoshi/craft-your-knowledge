@@ -57,7 +57,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>app</finalName>
+		<finalName>craft-your-knowledge</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
