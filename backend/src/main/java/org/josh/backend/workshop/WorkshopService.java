@@ -17,7 +17,7 @@ public class WorkshopService {
                 workshop.mainTopic(),
                 workshop.subTopic(),
                 workshop.buzzWords(),
-                workshop.likes(),
+                0,
                 workshop.estimatedTimeToMaster(),
                 workshop.difficulty()
         );
