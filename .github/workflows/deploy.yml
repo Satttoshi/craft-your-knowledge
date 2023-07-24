@@ -96,7 +96,7 @@ jobs:
           script: |
             sudo docker stop craft-your-knowledge
             sudo docker rm craft-your-knowledge
-            sudo docker run --pull=always --name cgn-java-23-2-joshua --network capstones --ip 10.0.5.11 --restart always --detach --env MONGO_DB_URI=${{ secrets.MONGO_DB_URI }} satttoshi/craft-your-knowledge:latest
+            sudo docker run --pull=always --name craft-your-knowledge --network capstones --ip 10.0.5.11 --restart always --detach --env MONGO_DB_URI=${{ secrets.MONGO_DB_URI }} satttoshi/craft-your-knowledge:latest
             sleep 15s
             sudo docker logs craft-your-knowledge
 
