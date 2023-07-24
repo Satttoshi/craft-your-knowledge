@@ -1,0 +1,110 @@
+name: "Deploy App"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Build Frontend
+        working-directory: frontend
+        run: |
+          npm install
+          npm run build
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: frontend-build
+          path: frontend/dist/
+
+  build-backend:
+    runs-on: ubuntu-latest
+    needs: build-frontend
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: frontend-build
+          path: backend/src/main/resources/static
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          #Set Java Version
+          java-version: '20'
+          distribution: 'adopt'
+          cache: 'maven'
+
+      - name: Build with maven
+        run: mvn -B package --file backend/pom.xml
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: craft-your-knowledge.jar
+          path: backend/target/app.jar
+
+  push-to-docker-hub:
+    runs-on: ubuntu-latest
+    needs: build-backend
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: craft-your-knowledge.jar
+          path: backend/target
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          #Set dockerhub username
+          username: satttoshi
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          #Set dockerhub project (replace "bartfastiel/java-capstone-project.de-example-app")
+          tags: satttoshi/craft-your-knowledge:latest
+          context: .
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: push-to-docker-hub
+    steps:
+      - name: Restart docker container
+        uses: appleboy/ssh-action@master
+        with:
+          host: capstone-project.de
+          #Set App Name (replace "example" with your ssh user name)
+          username: cgn-java-23-2-joshua
+          password: ${{ secrets.SSH_PASSWORD }}
+          #Set App Name (replace "example" with your ssh user name)
+          #Set dockerhub project (replace "bartfastiel/java-capstone-project.de-example-app")
+          #Set IP (replace "10.0.1.99" with your ip address)
+          script: |
+            sudo docker stop craft-your-knowledge
+            sudo docker rm craft-your-knowledge
+            sudo docker run --pull=always --name craft-your-knowledge --network capstones --ip 10.0.5.11 --restart always --detach --env MONGO_DB_URI=${{ secrets.MONGO_DB_URI }} satttoshi/craft-your-knowledge:latest
+            sleep 15s
+            sudo docker logs craft-your-knowledge
+
+      - name: Check the deployed service URL
+        uses: jtalk/url-health-check-action@v3
+        with:
+          #Set App Name (replace "example" with your ssh user name)
+          url: http://cgn-java-23-2-joshua.capstone-project.de
+          max-attempts: 3
+          retry-delay: 5s
+          retry-all: true
