@@ -51,7 +51,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: craft-your-knowledge.jar
-          path: backend/target/app.jar
+          path: backend/target/craft-your-knowledge.jar
 
   push-to-docker-hub:
     runs-on: ubuntu-latest
