@@ -68,7 +68,7 @@ jobs:
         uses: docker/login-action@v1
         with:
           #Set dockerhub username
-          username: satttoshi
+          username: team-themes
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Build and push
