@@ -88,7 +88,7 @@ jobs:
         with:
           host: capstone-project.de
           #Set App Name (replace "example" with your ssh user name)
-          username: team-themes
+          username: cgn-java-23-2-joshua
           password: ${{ secrets.SSH_PASSWORD }}
           #Set App Name (replace "example" with your ssh user name)
           #Set dockerhub project (replace "bartfastiel/java-capstone-project.de-example-app")
