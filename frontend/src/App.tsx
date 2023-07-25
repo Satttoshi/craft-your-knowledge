@@ -1,4 +1,3 @@
-import './App.css'
 import CreateForm from "./components/CreateForm.tsx";
 
 function App() {
