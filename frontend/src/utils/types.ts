@@ -4,7 +4,7 @@ export type Workshop = {
     subTopic: string,
     buzzWords: string[],
     likes: number,
-    estimatedTime: number,
+    estimatedTimeToMaster: number,
     difficulty: string,
 }
 
@@ -12,6 +12,6 @@ export type WorkshopWithoutIdAndLikes = {
     topic: string,
     subTopic: string,
     buzzWords: string[],
-    estimatedTime: number,
+    estimatedTimeToMaster: number,
     difficulty: string,
 }

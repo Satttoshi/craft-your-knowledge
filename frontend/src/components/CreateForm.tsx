@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {FormEvent, useState} from "react";
 import {Autocomplete, Chip, TextField, FormControl, InputLabel, Select, MenuItem} from "@mui/material";
 import {LoadingButton} from "@mui/lab";
 import {Save} from "@mui/icons-material";
@@ -10,17 +10,20 @@ export default function CreateForm() {
     const [topic, setTopic] = useState<string>("")
     const [subTopic, setSubTopic] = useState<string>("");
     const [buzzWords, setBuzzWords] = useState<string[]>([]);
-    const [estimatedTime, setEstimatedTime] = useState<number>(10);
+    const [estimatedTimeToMaster, setEstimatedTimeToMaster] = useState<number>(10);
     const [difficulty, setDifficulty] = useState<string>("EASY");
 
     const createWorkshop = useStore(state => state.createWorkshop);
+    const isCreatingWorkshop = useStore(state => state.isCreatingWorkshop);
 
-    function handleSubmit(): void {
+    function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+        event.preventDefault();
+
         const workshopWithoutIdAndLikes: WorkshopWithoutIdAndLikes = {
             topic,
             subTopic,
             buzzWords,
-            estimatedTime,
+            estimatedTimeToMaster,
             difficulty,
         }
         createWorkshop(workshopWithoutIdAndLikes)
@@ -50,16 +53,16 @@ export default function CreateForm() {
                 options={buzzWords}
                 freeSolo
                 value={buzzWords}
-                onChange={(_, buzzwords) => {
-                    setBuzzWords(buzzwords);
+                onChange={(_, buzzWords) => {
+                    setBuzzWords(buzzWords as string[]);
                 }}
-                renderTags={(value: readonly string[], getTagProps) =>
-                    value.map((option: string, index: number) => {
+                renderTags={(value, getTagProps) =>
+                    value.map((option, index) => {
                         const tagProps = getTagProps({index});
                         return (
                             <Chip
                                 variant="outlined"
-                                label={option}
+                                label={option as string}
                                 {...tagProps}
                             />
                         );
@@ -75,9 +78,9 @@ export default function CreateForm() {
                 <Select
                     labelId="estimated-time"
                     id="estimated-time"
-                    value={estimatedTime}
+                    value={estimatedTimeToMaster}
                     label="Estimated Time to Complete"
-                    onChange={(e) => setEstimatedTime(e.target.value as number)}
+                    onChange={(e) => setEstimatedTimeToMaster(e.target.value as number)}
                 >
                     <MenuItem value={10}>10 Minutes</MenuItem>
                     <MenuItem value={20}>20 Minutes</MenuItem>
@@ -103,9 +106,10 @@ export default function CreateForm() {
             </FormControl>
 
             <StyledButton
+                type="submit"
                 color="primary"
                 onClick={console.log}
-                loading={false}
+                loading={isCreatingWorkshop}
                 loadingPosition="start"
                 startIcon={<Save />}
                 variant="contained"
