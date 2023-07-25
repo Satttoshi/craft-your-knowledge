@@ -3,22 +3,33 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 class IdServiceTest {
 
-    private final IdService idService = Mockito.mock(IdService.class) ;
-
     @Test
-    void test_getUUID(){
+    void testCreateId() {
         //GIVEN
-        String expected = "aBcDeF69";
+        IdService idService = new IdService();
 
         //WHEN
-        when(idService.createId()).thenReturn(expected);
-        String actual = idService.createId();
+        String id = idService.createId();
 
         //THEN
-        Assertions.assertThat(actual).isEqualTo(expected);
+        assertEquals(36, id.length()); // UUIDs have a fixed length of 36 characters
+    }
+
+    @Test
+    void testCreateIdWithMockito() {
+        //GIVEN
+        IdService idService = Mockito.mock(IdService.class);
+
+        //WHEN
+        when(idService.createId()).thenReturn("mocked-id");
+        String id = idService.createId();
+
+        //THEN
+        assertEquals("mocked-id", id);
     }
 }
