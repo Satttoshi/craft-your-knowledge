@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 class WorkshopControllerTest {
 
+    // Flapdoodle Test-Dependency -> empty MongoDB will be used for testing
+
     @Autowired
     MockMvc mockMvc;
 
@@ -56,7 +58,6 @@ class WorkshopControllerTest {
     @Test
     void expectEmptyList_whenReadWorkshops() throws Exception {
         //GIVEN
-        // -> Init empty test MongoDB Themes & Users with flapdoodle
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/workshop"))
             //THEN
