@@ -108,7 +108,6 @@ export default function CreateForm() {
             <StyledButton
                 type="submit"
                 color="primary"
-                onClick={console.log}
                 loading={isCreatingWorkshop}
                 loadingPosition="start"
                 startIcon={<Save />}

@@ -14,15 +14,12 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 class WorkshopControllerTest {
 
+    // Flapdoodle Test-Dependency -> empty MongoDB will be used for testing
+
     @Autowired
     MockMvc mockMvc;
 
-    @Test
-    @DirtiesContext
-    void expectWorkshop_whenCreateWorkshop() throws Exception {
-
-            //GIVEN
-            String workshopWithoutIdAndLikes = """
+    String testWorkshopWithoutIdAndLikes = """
                     {
                         "topic": "fizz",
                         "subTopic": "buzz",
@@ -32,11 +29,17 @@ class WorkshopControllerTest {
                     }
                 """;
 
+    @Test
+    @DirtiesContext
+    void expectWorkshop_whenCreateWorkshop() throws Exception {
+
+            //GIVEN
+
             //WHEN
             mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(workshopWithoutIdAndLikes))
+                    .content(testWorkshopWithoutIdAndLikes))
                 //THEN
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
@@ -50,6 +53,41 @@ class WorkshopControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.difficulty").value("EASY")
 
             );
+    }
+
+    @Test
+    void expectEmptyList_whenReadWorkshops() throws Exception {
+        //GIVEN
+        //WHEN
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/workshop"))
+            //THEN
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().json("[]"));
+    }
+
+    @Test
+    @DirtiesContext
+    void expectWorkshopList_whenReadWorkshops() throws Exception {
+        //GIVEN
+        mockMvc.perform(
+            MockMvcRequestBuilders.post("/api/workshop")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(testWorkshopWithoutIdAndLikes));
+        //WHEN
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/workshop"))
+            //THEN
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].topic").value("fizz"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].subTopic").value("buzz"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].buzzWords").isArray())
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].buzzWords[0]").value("foo"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].buzzWords[1]").value("bar"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].likes").value(0))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].estimatedTimeToMaster").value(30))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].difficulty").value("EASY")
+        );
+
     }
 
 }

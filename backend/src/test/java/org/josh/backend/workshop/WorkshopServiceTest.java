@@ -47,5 +47,17 @@ class WorkshopServiceTest {
         Assertions.assertThat(actual).isEqualTo(testWorkshop);
     }
 
+    @Test
+    void test_readWorkshops() {
+        // given
+        when(workshopRepo.findAll()).thenReturn(List.of(testWorkshop));
+
+        // when
+        List<Workshop> actual = workshopService.readWorkshops();
+
+        // then
+        Assertions.assertThat(actual).containsExactly(testWorkshop);
+    }
+
 
 }
