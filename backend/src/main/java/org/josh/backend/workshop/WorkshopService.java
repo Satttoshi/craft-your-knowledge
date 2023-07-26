@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.josh.backend.utils.IdService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class WorkshopService {
@@ -22,5 +24,9 @@ public class WorkshopService {
                 workshop.difficulty()
         );
         return workshopRepository.save(workshopToSave);
+    }
+
+    public List<Workshop> readWorkshops() {
+        return workshopRepository.findAll();
     }
 }
