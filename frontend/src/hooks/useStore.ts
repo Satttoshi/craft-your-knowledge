@@ -10,6 +10,7 @@ type State = {
     createWorkshop: (requestBody: WorkshopWithoutIdAndLikes) => void,
     readWorkshops: () => void,
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => void,
+    deleteWorkshop: (workshopId: string) => void,
 }
 
 
@@ -48,7 +49,14 @@ export const useStore = create<State>((set, get) => ({
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => {
         axios.put(`/api/workshop/${workshopId}`, personalStatus)
             .catch(console.error)
-    }
+    },
+
+    deleteWorkshop: (workshopId: string) => {
+        const readWorkshops = get().readWorkshops;
+        axios.delete(`/api/workshop/${workshopId}`)
+            .catch(console.error)
+            .finally(readWorkshops)
+    },
 
     // STORE END
 }));
