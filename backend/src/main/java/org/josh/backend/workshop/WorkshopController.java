@@ -24,8 +24,7 @@ public class WorkshopController {
     }
 
     @PutMapping("/{id}")
-    public Workshop updateWorkshop(@PathVariable String id, @RequestBody WorkshopWithoutIdAndLikes workshop) {
-        return workshopService.updateWorkshop(id, workshop);
+    public Workshop updateWorkshop(@PathVariable String id, @RequestBody WorkshopPersonalStatus workshopPersonalStatus) {
+        return workshopService.updateWorkshopPersonalStatus(id, workshopPersonalStatus);
     }
-
 }

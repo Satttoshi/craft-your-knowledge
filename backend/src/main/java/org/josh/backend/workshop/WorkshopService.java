@@ -36,7 +36,7 @@ public class WorkshopService {
 
     public Workshop updateWorkshopPersonalStatus(String id, WorkshopPersonalStatus workshopPersonalStatus){
         Workshop workshopBefore = workshopRepository.findById(id).orElseThrow();
-        List<WorkshopPersonalStatus> workshopPersonalStatuses = getWorkshopPersonalStatuses(workshopPersonalStatus, workshopBefore);
+        List<WorkshopPersonalStatus> workshopPersonalStatuses = alterWorkshopPersonalStatuses(workshopPersonalStatus, workshopBefore);
 
         Workshop workshopToSave = new Workshop(
             workshopBefore.id(),
@@ -52,9 +52,10 @@ public class WorkshopService {
         return workshopRepository.save(workshopToSave);
     }
 
-    private static List<WorkshopPersonalStatus> getWorkshopPersonalStatuses(WorkshopPersonalStatus workshopPersonalStatus, Workshop workshopBefore) {
-        List<WorkshopPersonalStatus> workshopPersonalStatuses = new ArrayList<>(workshopBefore.workshopPersonalStatuses());
+    private static List<WorkshopPersonalStatus> alterWorkshopPersonalStatuses(WorkshopPersonalStatus workshopPersonalStatus, Workshop workshopBefore) {
+        // Search if user already has a personal status for this workshop and update it if so or add it if not
 
+        List<WorkshopPersonalStatus> workshopPersonalStatuses = new ArrayList<>(workshopBefore.workshopPersonalStatuses());
         int indexToUpdate = -1;
         for (int i = 0; i < workshopPersonalStatuses.size(); i++) {
             WorkshopPersonalStatus personalStatus = workshopPersonalStatuses.get(i);

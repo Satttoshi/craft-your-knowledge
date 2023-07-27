@@ -7,6 +7,5 @@ public record WorkshopPersonalStatus(
     MongoUserWithoutPassword user,
     ProgressStatus progressStatus,
     boolean isLiked
-
 ) {
 }
