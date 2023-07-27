@@ -1,7 +1,6 @@
 package org.josh.backend.workshop;
 
 import lombok.RequiredArgsConstructor;
-import org.josh.backend.security.MongoUser;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.springframework.stereotype.Service;
@@ -34,4 +33,21 @@ public class WorkshopService {
     public List<Workshop> readWorkshops() {
         return workshopRepository.findAll();
     }
+
+    public Workshop updateWorkshop(String id, WorkshopWithoutIdAndLikes workshop) {
+        Workshop workshopBefore = workshopRepository.findById(id).orElseThrow();
+        Workshop workshopToSave = new Workshop(
+                id,
+                new MongoUserWithoutPassword("adminId", "AdminName"),
+                workshop.topic(),
+                workshop.subTopic(),
+                workshop.buzzWords(),
+                workshopBefore.likes(),
+                workshop.estimatedTimeToMaster(),
+                workshop.difficulty(),
+                workshopBefore.workshopPersonalStatuses()
+        );
+        return workshopRepository.save(workshopToSave);
+    }
+
 }
