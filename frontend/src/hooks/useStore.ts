@@ -46,10 +46,8 @@ export const useStore = create<State>((set, get) => ({
     },
 
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => {
-        const readWorkshops = get().readWorkshops;
         axios.put(`/api/workshop/${workshopId}`, personalStatus)
             .catch(console.error)
-            .finally(readWorkshops)
     }
 
     // STORE END
