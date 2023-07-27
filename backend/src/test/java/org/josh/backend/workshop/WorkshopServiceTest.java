@@ -1,9 +1,8 @@
 package org.josh.backend.workshop;
 
 import org.assertj.core.api.Assertions;
-import org.josh.backend.security.MongoUserWithIdAndName;
+import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
-import org.josh.backend.utils.ProgressStatus;
 import org.junit.jupiter.api.Test;
 import org.josh.backend.utils.Difficulty;
 
@@ -20,6 +19,7 @@ class WorkshopServiceTest {
 
     Workshop testWorkshop = new Workshop(
         "fakeId69",
+        new MongoUserWithoutPassword("adminId", "AdminName"),
         "testTopic",
         "testSubTopic",
         List.of("testBuzzWord1", "testBuzzWord2"),

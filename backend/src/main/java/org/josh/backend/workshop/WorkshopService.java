@@ -1,6 +1,8 @@
 package org.josh.backend.workshop;
 
 import lombok.RequiredArgsConstructor;
+import org.josh.backend.security.MongoUser;
+import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,7 @@ public class WorkshopService {
     public Workshop createWorkshop(WorkshopWithoutIdAndLikes workshop) {
         Workshop workshopToSave = new Workshop(
                 idService.createId(),
+                new MongoUserWithoutPassword("adminId", "AdminName"),
                 workshop.topic(),
                 workshop.subTopic(),
                 workshop.buzzWords(),
