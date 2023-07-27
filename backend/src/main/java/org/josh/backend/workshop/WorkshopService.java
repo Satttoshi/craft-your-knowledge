@@ -1,6 +1,7 @@
 package org.josh.backend.workshop;
 
 import lombok.RequiredArgsConstructor;
+import org.josh.backend.exception.NoSuchWorkshopException;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.springframework.stereotype.Service;
@@ -74,6 +75,9 @@ public class WorkshopService {
     }
 
     public void deleteWorkshop(String id) {
+        if (!workshopRepository.existsById(id)) {
+            throw new NoSuchWorkshopException("No workshop found with Id: " + id);
+        }
         workshopRepository.deleteById(id);
     }
 
