@@ -27,4 +27,9 @@ public class WorkshopController {
     public Workshop updatePersonalStatus(@PathVariable String id, @RequestBody PersonalStatus personalStatus) {
         return workshopService.updatePersonalStatus(id, personalStatus);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteWorkshop(@PathVariable String id) {
+        workshopService.deleteWorkshop(id);
+    }
 }
