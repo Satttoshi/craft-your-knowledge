@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.josh.backend.utils.Difficulty;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -60,6 +61,16 @@ class WorkshopServiceTest {
 
         // then
         Assertions.assertThat(actual).containsExactly(testWorkshop);
+    }
+
+    @Test
+    void test_updateWorkshop() {
+        // given
+        // when
+        when(workshopRepo.findById("fakeId69")).thenReturn(Optional.of(testWorkshop));
+        when(workshopRepo.save(testWorkshop)).thenReturn(testWorkshop);
+        // then
+        Assertions.assertThat(workshopService.updateWorkshop("fakeId69", testWorkshopWithoutIdAndLikes)).isEqualTo(testWorkshop);
     }
 
 
