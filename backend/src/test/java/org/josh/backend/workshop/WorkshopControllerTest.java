@@ -155,7 +155,7 @@ class WorkshopControllerTest {
 
     @DirtiesContext
     @Test
-    void expectEmptyList_whenDeleteThemeById() throws Exception {
+    void expectEmptyList_whenDeleteWorkshopById() throws Exception {
 
         //GIVEN
         String result = mockMvc.perform(
@@ -179,7 +179,7 @@ class WorkshopControllerTest {
     }
 
     @Test
-    void expectErrorMessage_whenDeleteThemeById() throws Exception {
+    void expectErrorMessage_whenDeleteWorkshopById() throws Exception {
 
         //GIVEN
         String id = "fakeId";
