@@ -17,15 +17,15 @@ public class WorkshopService {
 
     public Workshop createWorkshop(WorkshopWithoutIdAndLikes workshop) {
         Workshop workshopToSave = new Workshop(
-                idService.createId(),
-                new MongoUserWithoutPassword("adminId", "AdminName"),
-                workshop.topic(),
-                workshop.subTopic(),
-                workshop.buzzWords(),
-                0,
-                workshop.estimatedTimeToMaster(),
-                workshop.difficulty(),
-                new ArrayList<>()
+            idService.createId(),
+            new MongoUserWithoutPassword("adminId", "AdminName"),
+            workshop.topic(),
+            workshop.subTopic(),
+            workshop.buzzWords(),
+            0,
+            workshop.estimatedTimeToMaster(),
+            workshop.difficulty(),
+            new ArrayList<>()
         );
         return workshopRepository.save(workshopToSave);
     }
@@ -34,9 +34,9 @@ public class WorkshopService {
         return workshopRepository.findAll();
     }
 
-    public Workshop updateWorkshopPersonalStatus(String id, WorkshopPersonalStatus workshopPersonalStatus){
+    public Workshop updatePersonalStatus(String id, PersonalStatus personalStatus){
         Workshop workshopBefore = workshopRepository.findById(id).orElseThrow();
-        List<WorkshopPersonalStatus> workshopPersonalStatuses = alterWorkshopPersonalStatuses(workshopPersonalStatus, workshopBefore);
+        List<PersonalStatus> personalStatuses = alterPersonalStatuses(personalStatus, workshopBefore);
 
         Workshop workshopToSave = new Workshop(
             workshopBefore.id(),
@@ -47,18 +47,18 @@ public class WorkshopService {
             workshopBefore.likes(),
             workshopBefore.estimatedTimeToMaster(),
             workshopBefore.difficulty(),
-            workshopPersonalStatuses
+            personalStatuses
         );
         return workshopRepository.save(workshopToSave);
     }
 
-    private static List<WorkshopPersonalStatus> alterWorkshopPersonalStatuses(WorkshopPersonalStatus workshopPersonalStatus, Workshop workshopBefore) {
+    private static List<PersonalStatus> alterPersonalStatuses(PersonalStatus workshopPersonalStatus, Workshop workshopBefore) {
         // Search if user already has a personal status for this workshop and update it if so or add it if not
 
-        List<WorkshopPersonalStatus> workshopPersonalStatuses = new ArrayList<>(workshopBefore.workshopPersonalStatuses());
+        List<PersonalStatus> personalStatuses = new ArrayList<>(workshopBefore.personalStatuses());
         int indexToUpdate = -1;
-        for (int i = 0; i < workshopPersonalStatuses.size(); i++) {
-            WorkshopPersonalStatus personalStatus = workshopPersonalStatuses.get(i);
+        for (int i = 0; i < personalStatuses.size(); i++) {
+            PersonalStatus personalStatus = personalStatuses.get(i);
             if (personalStatus.user().equals(workshopPersonalStatus.user())) {
                 indexToUpdate = i;
                 break;
@@ -66,11 +66,11 @@ public class WorkshopService {
         }
 
         if (indexToUpdate == -1) {
-            workshopPersonalStatuses.add(workshopPersonalStatus);
+            personalStatuses.add(workshopPersonalStatus);
         } else {
-            workshopPersonalStatuses.set(indexToUpdate, workshopPersonalStatus);
+            personalStatuses.set(indexToUpdate, workshopPersonalStatus);
         }
-        return workshopPersonalStatuses;
+        return personalStatuses;
     }
 
 }

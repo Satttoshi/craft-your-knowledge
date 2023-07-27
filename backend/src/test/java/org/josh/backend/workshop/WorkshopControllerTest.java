@@ -98,51 +98,58 @@ class WorkshopControllerTest {
     @DirtiesContext
     void expectUpdatedWorkshop_whenUpdateWorkshop() throws Exception {
         //GIVEN
+        String testPersonalStatus = """
+                {
+                    "user": {
+                        "id": "adminId",
+                        "name": "AdminName"
+                    },
+                    "progressStatus": "NOT_STARTED",
+                    "isLiked": true
+                }
+            """;
+
         String result = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(testWorkshopWithoutIdAndLikes))
             .andReturn().getResponse().getContentAsString();
 
-        Workshop workshopFromResult = objectMapper.readValue(result, Workshop.class);
-        String id = workshopFromResult.id();
-
-        String testWorkshopWithoutIdAndLikes = """
+        Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
+        String id = saveResultWorkshop.id();
+        String expect = """
                 {
+                    "id": "%s",
+                    "author": {
+                        "id": "adminId",
+                        "name": "AdminName"
+                    },
                     "topic": "fizz",
                     "subTopic": "buzz",
                     "buzzWords": ["foo", "bar"],
+                    "likes": 0,
                     "estimatedTimeToMaster": 30,
-                    "difficulty": "EASY"
+                    "difficulty": "EASY",
+                    "personalStatuses": [
+                        {
+                            "user": {
+                                "id": "adminId",
+                                "name": "AdminName"
+                            },
+                            "progressStatus": "NOT_STARTED",
+                            "isLiked": true
+                        }
+                    ]
                 }
-            """;
-
-        String expected = """
-                {
-                        "id": "%s",
-                        "author": {
-                            "id": "adminId",
-                            "name": "AdminName"
-                        },
-                        "topic": "fizz",
-                        "subTopic": "buzz",
-                        "buzzWords": ["foo", "bar"],
-                        "likes": 0,
-                        "estimatedTimeToMaster": 30,
-                        "difficulty": "EASY",
-                        "workshopPersonalStatuses": []
-                    }
             """.formatted(id);
 
         //WHEN
-        mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/workshop/%s".formatted(id))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(testWorkshopWithoutIdAndLikes))
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/workshop/%s".formatted(id))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(testPersonalStatus))
+
             //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().json(expected));
-
+            .andExpect(MockMvcResultMatchers.content().json(expect));
     }
-
 }

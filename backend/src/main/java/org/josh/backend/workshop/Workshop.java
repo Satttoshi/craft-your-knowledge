@@ -19,6 +19,6 @@ public record Workshop(
     int likes,
     int estimatedTimeToMaster,
     Difficulty difficulty,
-    List<WorkshopPersonalStatus> workshopPersonalStatuses
+    List<PersonalStatus> personalStatuses
 ) {
 }

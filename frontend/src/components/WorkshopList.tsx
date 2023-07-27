@@ -1,6 +1,7 @@
 import {useStore} from "../hooks/useStore.ts";
 import {Workshop} from "../utils/types.ts";
 import {useEffect} from "react";
+import LikeStar from "./LikeStar.tsx";
 
 export default function WorkshopList() {
 
@@ -26,6 +27,7 @@ export default function WorkshopList() {
                         <p>Topic: {workshop.subTopic}</p>
                         <p>Difficulty: {workshop.difficulty}</p>
                         <p>Time: {workshop.estimatedTimeToMaster}</p>
+                        <LikeStar isLiked={workshop.personalStatuses[0].isLiked}/>
                     </div>
                 )
             })}

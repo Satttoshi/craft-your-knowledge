@@ -20,7 +20,7 @@ class WorkshopServiceTest {
     WorkshopService workshopService = new WorkshopService(workshopRepo, idService);
 
 
-    WorkshopPersonalStatus testWorkshopPersonalStatus = new WorkshopPersonalStatus(
+    PersonalStatus testPersonalStatus = new PersonalStatus(
         new MongoUserWithoutPassword(
             "fakeUserId69",
             "fakeUserName69"
@@ -38,7 +38,7 @@ class WorkshopServiceTest {
         0,
         0,
         Difficulty.EASY,
-        List.of(testWorkshopPersonalStatus)
+        List.of(testPersonalStatus)
     );
 
     WorkshopWithoutIdAndLikes testWorkshopWithoutIdAndLikes = new WorkshopWithoutIdAndLikes(
@@ -78,12 +78,12 @@ class WorkshopServiceTest {
     }
 
     @Test
-    public void test_updateWorkshopPersonalStatus() {
+    public void test_updatePersonalStatus() {
         // given
         // when
         when(workshopRepo.findById("fakeId69")).thenReturn(Optional.of(testWorkshop));
         when(workshopRepo.save(testWorkshop)).thenReturn(testWorkshop);
-        Workshop actual = workshopService.updateWorkshopPersonalStatus("fakeId69", testWorkshopPersonalStatus);
+        Workshop actual = workshopService.updatePersonalStatus("fakeId69", testPersonalStatus);
 
         // then
         Assertions.assertThat(actual).isEqualTo(testWorkshop);
