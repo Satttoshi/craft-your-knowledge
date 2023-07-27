@@ -90,5 +90,15 @@ class WorkshopServiceTest {
         verify(workshopRepo).findById("fakeId69");
     }
 
+    @Test
+    void test_deleteWorkshop(){
+        //Given
+        String id = "fakeId69";
+        //When
+        when(workshopRepo.existsById(id)).thenReturn(true);
+        workshopService.deleteWorkshop(id);
+        //Then
+        verify(workshopRepo).deleteById(id);
+    }
 
 }
