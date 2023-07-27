@@ -27,7 +27,7 @@ export default function WorkshopList() {
                         <p>Topic: {workshop.subTopic}</p>
                         <p>Difficulty: {workshop.difficulty}</p>
                         <p>Time: {workshop.estimatedTimeToMaster}</p>
-                        <LikeStar isLiked={workshop.personalStatuses[0].isLiked}/>
+                        <LikeStar workshop={workshop}/>
                     </div>
                 )
             })}
