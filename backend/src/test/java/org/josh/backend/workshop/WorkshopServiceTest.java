@@ -1,7 +1,9 @@
 package org.josh.backend.workshop;
 
 import org.assertj.core.api.Assertions;
+import org.josh.backend.security.MongoUserWithIdAndName;
 import org.josh.backend.utils.IdService;
+import org.josh.backend.utils.ProgressStatus;
 import org.junit.jupiter.api.Test;
 import org.josh.backend.utils.Difficulty;
 
@@ -23,7 +25,8 @@ class WorkshopServiceTest {
         List.of("testBuzzWord1", "testBuzzWord2"),
         0,
         0,
-        Difficulty.EASY
+        Difficulty.EASY,
+        List.of()
     );
 
     WorkshopWithoutIdAndLikes testWorkshopWithoutIdAndLikes = new WorkshopWithoutIdAndLikes(
