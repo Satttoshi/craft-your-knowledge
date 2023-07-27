@@ -16,6 +16,7 @@ public record Workshop(
     List<String> buzzWords,
     int likes,
     int estimatedTimeToMaster,
-    Difficulty difficulty
+    Difficulty difficulty,
+    List<WorkshopPersonalStatus> workshopPersonalStatuses
 ) {
 }
