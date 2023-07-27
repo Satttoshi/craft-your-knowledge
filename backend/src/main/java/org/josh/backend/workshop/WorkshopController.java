@@ -2,6 +2,9 @@ package org.josh.backend.workshop;
 
 
 import lombok.RequiredArgsConstructor;
+import org.josh.backend.exception.ErrorMessage;
+import org.josh.backend.exception.NoSuchWorkshopException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,4 +35,11 @@ public class WorkshopController {
     public void deleteWorkshop(@PathVariable String id) {
         workshopService.deleteWorkshop(id);
     }
+
+    @ExceptionHandler({NoSuchWorkshopException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorMessage handleNoSuchElementExceptions(NoSuchWorkshopException exception) {
+        return new ErrorMessage(exception.getMessage());
+    }
+
 }
