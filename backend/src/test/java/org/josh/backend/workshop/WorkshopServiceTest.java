@@ -1,14 +1,17 @@
 package org.josh.backend.workshop;
 
 import org.assertj.core.api.Assertions;
+import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
+import org.josh.backend.utils.ProgressStatus;
 import org.junit.jupiter.api.Test;
 import org.josh.backend.utils.Difficulty;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class WorkshopServiceTest {
 
@@ -16,14 +19,26 @@ class WorkshopServiceTest {
     IdService idService = mock(IdService.class);
     WorkshopService workshopService = new WorkshopService(workshopRepo, idService);
 
+
+    PersonalStatus testPersonalStatus = new PersonalStatus(
+        new MongoUserWithoutPassword(
+            "fakeUserId69",
+            "fakeUserName69"
+        ),
+        ProgressStatus.NOT_STARTED,
+        true
+    );
+
     Workshop testWorkshop = new Workshop(
         "fakeId69",
+        new MongoUserWithoutPassword("fakeUserId69", "fakeUserName69"),
         "testTopic",
         "testSubTopic",
         List.of("testBuzzWord1", "testBuzzWord2"),
         0,
         0,
-        Difficulty.EASY
+        Difficulty.EASY,
+        List.of(testPersonalStatus)
     );
 
     WorkshopWithoutIdAndLikes testWorkshopWithoutIdAndLikes = new WorkshopWithoutIdAndLikes(
@@ -37,26 +52,42 @@ class WorkshopServiceTest {
     @Test
     void test_createWorkshop() {
         // given
-        when(idService.createId()).thenReturn("fakeId69");
-        when(workshopRepo.save(testWorkshop)).thenReturn(testWorkshop);
+        String fakeId = "fakeId69";
+        when(idService.createId()).thenReturn(fakeId);
+        when(workshopRepo.save(any(Workshop.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
         Workshop actual = workshopService.createWorkshop(testWorkshopWithoutIdAndLikes);
 
         // then
-        Assertions.assertThat(actual).isEqualTo(testWorkshop);
+        Assertions.assertThat(actual).isNotNull();
+        Assertions.assertThat(actual.id()).isEqualTo(fakeId);
+        verify(workshopRepo).save(any(Workshop.class));
     }
 
     @Test
     void test_readWorkshops() {
         // given
-        when(workshopRepo.findAll()).thenReturn(List.of(testWorkshop));
-
         // when
+        when(workshopRepo.findAll()).thenReturn(List.of(testWorkshop));
         List<Workshop> actual = workshopService.readWorkshops();
 
         // then
         Assertions.assertThat(actual).containsExactly(testWorkshop);
+        verify(workshopRepo).findAll();
+    }
+
+    @Test
+    void test_updatePersonalStatus() {
+        // given
+        // when
+        when(workshopRepo.findById("fakeId69")).thenReturn(Optional.of(testWorkshop));
+        when(workshopRepo.save(testWorkshop)).thenReturn(testWorkshop);
+        Workshop actual = workshopService.updatePersonalStatus("fakeId69", testPersonalStatus);
+
+        // then
+        Assertions.assertThat(actual).isEqualTo(testWorkshop);
+        verify(workshopRepo).findById("fakeId69");
     }
 
 

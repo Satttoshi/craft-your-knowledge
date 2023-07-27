@@ -6,6 +6,16 @@ export type Workshop = {
     likes: number,
     estimatedTimeToMaster: number,
     difficulty: string,
+    personalStatuses: PersonalStatus[],
+}
+
+export type PersonalStatus = {
+    user: {
+        id: string,
+        name: string,
+    },
+    progressStatus: string,
+    isLiked: boolean,
 }
 
 export type WorkshopWithoutIdAndLikes = {
