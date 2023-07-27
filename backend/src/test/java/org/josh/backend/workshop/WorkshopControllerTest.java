@@ -1,5 +1,6 @@
 package org.josh.backend.workshop;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,38 +20,41 @@ class WorkshopControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     String testWorkshopWithoutIdAndLikes = """
-                    {
-                        "topic": "fizz",
-                        "subTopic": "buzz",
-                        "buzzWords": ["foo", "bar"],
-                        "estimatedTimeToMaster": 30,
-                        "difficulty": "EASY"
-                    }
-                """;
+            {
+                "topic": "fizz",
+                "subTopic": "buzz",
+                "buzzWords": ["foo", "bar"],
+                "estimatedTimeToMaster": 30,
+                "difficulty": "EASY"
+            }
+        """;
 
     @Test
     @DirtiesContext
     void expectWorkshop_whenCreateWorkshop() throws Exception {
 
-            //GIVEN
+        //GIVEN
 
-            //WHEN
-            mockMvc.perform(
+        //WHEN
+        mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(testWorkshopWithoutIdAndLikes))
-                //THEN
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.topic").value("fizz"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.subTopic").value("buzz"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords").isArray())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords[0]").value("foo"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords[1]").value("bar"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.likes").value(0))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.estimatedTimeToMaster").value(30))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.difficulty").value("EASY")
+            //THEN
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.topic").value("fizz"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.subTopic").value("buzz"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords").isArray())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords[0]").value("foo"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords[1]").value("bar"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.likes").value(0))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.estimatedTimeToMaster").value(30))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.difficulty").value("EASY")
 
             );
     }
@@ -86,7 +90,58 @@ class WorkshopControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].likes").value(0))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].estimatedTimeToMaster").value(30))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].difficulty").value("EASY")
-        );
+            );
+
+    }
+
+    @Test
+    @DirtiesContext
+    void expectUpdatedWorkshop_whenUpdateWorkshop() throws Exception {
+        //GIVEN
+        String result = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/workshop")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(testWorkshopWithoutIdAndLikes))
+            .andReturn().getResponse().getContentAsString();
+
+        Workshop workshopFromResult = objectMapper.readValue(result, Workshop.class);
+        String id = workshopFromResult.id();
+
+        String testWorkshopWithoutIdAndLikes = """
+                {
+                    "topic": "fizz",
+                    "subTopic": "buzz",
+                    "buzzWords": ["foo", "bar"],
+                    "estimatedTimeToMaster": 30,
+                    "difficulty": "EASY"
+                }
+            """;
+
+        String expected = """
+                {
+                        "id": "%s",
+                        "author": {
+                            "id": "adminId",
+                            "name": "AdminName"
+                        },
+                        "topic": "fizz",
+                        "subTopic": "buzz",
+                        "buzzWords": ["foo", "bar"],
+                        "likes": 0,
+                        "estimatedTimeToMaster": 30,
+                        "difficulty": "EASY",
+                        "workshopPersonalStatuses": []
+                    }
+            """.formatted(id);
+
+        //WHEN
+        mockMvc.perform(
+                MockMvcRequestBuilders.put("/api/workshop/%s".formatted(id))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(testWorkshopWithoutIdAndLikes))
+            //THEN
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().json(expected));
 
     }
 
