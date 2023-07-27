@@ -73,4 +73,8 @@ public class WorkshopService {
         return personalStatuses;
     }
 
+    public void deleteWorkshop(String id) {
+        workshopRepository.deleteById(id);
+    }
+
 }
