@@ -189,7 +189,7 @@ class WorkshopControllerTest {
 
             //THEN
             .andExpect(MockMvcResultMatchers.status().isNotFound())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("No workshop found with Id: fakeId"));
+            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("No workshop found with Id: %s".formatted(id)));
     }
 
 
