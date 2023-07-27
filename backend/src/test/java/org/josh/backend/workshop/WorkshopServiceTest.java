@@ -78,7 +78,7 @@ class WorkshopServiceTest {
     }
 
     @Test
-    public void test_updatePersonalStatus() {
+    void test_updatePersonalStatus() {
         // given
         // when
         when(workshopRepo.findById("fakeId69")).thenReturn(Optional.of(testWorkshop));
