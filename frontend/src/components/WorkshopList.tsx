@@ -16,6 +16,8 @@ export default function WorkshopList() {
         return <h2>Loading...</h2>
     }
 
+    console.log(workshops)
+
     return (
         <>
             <h3>Workshops</h3>
