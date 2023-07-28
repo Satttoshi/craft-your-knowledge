@@ -1,12 +1,14 @@
 package org.josh.backend.openai;
 
 import jakarta.annotation.PostConstruct;
+import org.josh.backend.workshop.WorkshopFormData;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.List;
 
 
 @Service
@@ -26,12 +28,28 @@ public class OpenAiService {
             .build();
     }
 
-    public GPT3TurboResponseModel getResponse(Gpt3TurboRequestModel request) {
+    public GPT3TurboResponse getResponse(Gpt3TurboRequest request) {
         return client.post()
             .bodyValue(request)
             .retrieve()
-            .bodyToMono(GPT3TurboResponseModel.class)
+            .bodyToMono(GPT3TurboResponse.class)
             .block();
+    }
+
+    public Gpt3TurboRequest createRequest(WorkshopFormData workshopFormData) {
+        return new Gpt3TurboRequest(
+            "gpt-3.5-turbo",
+            List.of(
+                new PromptMessage(
+                    "system",
+                    "You are a helpful assistant"
+                ),
+                new PromptMessage(
+                    "user",
+                    "prompt"
+                )
+            )
+        );
     }
 
 }
