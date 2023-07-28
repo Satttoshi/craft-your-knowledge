@@ -1,10 +1,16 @@
 package org.josh.backend.workshop;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.josh.backend.openai.Gpt3TurboResponse;
+import org.josh.backend.openai.OpenAiService;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,7 +29,23 @@ class WorkshopControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    String testWorkshopWithoutIdAndLikes = """
+    @MockBean
+    OpenAiService openAiService;
+
+    @BeforeEach
+    void setUp() {
+        Mockito.when(openAiService.getResponse(Mockito.any()))
+            .thenReturn(
+                new Gpt3TurboResponse(
+                    "id",
+                    "object",
+                    0,
+                    null,
+                    null
+                ));
+    }
+
+    String testWorkshopFormData = """
             {
                 "topic": "fizz",
                 "subTopic": "buzz",
@@ -38,12 +60,11 @@ class WorkshopControllerTest {
     void expectWorkshop_whenCreateWorkshop() throws Exception {
 
         //GIVEN
-
         //WHEN
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(testWorkshopWithoutIdAndLikes))
+                    .content(testWorkshopFormData))
             //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
@@ -76,7 +97,7 @@ class WorkshopControllerTest {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/api/workshop")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(testWorkshopWithoutIdAndLikes));
+                .content(testWorkshopFormData));
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/workshop"))
             //THEN
@@ -112,7 +133,7 @@ class WorkshopControllerTest {
         String result = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(testWorkshopWithoutIdAndLikes))
+                    .content(testWorkshopFormData))
             .andReturn().getResponse().getContentAsString();
 
         Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
@@ -161,7 +182,7 @@ class WorkshopControllerTest {
         String result = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(testWorkshopWithoutIdAndLikes))
+                    .content(testWorkshopFormData))
             .andReturn().getResponse().getContentAsString();
 
         Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
@@ -191,6 +212,4 @@ class WorkshopControllerTest {
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("No workshop found with Id: %s".formatted(id)));
     }
-
-
 }
