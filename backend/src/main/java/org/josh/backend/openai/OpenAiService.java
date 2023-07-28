@@ -22,6 +22,7 @@ public class OpenAiService {
         client = WebClient.builder()
             .baseUrl("https://api.openai.com/v1/chat/completions")
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + openAiApiKey)
             .build();
     }
 
