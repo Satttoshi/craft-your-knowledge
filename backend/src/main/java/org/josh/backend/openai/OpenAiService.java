@@ -59,8 +59,8 @@ public class OpenAiService {
             "gpt-3.5-turbo",
             List.of(
                 new PromptMessage(
-                    systemPrompt,
-                    "You are a helpful assistant"
+                    "system",
+                    systemPrompt
                 ),
                 new PromptMessage(
                     "user",
