@@ -2,6 +2,9 @@ package org.josh.backend.workshop;
 
 import lombok.RequiredArgsConstructor;
 import org.josh.backend.exception.NoSuchWorkshopException;
+import org.josh.backend.openai.Gpt3TurboRequest;
+import org.josh.backend.openai.Gpt3TurboResponse;
+import org.josh.backend.openai.OpenAiService;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.springframework.stereotype.Service;
@@ -15,8 +18,21 @@ public class WorkshopService {
 
     private final WorkshopRepository workshopRepository;
     private final IdService idService;
+    private final OpenAiService openAiService;
 
     public Workshop createWorkshop(WorkshopWithoutIdAndLikes workshop) {
+
+        WorkshopFormData workshopFormData = new WorkshopFormData(
+            workshop.topic(),
+            workshop.subTopic(),
+            workshop.buzzWords(),
+            workshop.estimatedTimeToMaster(),
+            workshop.difficulty()
+        );
+
+        Gpt3TurboRequest request = openAiService.buildRequest(workshopFormData);
+        Gpt3TurboResponse response = openAiService.getResponse(request);
+
         Workshop workshopToSave = new Workshop(
             idService.createId(),
             new MongoUserWithoutPassword("adminId", "AdminName"),
@@ -26,7 +42,8 @@ public class WorkshopService {
             0,
             workshop.estimatedTimeToMaster(),
             workshop.difficulty(),
-            new ArrayList<>()
+            new ArrayList<>(),
+            response
         );
         return workshopRepository.save(workshopToSave);
     }
@@ -48,7 +65,8 @@ public class WorkshopService {
             workshopBefore.likes(),
             workshopBefore.estimatedTimeToMaster(),
             workshopBefore.difficulty(),
-            personalStatuses
+            personalStatuses,
+            workshopBefore.content()
         );
         return workshopRepository.save(workshopToSave);
     }

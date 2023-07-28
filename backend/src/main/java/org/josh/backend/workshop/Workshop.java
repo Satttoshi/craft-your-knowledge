@@ -1,5 +1,6 @@
 package org.josh.backend.workshop;
 
+import org.josh.backend.openai.Gpt3TurboResponse;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.Difficulty;
 import org.springframework.data.annotation.Id;
@@ -19,6 +20,7 @@ public record Workshop(
     int likes,
     int estimatedTimeToMaster,
     Difficulty difficulty,
-    List<PersonalStatus> personalStatuses
+    List<PersonalStatus> personalStatuses,
+    Gpt3TurboResponse content
 ) {
 }

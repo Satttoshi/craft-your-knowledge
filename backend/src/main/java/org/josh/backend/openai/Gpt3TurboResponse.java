@@ -2,7 +2,7 @@ package org.josh.backend.openai;
 
 import java.util.List;
 
-public record GPT3TurboResponse(
+public record Gpt3TurboResponse(
     String id,
     String object,
     int created,
