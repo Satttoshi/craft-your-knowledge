@@ -1,11 +1,9 @@
-
 type Props = {
     content: string
 }
 
 export default function ContentField({content}: Props) {
 
-    return (<p>
+    return <p>{content}</p>;
 
-    </p>)
 }

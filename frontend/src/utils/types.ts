@@ -7,7 +7,7 @@ export type Workshop = {
     estimatedTimeToMaster: number,
     difficulty: string,
     personalStatuses: PersonalStatus[],
-    content: string
+    content: Gpt3TurboResponse
 }
 
 export type Gpt3TurboResponse = {
@@ -30,7 +30,7 @@ export type Choice = {
 
 export type GptMessage = {
     role: string,
-    text: string
+    content: string
 }
 
 

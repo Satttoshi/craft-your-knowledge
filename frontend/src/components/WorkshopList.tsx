@@ -3,6 +3,7 @@ import {Workshop} from "../utils/types.ts";
 import {useEffect} from "react";
 import LikeStar from "./LikeStar.tsx";
 import DeleteButton from "./DeleteButton.tsx";
+import ContentField from "./ContentField.tsx";
 
 export default function WorkshopList() {
 
@@ -32,6 +33,7 @@ export default function WorkshopList() {
                         <p>Time: {workshop.estimatedTimeToMaster}</p>
                         <LikeStar workshop={workshop}/>
                         <DeleteButton id={workshop.id}/>
+                        <ContentField content={workshop.content.choices[0].message.content}/>
                     </div>
                 )
             })}
