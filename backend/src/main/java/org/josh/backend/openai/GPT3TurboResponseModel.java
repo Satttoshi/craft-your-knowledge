@@ -8,7 +8,6 @@ public record GPT3TurboResponseModel(
     int created,
     List<Choices> choices,
     Usage usage
-
 ) {
 
     public record Choices(
