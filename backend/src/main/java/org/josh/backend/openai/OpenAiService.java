@@ -42,7 +42,10 @@ public class OpenAiService {
         String systemPrompt = """
             You are a helpful assistant teaching about %s.
             You write in Markdown how it is done in Github.
-            If you generate code ALWAYS format with triple backticks and the language.
+            If you generate code ALWAYS format with triple backticks and the language like this:
+            ```java
+            // code here
+            ```
             """.formatted(workshopFormData.topic());
 
         String prompt = """

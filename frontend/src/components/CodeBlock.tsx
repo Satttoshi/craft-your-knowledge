@@ -1,5 +1,5 @@
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { coldarkDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import React from "react";
 
 type CodeBlockProps = {
@@ -14,7 +14,7 @@ export function CodeBlock({ inline, className, children, ...props }: CodeBlockPr
         <SyntaxHighlighter
             {...props}
             children={String(children).replace(/\n$/, "")}
-            style={materialDark}
+            style={coldarkDark}
             language={match[1]}
             PreTag="div"
         />

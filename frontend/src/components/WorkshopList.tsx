@@ -13,12 +13,9 @@ export default function WorkshopList() {
 
     useEffect(readWorkshops, [readWorkshops]);
 
-
     if (isReadingWorkshops) {
         return <h2>Loading...</h2>
     }
-
-    console.log(workshops)
 
     return (
         <>
