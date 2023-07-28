@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class Gpt3TurboResponseTest {
+class Gpt3TurboResponseTest {
 
     @Test
-    public void testRecordClass() {
-        // Create test data
+    void testRecordClass() {
+        // given
         String id = "test_id";
         String object = "test_object";
         int created = 12345;
@@ -18,10 +18,10 @@ public class Gpt3TurboResponseTest {
         );
         Gpt3TurboResponse.Usage usage = new Gpt3TurboResponse.Usage(10, 20, 30);
 
-        // Create the Gpt3TurboResponse instance using the constructor
+        // when
         Gpt3TurboResponse response = new Gpt3TurboResponse(id, object, created, choices, usage);
 
-        // Test the getter methods
+        // then
         Assertions.assertEquals(id, response.id());
         Assertions.assertEquals(object, response.object());
         Assertions.assertEquals(created, response.created());
