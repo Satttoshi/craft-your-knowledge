@@ -54,6 +54,8 @@ class OpenAiServiceTest {
         Gpt3TurboRequest request = openAiService.buildRequestWithFormData(testWorkshopFormData);
 
         // then
-        Assertions.assertThat(request).isNotNull().isEqualTo(expectedRequest);
+        Assertions.assertThat(request)
+            .isNotNull()
+            .isEqualTo(expectedRequest);
     }
 }

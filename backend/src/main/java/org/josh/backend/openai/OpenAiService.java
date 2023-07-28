@@ -17,15 +17,12 @@ public class OpenAiService {
 
     @Value("${openai.api.key}")
     private String openAiApiKey;
-
-    private String baseUrl = "https://api.openai.com/v1/chat/completions";
-
     private WebClient client;
 
     @PostConstruct
     public void init() {
         client = WebClient.builder()
-            .baseUrl(baseUrl)
+            .baseUrl("https://api.openai.com/v1/chat/completions")
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + openAiApiKey)
             .build();
