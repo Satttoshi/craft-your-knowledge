@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class OpenAiServiceTest {
+class OpenAiServiceTest {
 
     private OpenAiService openAiService = new OpenAiService();
 
@@ -54,7 +54,6 @@ public class OpenAiServiceTest {
         Gpt3TurboRequest request = openAiService.buildRequestWithFormData(testWorkshopFormData);
 
         // then
-        Assertions.assertThat(request).isNotNull();
-        Assertions.assertThat(request).isEqualTo(expectedRequest);
+        Assertions.assertThat(request).isNotNull().isEqualTo(expectedRequest);
     }
 }
