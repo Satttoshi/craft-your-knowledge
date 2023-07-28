@@ -4,7 +4,7 @@ import {LoadingButton} from "@mui/lab";
 import {Save} from "@mui/icons-material";
 import styled from "@emotion/styled";
 import {useStore} from "../hooks/useStore.ts";
-import {WorkshopWithoutIdAndLikes} from "../utils/types.ts";
+import {WorkshopFormData} from "../utils/types.ts";
 
 export default function CreateForm() {
     const [topic, setTopic] = useState<string>("")
@@ -19,14 +19,14 @@ export default function CreateForm() {
     function handleSubmit(event: FormEvent<HTMLFormElement>): void {
         event.preventDefault();
 
-        const workshopWithoutIdAndLikes: WorkshopWithoutIdAndLikes = {
+        const workshopFormData: WorkshopFormData = {
             topic,
             subTopic,
             buzzWords,
             estimatedTimeToMaster,
             difficulty,
         }
-        createWorkshop(workshopWithoutIdAndLikes)
+        createWorkshop(workshopFormData)
     }
 
     return (<>
