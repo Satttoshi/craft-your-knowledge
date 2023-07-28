@@ -20,15 +20,7 @@ public class WorkshopService {
     private final IdService idService;
     private final OpenAiService openAiService;
 
-    public Workshop createWorkshop(WorkshopWithoutIdAndLikes workshop) {
-
-        WorkshopFormData workshopFormData = new WorkshopFormData(
-            workshop.topic(),
-            workshop.subTopic(),
-            workshop.buzzWords(),
-            workshop.estimatedTimeToMaster(),
-            workshop.difficulty()
-        );
+    public Workshop createWorkshop(WorkshopFormData workshopFormData) {
 
         Gpt3TurboRequest request = openAiService.buildRequest(workshopFormData);
         Gpt3TurboResponse response = openAiService.getResponse(request);
@@ -36,12 +28,12 @@ public class WorkshopService {
         Workshop workshopToSave = new Workshop(
             idService.createId(),
             new MongoUserWithoutPassword("adminId", "AdminName"),
-            workshop.topic(),
-            workshop.subTopic(),
-            workshop.buzzWords(),
+            workshopFormData.topic(),
+            workshopFormData.subTopic(),
+            workshopFormData.buzzWords(),
             0,
-            workshop.estimatedTimeToMaster(),
-            workshop.difficulty(),
+            workshopFormData.estimatedTimeToMaster(),
+            workshopFormData.difficulty(),
             new ArrayList<>(),
             response
         );

@@ -42,10 +42,11 @@ class WorkshopServiceTest {
         0,
         0,
         Difficulty.EASY,
-        List.of(testPersonalStatus)
+        List.of(testPersonalStatus),
+        null
     );
 
-    WorkshopWithoutIdAndLikes testWorkshopWithoutIdAndLikes = new WorkshopWithoutIdAndLikes(
+    WorkshopFormData testWorkshopFormData = new WorkshopFormData(
         "testTopic",
         "testSubTopic",
         List.of("testBuzzWord1", "testBuzzWord2"),
@@ -61,7 +62,7 @@ class WorkshopServiceTest {
         when(workshopRepo.save(any(Workshop.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        Workshop actual = workshopService.createWorkshop(testWorkshopWithoutIdAndLikes);
+        Workshop actual = workshopService.createWorkshop(testWorkshopFormData);
 
         // then
         Assertions.assertThat(actual).isNotNull();

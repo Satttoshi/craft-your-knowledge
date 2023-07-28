@@ -17,7 +17,7 @@ public class WorkshopController {
     private final WorkshopService workshopService;
 
     @PostMapping
-    public Workshop createWorkshop(@RequestBody WorkshopWithoutIdAndLikes workshop) {
+    public Workshop createWorkshop(@RequestBody WorkshopFormData workshop) {
         return workshopService.createWorkshop(workshop);
     }
 
