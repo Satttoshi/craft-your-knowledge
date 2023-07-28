@@ -18,12 +18,14 @@ public class OpenAiService {
     @Value("${openai.api.key}")
     private String openAiApiKey;
 
+    private String baseUrl = "https://api.openai.com/v1/chat/completions";
+
     private WebClient client;
 
     @PostConstruct
     public void init() {
         client = WebClient.builder()
-            .baseUrl("https://api.openai.com/v1/chat/completions")
+            .baseUrl(baseUrl)
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + openAiApiKey)
             .build();
@@ -38,7 +40,7 @@ public class OpenAiService {
         return Objects.requireNonNull(responseEntity).getBody();
     }
 
-    public Gpt3TurboRequest buildRequest(WorkshopFormData workshopFormData) {
+    public Gpt3TurboRequest buildRequestWithFormData(WorkshopFormData workshopFormData) {
 
         String systemPrompt = "You are a helpful assistant teaching about %s".formatted(workshopFormData.topic());
 

@@ -22,7 +22,7 @@ public class WorkshopService {
 
     public Workshop createWorkshop(WorkshopFormData workshopFormData) {
 
-        Gpt3TurboRequest request = openAiService.buildRequest(workshopFormData);
+        Gpt3TurboRequest request = openAiService.buildRequestWithFormData(workshopFormData);
         Gpt3TurboResponse response = openAiService.getResponse(request);
 
         Workshop workshopToSave = new Workshop(

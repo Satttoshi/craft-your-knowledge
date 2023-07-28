@@ -112,7 +112,6 @@ class WorkshopControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].estimatedTimeToMaster").value(30))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].difficulty").value("EASY")
             );
-
     }
 
     @Test
