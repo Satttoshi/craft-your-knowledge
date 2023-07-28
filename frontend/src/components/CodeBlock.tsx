@@ -1,6 +1,7 @@
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { coldarkDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import React from "react";
+import styled from "@emotion/styled";
 
 type CodeBlockProps = {
     inline?: boolean;
@@ -17,10 +18,15 @@ export function CodeBlock({ inline, className, children, ...props }: CodeBlockPr
             style={coldarkDark}
             language={match[1]}
             PreTag="div"
+            showLineNumbers={true}
         />
     ) : (
-        <code {...props} className={className}>
+        <StyledCode {...props} className={className}>
             {children}
-        </code>
+        </StyledCode>
     );
 }
+
+const StyledCode= styled.code`
+    background-color: lightgray;
+`;
