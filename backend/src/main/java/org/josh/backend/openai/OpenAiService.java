@@ -53,7 +53,7 @@ public class OpenAiService {
             workshopFormData.difficulty().toString(), workshopFormData.estimatedTimeToMaster(),
             workshopFormData.buzzWords().toString());
 
-        Gpt3TurboRequest gpt3TurboRequest = new Gpt3TurboRequest(
+        return new Gpt3TurboRequest(
             "gpt-3.5-turbo",
             List.of(
                 new PromptMessage(
@@ -65,7 +65,5 @@ public class OpenAiService {
                     prompt
                 )
             ));
-        return gpt3TurboRequest;
     }
-
 }
