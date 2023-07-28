@@ -39,7 +39,11 @@ public class OpenAiService {
 
     public Gpt3TurboRequest buildRequestWithFormData(WorkshopFormData workshopFormData) {
 
-        String systemPrompt = "You are a helpful assistant teaching about %s".formatted(workshopFormData.topic());
+        String systemPrompt = """
+            You are a helpful assistant teaching about %s.
+            You write in Markdown how it is done in Github.
+            If you generate code ALWAYS format with triple backticks and the language.
+            """.formatted(workshopFormData.topic());
 
         String prompt = """
             Write an article about %s.
