@@ -36,20 +36,37 @@ public class OpenAiService {
             .block();
     }
 
-    public Gpt3TurboRequest createRequest(WorkshopFormData workshopFormData) {
-        return new Gpt3TurboRequest(
+    public Gpt3TurboRequest buildRequest(WorkshopFormData workshopFormData) {
+
+        String systemPrompt = "You are a helpful assistant teaching about %s".formatted(workshopFormData.topic());
+
+        String prompt = """
+            Write an article about %s.
+            The article should be easy to understand.
+            The difficulty level should be %s.
+            Difficulty means how hard it is to understand. usually from junior to senior.
+            The estimated time to master should be %d minutes.
+            Please Consider the following buzz words:[ %s ], if no buzz words are provided in previous array, please ignore this.
+            Add a little challenge to the end and consider the estimated time to master and difficulty level to determine the challenge.
+            """.formatted(workshopFormData.subTopic(),
+            workshopFormData.difficulty().toString(), workshopFormData.estimatedTimeToMaster(),
+            workshopFormData.buzzWords().toString());
+
+        Gpt3TurboRequest gpt3TurboRequest = new Gpt3TurboRequest(
             "gpt-3.5-turbo",
             List.of(
                 new PromptMessage(
-                    "system",
+                    systemPrompt,
                     "You are a helpful assistant"
                 ),
                 new PromptMessage(
                     "user",
-                    "prompt"
+                    prompt
                 )
-            )
-        );
+            ));
+
+        System.out.println(gpt3TurboRequest);
+        return gpt3TurboRequest;
     }
 
 }
