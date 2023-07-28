@@ -152,4 +152,45 @@ class WorkshopControllerTest {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().json(expect));
     }
+
+    @DirtiesContext
+    @Test
+    void expectEmptyList_whenDeleteWorkshopById() throws Exception {
+
+        //GIVEN
+        String result = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/workshop")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(testWorkshopWithoutIdAndLikes))
+            .andReturn().getResponse().getContentAsString();
+
+        Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
+        String id = saveResultWorkshop.id();
+
+        //WHEN
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/workshop/%s".formatted(id)))
+
+            //THEN
+            .andExpect(MockMvcResultMatchers.status().isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/workshop"))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().json("[]"));
+    }
+
+    @Test
+    void expectErrorMessage_whenDeleteWorkshopById() throws Exception {
+
+        //GIVEN
+        String id = "fakeId";
+
+        //WHEN
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/workshop/%s".formatted(id)))
+
+            //THEN
+            .andExpect(MockMvcResultMatchers.status().isNotFound())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("No workshop found with Id: %s".formatted(id)));
+    }
+
+
 }

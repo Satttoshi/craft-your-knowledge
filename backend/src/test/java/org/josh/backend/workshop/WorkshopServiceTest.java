@@ -1,6 +1,7 @@
 package org.josh.backend.workshop;
 
 import org.assertj.core.api.Assertions;
+import org.josh.backend.exception.NoSuchWorkshopException;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.josh.backend.utils.ProgressStatus;
@@ -10,6 +11,7 @@ import org.josh.backend.utils.Difficulty;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -90,5 +92,24 @@ class WorkshopServiceTest {
         verify(workshopRepo).findById("fakeId69");
     }
 
+    @Test
+    void test_deleteWorkshop(){
+        //Given
+        String id = "fakeId69";
+        //When
+        when(workshopRepo.existsById(id)).thenReturn(true);
+        workshopService.deleteWorkshop(id);
+        //Then
+        verify(workshopRepo).deleteById(id);
+    }
+
+    @Test
+    void expectNoSuchWorkshopException_whenDeleteWorkshopByInvalidId() {
+        //Given
+        String invalidId = "invalidId";
+        //When
+        //Then
+        assertThrows(NoSuchWorkshopException.class, () -> workshopService.deleteWorkshop(invalidId));
+    }
 
 }

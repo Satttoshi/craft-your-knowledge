@@ -2,6 +2,7 @@ import {useStore} from "../hooks/useStore.ts";
 import {Workshop} from "../utils/types.ts";
 import {useEffect} from "react";
 import LikeStar from "./LikeStar.tsx";
+import DeleteButton from "./DeleteButton.tsx";
 
 export default function WorkshopList() {
 
@@ -30,6 +31,7 @@ export default function WorkshopList() {
                         <p>Difficulty: {workshop.difficulty}</p>
                         <p>Time: {workshop.estimatedTimeToMaster}</p>
                         <LikeStar workshop={workshop}/>
+                        <DeleteButton id={workshop.id}/>
                     </div>
                 )
             })}
