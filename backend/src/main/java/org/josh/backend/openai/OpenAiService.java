@@ -26,4 +26,12 @@ public class OpenAiService {
             .build();
     }
 
+    public GPT3TurboResponseModel getResponse(Gpt3TurboRequestModel request) {
+        return client.post()
+            .bodyValue(request)
+            .retrieve()
+            .bodyToMono(GPT3TurboResponseModel.class)
+            .block();
+    }
+
 }
