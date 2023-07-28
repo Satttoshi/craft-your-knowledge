@@ -14,7 +14,7 @@ class OpenAiServiceTest {
     @Test
     void test_buildRequestWithFormData() {
         // given
-        WorkshopFormData testWorkshopFormData = new WorkshopFormData(
+        WorkshopFormData workshopFormData = new WorkshopFormData(
             "testTopic",
             "testSubTopic",
             List.of("testBuzzWord1", "testBuzzWord2"),
@@ -22,7 +22,14 @@ class OpenAiServiceTest {
             Difficulty.EASY
         );
 
-        String systemPrompt = "You are a helpful assistant teaching about %s".formatted(testWorkshopFormData.topic());
+        String systemPrompt = """
+            You are a helpful assistant teaching about %s.
+            You write in Markdown how it is done in Github.
+            If you generate code ALWAYS format with triple backticks and the language like this:
+            ```java
+            // code here
+            ```
+            """.formatted(workshopFormData.topic());
 
         String prompt = """
             Write an article about %s.
@@ -32,9 +39,9 @@ class OpenAiServiceTest {
             The estimated time to master should be %d minutes.
             Please Consider the following buzz words:[ %s ], if no buzz words are provided in previous array, please ignore this.
             Add a little challenge to the end and consider the estimated time to master and difficulty level to determine the challenge.
-            """.formatted(testWorkshopFormData.subTopic(),
-            testWorkshopFormData.difficulty().toString(), testWorkshopFormData.estimatedTimeToMaster(),
-            testWorkshopFormData.buzzWords().toString());
+            """.formatted(workshopFormData.subTopic(),
+            workshopFormData.difficulty().toString(), workshopFormData.estimatedTimeToMaster(),
+            workshopFormData.buzzWords().toString());
 
         Gpt3TurboRequest expectedRequest = new Gpt3TurboRequest(
             "gpt-3.5-turbo",
@@ -51,7 +58,7 @@ class OpenAiServiceTest {
         );
 
         // when
-        Gpt3TurboRequest request = openAiService.buildRequestWithFormData(testWorkshopFormData);
+        Gpt3TurboRequest request = openAiService.buildRequestWithFormData(workshopFormData);
 
         // then
         Assertions.assertThat(request)
