@@ -65,8 +65,6 @@ public class OpenAiService {
                     prompt
                 )
             ));
-
-        System.out.println(gpt3TurboRequest);
         return gpt3TurboRequest;
     }
 
