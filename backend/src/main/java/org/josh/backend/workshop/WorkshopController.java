@@ -1,6 +1,5 @@
 package org.josh.backend.workshop;
 
-
 import lombok.RequiredArgsConstructor;
 import org.josh.backend.exception.ErrorMessage;
 import org.josh.backend.exception.NoSuchWorkshopException;

@@ -28,5 +28,5 @@ export function CodeBlock({ inline, className, children, ...props }: CodeBlockPr
 }
 
 const StyledCode= styled.code`
-    background-color: lightgray;
+    background-color: darkslateblue;
 `;
