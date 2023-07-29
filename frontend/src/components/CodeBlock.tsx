@@ -19,6 +19,7 @@ export function CodeBlock({ inline, className, children, ...props }: CodeBlockPr
             language={match[1]}
             PreTag="div"
             showLineNumbers={true}
+            customStyle={{backgroundColor: "var(--color1)", fontFamily: "var(--fontCode)", padding: "1rem 0.2rem"}}
         />
     ) : (
         <StyledCode {...props} className={className}>
@@ -28,5 +29,8 @@ export function CodeBlock({ inline, className, children, ...props }: CodeBlockPr
 }
 
 const StyledCode= styled.code`
-    background-color: darkslateblue;
+    background-color: var(--color1);
+    color: var(--color5);
+    font-family: var(--fontCode);
+    padding: 0 0.2rem;
 `;

@@ -18,12 +18,20 @@ export default function GlobalStyles() {
       :root {
         --fontSans: 'Nunito Sans', sans-serif;
         --fontCode: 'Source Code Pro', monospace;
+        
+        --color1: #000F18;
+        --color2: #001928;
+        --color3: #002343;
+        --color4: #027353;
+        --color5: #F2BD1D;
+        --colorWhite: #F1EEE6;
+        --colorBlack: #01090E;
       }
       
       body {
         font-family: var(--fontSans);
-        color: antiquewhite;
-        background-color: #1e1e1e;
+        color: var(--colorWhite);
+        background-color: var(--color2);
       }
 
     `}/>
