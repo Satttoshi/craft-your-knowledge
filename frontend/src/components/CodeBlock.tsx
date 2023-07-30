@@ -12,7 +12,8 @@ type CodeBlockProps = {
 export function CodeBlock({ inline, className, children, ...props }: CodeBlockProps) {
     const match = /language-(\w+)/.exec(className || "");
     return !inline && match ? (
-        <SyntaxHighlighter
+
+        <StyledCodeBlock
             {...props}
             children={String(children).replace(/\n$/, "")}
             style={coldarkDark}
@@ -28,9 +29,14 @@ export function CodeBlock({ inline, className, children, ...props }: CodeBlockPr
     );
 }
 
+const StyledCodeBlock = styled(SyntaxHighlighter)`
+    border-radius: 10px;
+`;
+
 const StyledCode= styled.code`
     background-color: var(--color1);
-    color: var(--color5);
+    color: var(--color4);
     font-family: var(--fontCode);
     padding: 0 0.2rem;
+    border-radius: 3px;
 `;

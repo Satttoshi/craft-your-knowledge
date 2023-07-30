@@ -22,7 +22,7 @@ export default function GlobalStyles() {
         --color1: #000F18;
         --color2: #001928;
         --color3: #002343;
-        --color4: #027353;
+        --color4: #00B07E;
         --color5: #F2BD1D;
         --colorWhite: #F1EEE6;
         --colorBlack: #01090E;
