@@ -49,9 +49,7 @@ class WorkshopControllerTest {
             {
                 "topic": "fizz",
                 "subTopic": "buzz",
-                "buzzWords": ["foo", "bar"],
-                "estimatedTimeToMaster": 30,
-                "difficulty": "EASY"
+                "buzzWords": ["foo", "bar"]
             }
         """;
 
@@ -73,11 +71,7 @@ class WorkshopControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords").isArray())
             .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords[0]").value("foo"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords[1]").value("bar"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.likes").value(0))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.estimatedTimeToMaster").value(30))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.difficulty").value("EASY")
-
-            );
+            .andExpect(MockMvcResultMatchers.jsonPath("$.likes").value(0));
     }
 
     @Test
@@ -108,10 +102,7 @@ class WorkshopControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].buzzWords").isArray())
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].buzzWords[0]").value("foo"))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].buzzWords[1]").value("bar"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].likes").value(0))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].estimatedTimeToMaster").value(30))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].difficulty").value("EASY")
-            );
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].likes").value(0));
     }
 
     @Test
@@ -148,8 +139,6 @@ class WorkshopControllerTest {
                     "subTopic": "buzz",
                     "buzzWords": ["foo", "bar"],
                     "likes": 0,
-                    "estimatedTimeToMaster": 30,
-                    "difficulty": "EASY",
                     "personalStatuses": [
                         {
                             "user": {

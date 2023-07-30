@@ -28,12 +28,10 @@ public class WorkshopService {
         Workshop workshopToSave = new Workshop(
             idService.createId(),
             new MongoUserWithoutPassword("adminId", "AdminName"),
+            workshopFormData.language(),
             workshopFormData.topic(),
-            workshopFormData.subTopic(),
             workshopFormData.buzzWords(),
             0,
-            workshopFormData.estimatedTimeToMaster(),
-            workshopFormData.difficulty(),
             new ArrayList<>(),
             response
         );
@@ -51,12 +49,10 @@ public class WorkshopService {
         Workshop workshopToSave = new Workshop(
             workshopBefore.id(),
             workshopBefore.author(),
+            workshopBefore.language(),
             workshopBefore.topic(),
-            workshopBefore.subTopic(),
             workshopBefore.buzzWords(),
             workshopBefore.likes(),
-            workshopBefore.estimatedTimeToMaster(),
-            workshopBefore.difficulty(),
             personalStatuses,
             workshopBefore.content()
         );

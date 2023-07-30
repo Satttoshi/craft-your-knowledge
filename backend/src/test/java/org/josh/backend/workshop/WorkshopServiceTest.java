@@ -7,7 +7,6 @@ import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.josh.backend.utils.ProgressStatus;
 import org.junit.jupiter.api.Test;
-import org.josh.backend.utils.Difficulty;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,8 +39,6 @@ class WorkshopServiceTest {
         "testSubTopic",
         List.of("testBuzzWord1", "testBuzzWord2"),
         0,
-        0,
-        Difficulty.EASY,
         List.of(testPersonalStatus),
         null
     );
@@ -49,9 +46,7 @@ class WorkshopServiceTest {
     WorkshopFormData testWorkshopFormData = new WorkshopFormData(
         "testTopic",
         "testSubTopic",
-        List.of("testBuzzWord1", "testBuzzWord2"),
-        0,
-        Difficulty.EASY
+        List.of("testBuzzWord1", "testBuzzWord2")
     );
 
     @Test

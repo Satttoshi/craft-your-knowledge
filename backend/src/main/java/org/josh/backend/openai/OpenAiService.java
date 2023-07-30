@@ -46,18 +46,14 @@ public class OpenAiService {
             ```java
             // code here
             ```
-            """.formatted(workshopFormData.topic());
+            """.formatted(workshopFormData.language());
 
         String prompt = """
             Write an article about %s.
             The article should be easy to understand.
-            The difficulty level should be %s.
-            Difficulty means how hard it is to understand. usually from junior to senior.
-            The estimated time to master should be %d minutes.
             Please Consider the following buzz words:[ %s ], if no buzz words are provided in previous array, please ignore this.
             Add a little challenge to the end and consider the estimated time to master and difficulty level to determine the challenge.
-            """.formatted(workshopFormData.subTopic(),
-            workshopFormData.difficulty().toString(), workshopFormData.estimatedTimeToMaster(),
+            """.formatted(workshopFormData.topic(),
             workshopFormData.buzzWords().toString());
 
         return new Gpt3TurboRequest(
