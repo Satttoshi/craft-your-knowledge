@@ -29,12 +29,12 @@ export default function CreateForm() {
         <StyledForm onSubmit={handleSubmit}>
 
             <FormControl fullWidth>
-                <InputLabel htmlFor="estimated-time">Estimated Time to Complete</InputLabel>
+                <InputLabel htmlFor="language">Language</InputLabel>
                 <Select
                     labelId="language"
                     id="language"
                     value={language}
-                    label="Estimated Time to Complete"
+                    label="Language"
                     onChange={(e) => setLanguage(e.target.value as string)}
                 >
                     <MenuItem value={"JAVASCRIPT"}>JavaScript</MenuItem>
