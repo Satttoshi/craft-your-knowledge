@@ -24,10 +24,8 @@ export default function WorkshopList() {
                 return (
                     <div key={workshop.id + "_list"}>
                         <h2>Workshop</h2>
-                        <p>Language: {workshop.topic}</p>
-                        <p>Topic: {workshop.subTopic}</p>
-                        <p>Difficulty: {workshop.difficulty}</p>
-                        <p>Time: {workshop.estimatedTimeToMaster}</p>
+                        <p>Language: {workshop.language}</p>
+                        <p>Topic: {workshop.topic}</p>
                         <LikeStar workshop={workshop}/>
                         <DeleteButton id={workshop.id}/>
                         <ContentField content={workshop.content.choices[0].message.content}/>

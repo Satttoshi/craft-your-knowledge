@@ -1,11 +1,9 @@
 export type Workshop = {
     id: string,
+    language: string,
     topic: string,
-    subTopic: string,
     buzzWords: string[],
     likes: number,
-    estimatedTimeToMaster: number,
-    difficulty: string,
     personalStatuses: PersonalStatus[],
     content: Gpt3TurboResponse
 }
@@ -44,9 +42,7 @@ export type PersonalStatus = {
 }
 
 export type WorkshopFormData = {
+    language: string,
     topic: string,
-    subTopic: string,
-    buzzWords: string[],
-    estimatedTimeToMaster: number,
-    difficulty: string
+    buzzWords: string[]
 }
