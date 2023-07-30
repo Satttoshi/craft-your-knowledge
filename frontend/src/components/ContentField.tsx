@@ -25,9 +25,14 @@ export default function ContentField({content}: Props) {
 }
 
 const StyledContentField = styled.article`
-  width: 600px;
+  width: 90vw;
   border-radius: 10px;
-  padding: 4rem;
+  padding: 1rem;
+  margin: 0;
+  
+  @media (min-width: 768px) {
+    width: 50vw;
+  }
   
   h1 {
     color: var(--color5);

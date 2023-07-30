@@ -14,11 +14,16 @@ export default function GlobalStyles() {
         src: url("/fonts/SourceCodePro.ttf") format("truetype");
         font-weight: 1 999;
       }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
       
       :root {
         --fontSans: 'Nunito Sans', sans-serif;
         --fontCode: 'Source Code Pro', monospace;
-        
         --color1: #000F18;
         --color2: #001928;
         --color3: #002343;
@@ -32,6 +37,16 @@ export default function GlobalStyles() {
         font-family: var(--fontSans);
         color: var(--colorWhite);
         background-color: var(--color2);
+        
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      #root {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
     `}/>

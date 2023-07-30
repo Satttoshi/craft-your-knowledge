@@ -5,7 +5,7 @@ import {Save} from "@mui/icons-material";
 import styled from "@emotion/styled";
 import {useStore} from "../hooks/useStore.ts";
 import {WorkshopFormData} from "../utils/types.ts";
-""
+
 export default function CreateForm() {
     const [language, setLanguage] = useState<string>("")
     const [topic, setTopic] = useState<string>("");
@@ -98,7 +98,7 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 600px;
+  width: 80vw;
   gap: 2rem;
 `;
 
