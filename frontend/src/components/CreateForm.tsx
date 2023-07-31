@@ -28,9 +28,14 @@ export default function CreateForm() {
     }
 
     return (<>
-        <GearsLoading/>
-    {isCreatingWorkshop && <StyledLoadingBar/>}
-        <StyledForm onSubmit={handleSubmit}>
+
+        {isCreatingWorkshop && (<>
+            <StyledLoadingBar/>
+            <StyledLoadingHeader>Generating...</StyledLoadingHeader>
+            <GearsLoading/>
+        </>)}
+
+        {!isCreatingWorkshop ? <StyledForm onSubmit={handleSubmit}>
             <FormControl fullWidth>
                 <InputLabel htmlFor="language">Language</InputLabel>
                 <Select
@@ -93,7 +98,17 @@ export default function CreateForm() {
                 <span>Save</span>
             </StyledButton>
 
-        </StyledForm>
+        </StyledForm> : <StyledButton
+            type="submit"
+            color="primary"
+            loading={isCreatingWorkshop}
+            loadingPosition="start"
+            startIcon={<Save/>}
+            variant="contained"
+        >
+            <span>Save</span>
+        </StyledButton>}
+
     </>)
 }
 
@@ -122,4 +137,9 @@ const StyledLoadingBar = styled(LinearProgress)`
   height: 0.5rem;
   margin: 1rem 0;
   border-radius: 16px;
+`;
+
+const StyledLoadingHeader = styled.h2`
+  font-family: var(--fontCode);
+  color: var(--colorWhite);
 `;
