@@ -24,8 +24,11 @@ public class WorkshopService {
 
     public Workshop createWorkshop(WorkshopFormData workshopFormData) {
 
-        Gpt3TurboRequest request = promptBuilder.buildRequestWithFormData(workshopFormData);
-        Gpt3TurboResponse response = openAiService.getResponse(request);
+        Gpt3TurboRequest articleRequest = promptBuilder.buildRequestWithFormData(workshopFormData);
+        Gpt3TurboResponse articleResponse = openAiService.getResponse(articleRequest);
+
+        Gpt3TurboRequest challengeRequest = promptBuilder.buildChallengeRequestWithPreviousData(articleResponse);
+        Gpt3TurboResponse challengeResponse = openAiService.getResponse(challengeRequest);
 
         Workshop workshopToSave = new Workshop(
             idService.createId(),
@@ -35,7 +38,8 @@ public class WorkshopService {
             workshopFormData.buzzWords(),
             0,
             new ArrayList<>(),
-            response
+            articleResponse,
+            challengeResponse
         );
         return workshopRepository.save(workshopToSave);
     }
@@ -56,7 +60,8 @@ public class WorkshopService {
             workshopBefore.buzzWords(),
             workshopBefore.likes(),
             personalStatuses,
-            workshopBefore.content()
+            workshopBefore.article(),
+            workshopBefore.challenge()
         );
         return workshopRepository.save(workshopToSave);
     }

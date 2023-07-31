@@ -18,6 +18,7 @@ public record Workshop(
     List<String> buzzWords,
     int likes,
     List<PersonalStatus> personalStatuses,
-    Gpt3TurboResponse content
+    Gpt3TurboResponse article,
+    Gpt3TurboResponse challenge
 ) {
 }
