@@ -40,6 +40,7 @@ class WorkshopServiceTest {
         List.of("testBuzzWord1", "testBuzzWord2"),
         0,
         List.of(testPersonalStatus),
+        null,
         null
     );
 
