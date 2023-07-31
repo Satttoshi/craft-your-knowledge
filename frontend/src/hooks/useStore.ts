@@ -28,7 +28,9 @@ export const useStore = create<State>((set, get) => ({
         axios.post("/api/workshop", requestBody)
             .catch(console.error)
             .finally(() => {
-                set({isCreatingWorkshop: false});
+                setTimeout(() => {
+                    set({isCreatingWorkshop: false});
+                }, 4000);
                 readWorkshops();
             })
     },

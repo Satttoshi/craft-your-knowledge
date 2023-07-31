@@ -1,9 +1,11 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState} from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { CodeBlock } from "./CodeBlock.tsx";
 import styled from "@emotion/styled";
 import { keyframes} from "@emotion/css";
+import {useStore} from "../hooks/useStore.ts";
+
 
 type Props = {
     content: string;
@@ -12,6 +14,7 @@ type Props = {
 export default function ContentField({ content }: Props) {
     const contentRef = useRef<HTMLDivElement>(null);
     const [containerHeight, setContainerHeight] = useState<number>(0);
+    const isCreatingWorkshop = useStore(state => state.isCreatingWorkshop);
 
     useEffect(() => {
         if (contentRef.current) {
@@ -31,31 +34,32 @@ export default function ContentField({ content }: Props) {
   `;
 
     const StyledContentField = styled.article`
-    animation: ${fadeIn} 4s linear;
-    border: 1px solid red;
-    width: 100vw;
-    border-radius: 10px;
-    padding: 1rem;
-    margin: 0;
-    overflow: hidden;
+      animation: ${(props: { isCreating: boolean }) =>
+              props.isCreating ? fadeIn : ""} 4s ease-in-out;
 
-    @media (min-width: 768px) {
-      width: 60vw;
-    }
+      width: 100vw;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 0;
+      overflow: hidden;
 
-    h1 {
-      color: var(--color5);
-    }
+      @media (min-width: 768px) {
+        width: 60vw;
+      }
 
-    h2,
-    h3,
-    h4 {
-      color: var(--color4);
-    }
-  `;
+      h1 {
+        color: var(--color5);
+      }
+
+      h2,
+      h3,
+      h4 {
+        color: var(--color4);
+      }
+    `;
 
     return (
-        <StyledContentField>
+        <StyledContentField isCreating={isCreatingWorkshop}>
             <div ref={contentRef}>
                 <ReactMarkdown
                     children={content}

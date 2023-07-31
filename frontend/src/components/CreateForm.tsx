@@ -5,6 +5,7 @@ import {Save} from "@mui/icons-material";
 import styled from "@emotion/styled";
 import {useStore} from "../hooks/useStore.ts";
 import {WorkshopFormData} from "../utils/types.ts";
+import LinearProgress from '@mui/material/LinearProgress';
 
 export default function CreateForm() {
     const [language, setLanguage] = useState<string>("")
@@ -26,8 +27,8 @@ export default function CreateForm() {
     }
 
     return (<>
+    {isCreatingWorkshop && <StyledLoadingBar/>}
         <StyledForm onSubmit={handleSubmit}>
-
             <FormControl fullWidth>
                 <InputLabel htmlFor="language">Language</InputLabel>
                 <Select
@@ -35,7 +36,7 @@ export default function CreateForm() {
                     id="language"
                     value={language}
                     label="Language"
-                    onChange={(e) => setLanguage(e.target.value as string)}
+                    onChange={(e) => setLanguage(e.target.value)}
                 >
                     <MenuItem value={"JAVASCRIPT"}>JavaScript</MenuItem>
                     <MenuItem value={"JAVA"}>Java</MenuItem>
@@ -84,7 +85,7 @@ export default function CreateForm() {
                 color="primary"
                 loading={isCreatingWorkshop}
                 loadingPosition="start"
-                startIcon={<Save />}
+                startIcon={<Save/>}
                 variant="contained"
             >
                 <span>Save</span>
@@ -98,7 +99,7 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80vw;
+  width: 60vw;
   gap: 2rem;
 `;
 
@@ -107,9 +108,16 @@ const StyledTextField = styled(TextField)`
 `;
 
 const StyledAutocomplete = styled(Autocomplete)`
-    width: 100%;
+  width: 100%;
 `;
 
 const StyledButton = styled(LoadingButton)`
-    width: 100px;
+  width: 100px;
+`;
+
+const StyledLoadingBar = styled(LinearProgress)`
+  width: 50vw;
+  height: 0.5rem;
+  margin: 1rem 0;
+  border-radius: 16px;
 `;
