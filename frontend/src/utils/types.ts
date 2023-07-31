@@ -1,13 +1,36 @@
 export type Workshop = {
     id: string,
+    language: string,
     topic: string,
-    subTopic: string,
     buzzWords: string[],
     likes: number,
-    estimatedTimeToMaster: number,
-    difficulty: string,
     personalStatuses: PersonalStatus[],
+    content: Gpt3TurboResponse
 }
+
+export type Gpt3TurboResponse = {
+    id: string,
+    object: string,
+    created: number,
+    choices: Choice[]
+    usage: {
+        prompt_tokens: number,
+        completion_tokens: number,
+        total_tokens: number,
+    }
+}
+
+export type Choice = {
+    index: number,
+    message: GptMessage,
+    finish_reason: string
+}
+
+export type GptMessage = {
+    role: string,
+    content: string
+}
+
 
 export type PersonalStatus = {
     user: {
@@ -15,13 +38,11 @@ export type PersonalStatus = {
         name: string,
     },
     progressStatus: string,
-    isLiked: boolean,
+    isLiked: boolean
 }
 
-export type WorkshopWithoutIdAndLikes = {
+export type WorkshopFormData = {
+    language: string,
     topic: string,
-    subTopic: string,
-    buzzWords: string[],
-    estimatedTimeToMaster: number,
-    difficulty: string,
+    buzzWords: string[]
 }

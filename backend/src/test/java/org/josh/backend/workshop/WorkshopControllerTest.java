@@ -1,10 +1,16 @@
 package org.josh.backend.workshop;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.josh.backend.openai.Gpt3TurboResponse;
+import org.josh.backend.openai.OpenAiService;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
@@ -23,13 +29,27 @@ class WorkshopControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    String testWorkshopWithoutIdAndLikes = """
+    @MockBean
+    OpenAiService openAiService;
+
+    @BeforeEach
+    void setUp() {
+        Mockito.when(openAiService.getResponse(Mockito.any()))
+            .thenReturn(
+                new Gpt3TurboResponse(
+                    "id",
+                    "object",
+                    0,
+                    null,
+                    null
+                ));
+    }
+
+    String testWorkshopFormData = """
             {
-                "topic": "fizz",
-                "subTopic": "buzz",
-                "buzzWords": ["foo", "bar"],
-                "estimatedTimeToMaster": 30,
-                "difficulty": "EASY"
+                "language": "fizz",
+                "topic": "buzz",
+                "buzzWords": ["foo", "bar"]
             }
         """;
 
@@ -38,25 +58,20 @@ class WorkshopControllerTest {
     void expectWorkshop_whenCreateWorkshop() throws Exception {
 
         //GIVEN
-
         //WHEN
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(testWorkshopWithoutIdAndLikes))
+                    .content(testWorkshopFormData))
             //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.topic").value("fizz"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.subTopic").value("buzz"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.language").value("fizz"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.topic").value("buzz"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords").isArray())
             .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords[0]").value("foo"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords[1]").value("bar"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.likes").value(0))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.estimatedTimeToMaster").value(30))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.difficulty").value("EASY")
-
-            );
+            .andExpect(MockMvcResultMatchers.jsonPath("$.likes").value(0));
     }
 
     @Test
@@ -76,22 +91,18 @@ class WorkshopControllerTest {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/api/workshop")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(testWorkshopWithoutIdAndLikes));
+                .content(testWorkshopFormData));
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/workshop"))
             //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").exists())
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].topic").value("fizz"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].subTopic").value("buzz"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].language").value("fizz"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].topic").value("buzz"))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].buzzWords").isArray())
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].buzzWords[0]").value("foo"))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].buzzWords[1]").value("bar"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].likes").value(0))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].estimatedTimeToMaster").value(30))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].difficulty").value("EASY")
-            );
-
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].likes").value(0));
     }
 
     @Test
@@ -112,7 +123,7 @@ class WorkshopControllerTest {
         String result = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(testWorkshopWithoutIdAndLikes))
+                    .content(testWorkshopFormData))
             .andReturn().getResponse().getContentAsString();
 
         Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
@@ -124,12 +135,10 @@ class WorkshopControllerTest {
                         "id": "adminId",
                         "name": "AdminName"
                     },
-                    "topic": "fizz",
-                    "subTopic": "buzz",
+                    "language": "fizz",
+                    "topic": "buzz",
                     "buzzWords": ["foo", "bar"],
                     "likes": 0,
-                    "estimatedTimeToMaster": 30,
-                    "difficulty": "EASY",
                     "personalStatuses": [
                         {
                             "user": {
@@ -161,7 +170,7 @@ class WorkshopControllerTest {
         String result = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(testWorkshopWithoutIdAndLikes))
+                    .content(testWorkshopFormData))
             .andReturn().getResponse().getContentAsString();
 
         Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
@@ -191,6 +200,4 @@ class WorkshopControllerTest {
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("No workshop found with Id: %s".formatted(id)));
     }
-
-
 }

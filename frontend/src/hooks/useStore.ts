@@ -1,13 +1,13 @@
 import {create} from "zustand";
 import axios from "axios";
-import {PersonalStatus, Workshop, WorkshopWithoutIdAndLikes} from "../utils/types.ts";
+import {PersonalStatus, Workshop, WorkshopFormData} from "../utils/types.ts";
 
 
 type State = {
     workshops: Workshop[],
     isCreatingWorkshop: boolean,
     isReadingWorkshops: boolean,
-    createWorkshop: (requestBody: WorkshopWithoutIdAndLikes) => void,
+    createWorkshop: (requestBody: WorkshopFormData) => void,
     readWorkshops: () => void,
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => void,
     deleteWorkshop: (workshopId: string) => void,
@@ -22,13 +22,15 @@ export const useStore = create<State>((set, get) => ({
     isReadingWorkshops: false,
 
 
-    createWorkshop: (requestBody: WorkshopWithoutIdAndLikes) => {
+    createWorkshop: (requestBody: WorkshopFormData) => {
         const readWorkshops = get().readWorkshops;
         set({isCreatingWorkshop: true});
         axios.post("/api/workshop", requestBody)
             .catch(console.error)
             .finally(() => {
-                set({isCreatingWorkshop: false});
+                setTimeout(() => {
+                    set({isCreatingWorkshop: false});
+                }, 4000);
                 readWorkshops();
             })
     },

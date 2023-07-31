@@ -2,11 +2,11 @@ package org.josh.backend.workshop;
 
 import org.assertj.core.api.Assertions;
 import org.josh.backend.exception.NoSuchWorkshopException;
+import org.josh.backend.openai.OpenAiService;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.josh.backend.utils.ProgressStatus;
 import org.junit.jupiter.api.Test;
-import org.josh.backend.utils.Difficulty;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +19,8 @@ class WorkshopServiceTest {
 
     WorkshopRepository workshopRepo = mock(WorkshopRepository.class);
     IdService idService = mock(IdService.class);
-    WorkshopService workshopService = new WorkshopService(workshopRepo, idService);
+    OpenAiService openAiService = mock(OpenAiService.class);
+    WorkshopService workshopService = new WorkshopService(workshopRepo, idService, openAiService);
 
 
     PersonalStatus testPersonalStatus = new PersonalStatus(
@@ -38,17 +39,14 @@ class WorkshopServiceTest {
         "testSubTopic",
         List.of("testBuzzWord1", "testBuzzWord2"),
         0,
-        0,
-        Difficulty.EASY,
-        List.of(testPersonalStatus)
+        List.of(testPersonalStatus),
+        null
     );
 
-    WorkshopWithoutIdAndLikes testWorkshopWithoutIdAndLikes = new WorkshopWithoutIdAndLikes(
+    WorkshopFormData testWorkshopFormData = new WorkshopFormData(
         "testTopic",
         "testSubTopic",
-        List.of("testBuzzWord1", "testBuzzWord2"),
-        0,
-        Difficulty.EASY
+        List.of("testBuzzWord1", "testBuzzWord2")
     );
 
     @Test
@@ -59,7 +57,7 @@ class WorkshopServiceTest {
         when(workshopRepo.save(any(Workshop.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        Workshop actual = workshopService.createWorkshop(testWorkshopWithoutIdAndLikes);
+        Workshop actual = workshopService.createWorkshop(testWorkshopFormData);
 
         // then
         Assertions.assertThat(actual).isNotNull();

@@ -2,6 +2,9 @@ package org.josh.backend.workshop;
 
 import lombok.RequiredArgsConstructor;
 import org.josh.backend.exception.NoSuchWorkshopException;
+import org.josh.backend.openai.Gpt3TurboRequest;
+import org.josh.backend.openai.Gpt3TurboResponse;
+import org.josh.backend.openai.OpenAiService;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.springframework.stereotype.Service;
@@ -15,18 +18,22 @@ public class WorkshopService {
 
     private final WorkshopRepository workshopRepository;
     private final IdService idService;
+    private final OpenAiService openAiService;
 
-    public Workshop createWorkshop(WorkshopWithoutIdAndLikes workshop) {
+    public Workshop createWorkshop(WorkshopFormData workshopFormData) {
+
+        Gpt3TurboRequest request = openAiService.buildRequestWithFormData(workshopFormData);
+        Gpt3TurboResponse response = openAiService.getResponse(request);
+
         Workshop workshopToSave = new Workshop(
             idService.createId(),
             new MongoUserWithoutPassword("adminId", "AdminName"),
-            workshop.topic(),
-            workshop.subTopic(),
-            workshop.buzzWords(),
+            workshopFormData.language(),
+            workshopFormData.topic(),
+            workshopFormData.buzzWords(),
             0,
-            workshop.estimatedTimeToMaster(),
-            workshop.difficulty(),
-            new ArrayList<>()
+            new ArrayList<>(),
+            response
         );
         return workshopRepository.save(workshopToSave);
     }
@@ -42,13 +49,12 @@ public class WorkshopService {
         Workshop workshopToSave = new Workshop(
             workshopBefore.id(),
             workshopBefore.author(),
+            workshopBefore.language(),
             workshopBefore.topic(),
-            workshopBefore.subTopic(),
             workshopBefore.buzzWords(),
             workshopBefore.likes(),
-            workshopBefore.estimatedTimeToMaster(),
-            workshopBefore.difficulty(),
-            personalStatuses
+            personalStatuses,
+            workshopBefore.content()
         );
         return workshopRepository.save(workshopToSave);
     }

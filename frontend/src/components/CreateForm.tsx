@@ -4,14 +4,14 @@ import {LoadingButton} from "@mui/lab";
 import {Save} from "@mui/icons-material";
 import styled from "@emotion/styled";
 import {useStore} from "../hooks/useStore.ts";
-import {WorkshopWithoutIdAndLikes} from "../utils/types.ts";
+import {WorkshopFormData} from "../utils/types.ts";
+import LinearProgress from '@mui/material/LinearProgress';
+import GearsLoading from "./GearsLoading.tsx";
 
 export default function CreateForm() {
-    const [topic, setTopic] = useState<string>("")
-    const [subTopic, setSubTopic] = useState<string>("");
+    const [language, setLanguage] = useState<string>("")
+    const [topic, setTopic] = useState<string>("");
     const [buzzWords, setBuzzWords] = useState<string[]>([]);
-    const [estimatedTimeToMaster, setEstimatedTimeToMaster] = useState<number>(10);
-    const [difficulty, setDifficulty] = useState<string>("EASY");
 
     const createWorkshop = useStore(state => state.createWorkshop);
     const isCreatingWorkshop = useStore(state => state.isCreatingWorkshop);
@@ -19,32 +19,46 @@ export default function CreateForm() {
     function handleSubmit(event: FormEvent<HTMLFormElement>): void {
         event.preventDefault();
 
-        const workshopWithoutIdAndLikes: WorkshopWithoutIdAndLikes = {
+        const workshopFormData: WorkshopFormData = {
+            language,
             topic,
-            subTopic,
-            buzzWords,
-            estimatedTimeToMaster,
-            difficulty,
+            buzzWords
         }
-        createWorkshop(workshopWithoutIdAndLikes)
+        createWorkshop(workshopFormData)
     }
 
     return (<>
-        <StyledForm onSubmit={handleSubmit}>
+
+        {isCreatingWorkshop && (<>
+            <StyledLoadingBar/>
+            <StyledLoadingHeader>Generating...</StyledLoadingHeader>
+            <GearsLoading/>
+        </>)}
+
+        {!isCreatingWorkshop ? <StyledForm onSubmit={handleSubmit}>
+            <FormControl fullWidth>
+                <InputLabel htmlFor="language">Language</InputLabel>
+                <Select
+                    labelId="language"
+                    id="language"
+                    value={language}
+                    label="Language"
+                    onChange={(e) => setLanguage(e.target.value)}
+                >
+                    <MenuItem value={"JAVASCRIPT"}>JavaScript</MenuItem>
+                    <MenuItem value={"JAVA"}>Java</MenuItem>
+                    <MenuItem value={"PYTHON"}>Python</MenuItem>
+                    <MenuItem value={"C"}>C</MenuItem>
+                    <MenuItem value={"CSHARP"}>C#</MenuItem>
+                </Select>
+            </FormControl>
+
             <StyledTextField
                 id="topicInput"
                 name="topic"
                 label="Topic"
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-            />
-
-            <StyledTextField
-                id="subTopicInput"
-                name="subTopic"
-                label="Sub Topic"
-                value={subTopic}
-                onChange={(e) => setSubTopic(e.target.value)}
             />
 
             <StyledAutocomplete
@@ -73,50 +87,28 @@ export default function CreateForm() {
                 )}
             />
 
-            <FormControl fullWidth>
-                <InputLabel htmlFor="estimated-time">Estimated Time to Complete</InputLabel>
-                <Select
-                    labelId="estimated-time"
-                    id="estimated-time"
-                    value={estimatedTimeToMaster}
-                    label="Estimated Time to Complete"
-                    onChange={(e) => setEstimatedTimeToMaster(e.target.value as number)}
-                >
-                    <MenuItem value={10}>10 Minutes</MenuItem>
-                    <MenuItem value={20}>20 Minutes</MenuItem>
-                    <MenuItem value={30}>30 Minutes</MenuItem>
-                    <MenuItem value={60}>1 Hour</MenuItem>
-                    <MenuItem value={120}>2 Hour</MenuItem>
-                </Select>
-            </FormControl>
-
-            <FormControl fullWidth>
-                <InputLabel htmlFor="difficulty">Choose Difficulty</InputLabel>
-                <Select
-                    labelId="difficulty"
-                    id="difficulty"
-                    value={difficulty}
-                    label="Choose Difficulty"
-                    onChange={e => setDifficulty(e.target.value)}
-                >
-                    <MenuItem value={"EASY"}>Junior</MenuItem>
-                    <MenuItem value={"MEDIUM"}>Senior</MenuItem>
-                    <MenuItem value={"HARD"}>Dark Souls</MenuItem>
-                </Select>
-            </FormControl>
-
             <StyledButton
                 type="submit"
                 color="primary"
                 loading={isCreatingWorkshop}
                 loadingPosition="start"
-                startIcon={<Save />}
+                startIcon={<Save/>}
                 variant="contained"
             >
                 <span>Save</span>
             </StyledButton>
 
-        </StyledForm>
+        </StyledForm> : <StyledButton
+            type="submit"
+            color="primary"
+            loading={isCreatingWorkshop}
+            loadingPosition="start"
+            startIcon={<Save/>}
+            variant="contained"
+        >
+            <span>Save</span>
+        </StyledButton>}
+
     </>)
 }
 
@@ -124,7 +116,7 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 600px;
+  width: 60vw;
   gap: 2rem;
 `;
 
@@ -133,9 +125,21 @@ const StyledTextField = styled(TextField)`
 `;
 
 const StyledAutocomplete = styled(Autocomplete)`
-    width: 100%;
+  width: 100%;
 `;
 
 const StyledButton = styled(LoadingButton)`
-    width: 100px;
+  width: 100px;
+`;
+
+const StyledLoadingBar = styled(LinearProgress)`
+  width: 50vw;
+  height: 0.5rem;
+  margin: 1rem 0;
+  border-radius: 16px;
+`;
+
+const StyledLoadingHeader = styled.h2`
+  font-family: var(--fontCode);
+  color: var(--colorWhite);
 `;

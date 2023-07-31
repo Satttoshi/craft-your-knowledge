@@ -1,7 +1,7 @@
 package org.josh.backend.workshop;
 
+import org.josh.backend.openai.Gpt3TurboResponse;
 import org.josh.backend.security.MongoUserWithoutPassword;
-import org.josh.backend.utils.Difficulty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,12 +13,11 @@ public record Workshop(
     @Id
     String id,
     MongoUserWithoutPassword author,
+    String language,
     String topic,
-    String subTopic,
     List<String> buzzWords,
     int likes,
-    int estimatedTimeToMaster,
-    Difficulty difficulty,
-    List<PersonalStatus> personalStatuses
+    List<PersonalStatus> personalStatuses,
+    Gpt3TurboResponse content
 ) {
 }
