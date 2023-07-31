@@ -6,6 +6,7 @@ import styled from "@emotion/styled";
 import {useStore} from "../hooks/useStore.ts";
 import {WorkshopFormData} from "../utils/types.ts";
 import LinearProgress from '@mui/material/LinearProgress';
+import GearsLoading from "./GearsLoading.tsx";
 
 export default function CreateForm() {
     const [language, setLanguage] = useState<string>("")
@@ -27,6 +28,7 @@ export default function CreateForm() {
     }
 
     return (<>
+        <GearsLoading/>
     {isCreatingWorkshop && <StyledLoadingBar/>}
         <StyledForm onSubmit={handleSubmit}>
             <FormControl fullWidth>
