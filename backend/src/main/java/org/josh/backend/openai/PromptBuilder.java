@@ -16,10 +16,7 @@ public class PromptBuilder {
 
             You will generate content in JSON format, adhering strictly to the following template:
                         
-            {
-                "article": "Your article in markdown",
-                "challenge": "Your challenge in markdown"
-            }
+            {"article": "Your article in markdown","challenge": "Your challenge in markdown"}
                         
             You must ensure that the JSON format remains consistent, modifying only the values and not the keys. The content must always be JSON compatible.
             Your output will be divided into two main sections, each with unique content:

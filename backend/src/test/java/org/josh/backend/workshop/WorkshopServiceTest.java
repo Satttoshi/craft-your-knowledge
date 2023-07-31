@@ -3,6 +3,7 @@ package org.josh.backend.workshop;
 import org.assertj.core.api.Assertions;
 import org.josh.backend.exception.NoSuchWorkshopException;
 import org.josh.backend.openai.OpenAiService;
+import org.josh.backend.openai.PromptBuilder;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.josh.backend.utils.ProgressStatus;
@@ -20,8 +21,7 @@ class WorkshopServiceTest {
     WorkshopRepository workshopRepo = mock(WorkshopRepository.class);
     IdService idService = mock(IdService.class);
     OpenAiService openAiService = mock(OpenAiService.class);
-    WorkshopService workshopService = new WorkshopService(workshopRepo, idService, openAiService);
-
+    WorkshopService workshopService = new WorkshopService(workshopRepo, idService, openAiService, new PromptBuilder());
 
     PersonalStatus testPersonalStatus = new PersonalStatus(
         new MongoUserWithoutPassword(

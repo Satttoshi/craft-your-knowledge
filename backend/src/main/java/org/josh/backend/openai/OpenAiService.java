@@ -19,10 +19,6 @@ public class OpenAiService {
     private String openAiApiKey;
     private WebClient client;
 
-    public OpenAiService() {
-        PromptBuilder promptBuilder = new PromptBuilder();
-    }
-
     @PostConstruct
     public void init() {
         client = WebClient.builder()
@@ -39,38 +35,5 @@ public class OpenAiService {
             .toEntity(Gpt3TurboResponse.class)
             .block();
         return Objects.requireNonNull(responseEntity).getBody();
-    }
-
-    public Gpt3TurboRequest buildRequestWithFormData(WorkshopFormData workshopFormData) {
-
-        String systemPrompt = """
-            You are a helpful assistant teaching about %s.
-            You write in Markdown how it is done in Github.
-            If you generate code ALWAYS format with triple backticks and the language like this:
-            ```java
-            // code here
-            ```
-            """.formatted(workshopFormData.language());
-
-        String prompt = """
-            Write an article about %s.
-            The article should be easy to understand.
-            Please Consider the following buzz words:[ %s ], if no buzz words are provided in previous array, please ignore this.
-            Add a little challenge to the end and consider the estimated time to master and difficulty level to determine the challenge.
-            """.formatted(workshopFormData.topic(),
-            workshopFormData.buzzWords().toString());
-
-        return new Gpt3TurboRequest(
-            "gpt-3.5-turbo",
-            List.of(
-                new PromptMessage(
-                    "system",
-                    systemPrompt
-                ),
-                new PromptMessage(
-                    "user",
-                    prompt
-                )
-            ));
     }
 }

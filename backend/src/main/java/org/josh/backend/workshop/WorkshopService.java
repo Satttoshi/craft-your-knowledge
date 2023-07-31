@@ -5,6 +5,7 @@ import org.josh.backend.exception.NoSuchWorkshopException;
 import org.josh.backend.openai.Gpt3TurboRequest;
 import org.josh.backend.openai.Gpt3TurboResponse;
 import org.josh.backend.openai.OpenAiService;
+import org.josh.backend.openai.PromptBuilder;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,11 @@ public class WorkshopService {
     private final WorkshopRepository workshopRepository;
     private final IdService idService;
     private final OpenAiService openAiService;
+    private final PromptBuilder promptBuilder;
 
     public Workshop createWorkshop(WorkshopFormData workshopFormData) {
 
-        Gpt3TurboRequest request = openAiService.buildRequestWithFormData(workshopFormData);
+        Gpt3TurboRequest request = promptBuilder.buildRequestWithFormData(workshopFormData);
         Gpt3TurboResponse response = openAiService.getResponse(request);
 
         Workshop workshopToSave = new Workshop(
@@ -86,5 +88,4 @@ public class WorkshopService {
         }
         workshopRepository.deleteById(id);
     }
-
 }
