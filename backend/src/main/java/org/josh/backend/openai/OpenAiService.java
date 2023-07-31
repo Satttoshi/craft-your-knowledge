@@ -19,6 +19,10 @@ public class OpenAiService {
     private String openAiApiKey;
     private WebClient client;
 
+    public OpenAiService() {
+        PromptBuilder promptBuilder = new PromptBuilder();
+    }
+
     @PostConstruct
     public void init() {
         client = WebClient.builder()
