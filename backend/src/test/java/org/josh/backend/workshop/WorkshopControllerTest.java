@@ -47,8 +47,8 @@ class WorkshopControllerTest {
 
     String testWorkshopFormData = """
             {
-                "topic": "fizz",
-                "subTopic": "buzz",
+                "language": "fizz",
+                "topic": "buzz",
                 "buzzWords": ["foo", "bar"]
             }
         """;
@@ -66,8 +66,8 @@ class WorkshopControllerTest {
             //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.topic").value("fizz"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$.subTopic").value("buzz"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.language").value("fizz"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.topic").value("buzz"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords").isArray())
             .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords[0]").value("foo"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords[1]").value("bar"))
@@ -97,8 +97,8 @@ class WorkshopControllerTest {
             //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").exists())
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].topic").value("fizz"))
-            .andExpect(MockMvcResultMatchers.jsonPath("$[0].subTopic").value("buzz"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].language").value("fizz"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$[0].topic").value("buzz"))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].buzzWords").isArray())
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].buzzWords[0]").value("foo"))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].buzzWords[1]").value("bar"))
@@ -135,8 +135,8 @@ class WorkshopControllerTest {
                         "id": "adminId",
                         "name": "AdminName"
                     },
-                    "topic": "fizz",
-                    "subTopic": "buzz",
+                    "language": "fizz",
+                    "topic": "buzz",
                     "buzzWords": ["foo", "bar"],
                     "likes": 0,
                     "personalStatuses": [
