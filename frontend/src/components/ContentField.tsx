@@ -22,8 +22,6 @@ export default function ContentField({ content }: Props) {
         }
     }, []);
 
-    console.log(containerHeight);
-
     const fadeIn = keyframes`
     from {
       height: 0;
