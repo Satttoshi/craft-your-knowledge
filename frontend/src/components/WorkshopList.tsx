@@ -17,10 +17,14 @@ export default function WorkshopList() {
         return <h2>Loading...</h2>
     }
 
+
+
     return (
         <>
             <h3>Workshops</h3>
             {workshops.map((workshop: Workshop) => {
+                const articleAndChallenge = workshop.article.choices[0].message.content + "\n" + workshop.challenge.choices[0].message.content;
+
                 return (
                     <div key={workshop.id + "_list"}>
                         <h2>Workshop</h2>
@@ -28,8 +32,7 @@ export default function WorkshopList() {
                         <p>Topic: {workshop.topic}</p>
                         <LikeStar workshop={workshop}/>
                         <DeleteButton id={workshop.id}/>
-                        <ContentField content={workshop.article.choices[0].message.content}/>
-                        <ContentField content={workshop.challenge.choices[0].message.content}/>
+                        <ContentField content={articleAndChallenge}/>
                     </div>
                 )
             })}

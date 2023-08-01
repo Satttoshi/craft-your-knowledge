@@ -53,6 +53,10 @@ public class PromptBuilder {
             The challenge should be achievable, not overly difficult, and take approximately 10 to 30 minutes to complete.
             The text should also be written in Markdown, like GitHub.
             
+            First line header should always be: # Challenge
+
+            Start by providing a brief introduction to the challenge, followed by the challenge itself.
+            
             In instances where you need to generate code blocks, ensure to format them with triple backticks (`) and specify the code language.
             Here's an example:
 
@@ -67,6 +71,8 @@ public class PromptBuilder {
             
             This challenge should be carefully designed so as not to be overly complex, with an estimated completion time between 10 and 30 minutes.
             Furthermore, it should be crafted in a way that allows the reader to solve it directly within a web-based code editor.
+            
+            You may provide hints but NEVER the solution.
             
             The article you wrote previously and the challenge should be based on is as follows:
             ###
