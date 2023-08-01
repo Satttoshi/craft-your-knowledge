@@ -1,9 +1,7 @@
 import {useStore} from "../hooks/useStore.ts";
 import {Workshop} from "../utils/types.ts";
 import {useEffect} from "react";
-import LikeStar from "./LikeStar.tsx";
-import DeleteButton from "./DeleteButton.tsx";
-import ContentField from "./ContentField.tsx";
+import WorkshopPreview from "./WorkshopPreview.tsx";
 
 export default function WorkshopList() {
     const workshops = useStore(state => state.workshops);
@@ -19,18 +17,10 @@ export default function WorkshopList() {
     return (
         <>
             <h3>Workshops</h3>
+            <a href={"/create"}>Create Workshop</a>
             {workshops.map((workshop: Workshop) => {
-                const articleAndChallenge = workshop.article.choices[0].message.content + "\n" + workshop.challenge.choices[0].message.content;
-
                 return (
-                    <div key={workshop.id + "_list"}>
-                        <h2>Workshop</h2>
-                        <p>Language: {workshop.language}</p>
-                        <p>Topic: {workshop.topic}</p>
-                        <LikeStar workshop={workshop}/>
-                        <DeleteButton id={workshop.id}/>
-                        <ContentField content={articleAndChallenge}/>
-                    </div>
+                    <WorkshopPreview key={"preview" + workshop.id} workshop={workshop}/>
                 )
             })}
         </>
