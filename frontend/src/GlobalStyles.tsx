@@ -20,7 +20,7 @@ export default function GlobalStyles() {
       *::after {
         box-sizing: border-box;
       }
-      
+
       :root {
         --fontSans: 'Nunito Sans', sans-serif;
         --fontCode: 'Source Code Pro', monospace;
@@ -32,17 +32,26 @@ export default function GlobalStyles() {
         --colorWhite: #F1EEE6;
         --colorBlack: #01090E;
       }
-      
+
       body {
         font-family: var(--fontSans);
         color: var(--colorWhite);
         background-color: var(--color2);
-        
+
         display: flex;
         flex-direction: column;
         align-items: center;
       }
-      
+
+      body::-webkit-scrollbar {
+        width: 0.5rem;
+        background: var(--color3);
+      }
+
+      body::-webkit-scrollbar-thumb {
+        background: var(--color4);
+      }
+
       #root {
         display: flex;
         flex-direction: column;

@@ -6,7 +6,6 @@ import DeleteButton from "./DeleteButton.tsx";
 import ContentField from "./ContentField.tsx";
 
 export default function WorkshopList() {
-
     const workshops = useStore(state => state.workshops);
     const isReadingWorkshops = useStore(state => state.isReadingWorkshops);
     const readWorkshops = useStore(state => state.readWorkshops);
@@ -16,8 +15,6 @@ export default function WorkshopList() {
     if (isReadingWorkshops) {
         return <h2>Loading...</h2>
     }
-
-
 
     return (
         <>
