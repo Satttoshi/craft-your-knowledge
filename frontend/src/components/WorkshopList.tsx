@@ -28,7 +28,8 @@ export default function WorkshopList() {
                         <p>Topic: {workshop.topic}</p>
                         <LikeStar workshop={workshop}/>
                         <DeleteButton id={workshop.id}/>
-                        <ContentField content={workshop.content.choices[0].message.content}/>
+                        <ContentField content={workshop.article.choices[0].message.content}/>
+                        <ContentField content={workshop.challenge.choices[0].message.content}/>
                     </div>
                 )
             })}
