@@ -9,6 +9,7 @@ type State = {
     isReadingWorkshops: boolean,
     createWorkshop: (requestBody: WorkshopFormData) => void,
     readWorkshops: () => void,
+    getWorkshopById: (id: string) => Workshop,
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => void,
     deleteWorkshop: (workshopId: string) => void,
 }
