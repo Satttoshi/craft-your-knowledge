@@ -1,17 +1,24 @@
-import CreateForm from "./components/CreateForm.tsx";
-import WorkshopList from "./components/WorkshopList.tsx";
 import GlobalStyles from "./GlobalStyles.tsx";
 import theme from "./utils/mui-theme.ts";
 import {ThemeProvider} from "@mui/material";
+import {Route, Routes} from "react-router-dom";
+import Home from "./pages/Home.tsx";
+import Create from "./pages/Create.tsx";
+import NotFound from "./pages/NotFound.tsx";
+import WorkshopDetail from "./pages/WorkshopDetail.tsx";
 
 function App() {
 
     return (
         <>
+            <GlobalStyles/>
             <ThemeProvider theme={theme}>
-                <GlobalStyles/>
-                <WorkshopList/>
-                <CreateForm/>
+                <Routes>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/create" element={<Create/>}/>
+                    <Route path="/workshop/:id" element={<WorkshopDetail/>}/>
+                    <Route path="*" element={<NotFound/>}/>
+                </Routes>
             </ThemeProvider>
         </>
     )

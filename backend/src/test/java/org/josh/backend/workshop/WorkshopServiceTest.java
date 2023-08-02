@@ -2,7 +2,7 @@ package org.josh.backend.workshop;
 
 import org.assertj.core.api.Assertions;
 import org.josh.backend.exception.NoSuchWorkshopException;
-import org.josh.backend.openai.OpenAiService;
+import org.josh.backend.openai.*;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.josh.backend.utils.ProgressStatus;
@@ -20,7 +20,9 @@ class WorkshopServiceTest {
     WorkshopRepository workshopRepo = mock(WorkshopRepository.class);
     IdService idService = mock(IdService.class);
     OpenAiService openAiService = mock(OpenAiService.class);
-    WorkshopService workshopService = new WorkshopService(workshopRepo, idService, openAiService);
+
+    PromptBuilder promptBuilder = mock(PromptBuilder.class);
+    WorkshopService workshopService = new WorkshopService(workshopRepo, idService, openAiService, promptBuilder);
 
 
     PersonalStatus testPersonalStatus = new PersonalStatus(
@@ -40,6 +42,7 @@ class WorkshopServiceTest {
         List.of("testBuzzWord1", "testBuzzWord2"),
         0,
         List.of(testPersonalStatus),
+        null,
         null
     );
 
@@ -52,9 +55,25 @@ class WorkshopServiceTest {
     @Test
     void test_createWorkshop() {
         // given
+
+        Gpt3TurboRequest challengeRequest = new Gpt3TurboRequest(
+            "gpt-3.5-turbo",
+            List.of(
+                new PromptMessage(
+                    "system",
+                    "testSystemPrompt"
+                ),
+                new PromptMessage(
+                    "user",
+                    "testUserPrompt"
+                )
+            )
+        );
+
         String fakeId = "fakeId69";
         when(idService.createId()).thenReturn(fakeId);
         when(workshopRepo.save(any(Workshop.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(promptBuilder.buildChallengeRequestWithPreviousData(any(Gpt3TurboResponse.class))).thenReturn(challengeRequest);
 
         // when
         Workshop actual = workshopService.createWorkshop(testWorkshopFormData);
@@ -78,6 +97,20 @@ class WorkshopServiceTest {
     }
 
     @Test
+    void test_getWorkshopById() {
+        // given
+        String id = "testId42069";
+        Workshop expected = testWorkshop;
+
+        // when
+        when(workshopRepo.findById(id)).thenReturn(Optional.of(expected));
+        Workshop actual = workshopService.getWorkshopById(id);
+
+        // then
+        Assertions.assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
     void test_updatePersonalStatus() {
         // given
         // when
@@ -91,7 +124,7 @@ class WorkshopServiceTest {
     }
 
     @Test
-    void test_deleteWorkshop(){
+    void test_deleteWorkshop() {
         //Given
         String id = "fakeId69";
         //When

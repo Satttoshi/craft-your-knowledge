@@ -5,7 +5,8 @@ export type Workshop = {
     buzzWords: string[],
     likes: number,
     personalStatuses: PersonalStatus[],
-    content: Gpt3TurboResponse
+    article: Gpt3TurboResponse,
+    challenge: Gpt3TurboResponse
 }
 
 export type Gpt3TurboResponse = {

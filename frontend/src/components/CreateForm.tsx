@@ -5,14 +5,15 @@ import {Save} from "@mui/icons-material";
 import styled from "@emotion/styled";
 import {useStore} from "../hooks/useStore.ts";
 import {WorkshopFormData} from "../utils/types.ts";
-import LinearProgress from '@mui/material/LinearProgress';
 import GearsLoading from "./GearsLoading.tsx";
+import {useNavigate} from "react-router-dom";
 
 export default function CreateForm() {
     const [language, setLanguage] = useState<string>("")
     const [topic, setTopic] = useState<string>("");
     const [buzzWords, setBuzzWords] = useState<string[]>([]);
 
+    const navigate = useNavigate();
     const createWorkshop = useStore(state => state.createWorkshop);
     const isCreatingWorkshop = useStore(state => state.isCreatingWorkshop);
 
@@ -25,12 +26,15 @@ export default function CreateForm() {
             buzzWords
         }
         createWorkshop(workshopFormData)
+            .then((workshop)=>{
+                navigate(`/workshop/${workshop.id}`)
+            })
+            .catch(error => console.log(error))
     }
 
     return (<>
 
         {isCreatingWorkshop && (<>
-            <StyledLoadingBar/>
             <StyledLoadingHeader>Generating...</StyledLoadingHeader>
             <GearsLoading/>
         </>)}
@@ -45,11 +49,11 @@ export default function CreateForm() {
                     label="Language"
                     onChange={(e) => setLanguage(e.target.value)}
                 >
-                    <MenuItem value={"JAVASCRIPT"}>JavaScript</MenuItem>
-                    <MenuItem value={"JAVA"}>Java</MenuItem>
-                    <MenuItem value={"PYTHON"}>Python</MenuItem>
+                    <MenuItem value={"JavaScript"}>JavaScript</MenuItem>
+                    <MenuItem value={"Java"}>Java</MenuItem>
+                    <MenuItem value={"Python"}>Python</MenuItem>
                     <MenuItem value={"C"}>C</MenuItem>
-                    <MenuItem value={"CSHARP"}>C#</MenuItem>
+                    <MenuItem value={"C#"}>C#</MenuItem>
                 </Select>
             </FormControl>
 
@@ -130,13 +134,6 @@ const StyledAutocomplete = styled(Autocomplete)`
 
 const StyledButton = styled(LoadingButton)`
   width: 100px;
-`;
-
-const StyledLoadingBar = styled(LinearProgress)`
-  width: 50vw;
-  height: 0.5rem;
-  margin: 1rem 0;
-  border-radius: 16px;
 `;
 
 const StyledLoadingHeader = styled.h2`

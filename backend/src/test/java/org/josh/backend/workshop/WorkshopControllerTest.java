@@ -1,8 +1,7 @@
 package org.josh.backend.workshop;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.josh.backend.openai.Gpt3TurboResponse;
-import org.josh.backend.openai.OpenAiService;
+import org.josh.backend.openai.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +15,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -32,8 +35,26 @@ class WorkshopControllerTest {
     @MockBean
     OpenAiService openAiService;
 
+    @MockBean
+    PromptBuilder promptBuilder;
+
     @BeforeEach
     void setUp() {
+
+        Gpt3TurboRequest challengeRequest = new Gpt3TurboRequest(
+            "gpt-3.5-turbo",
+            List.of(
+                new PromptMessage(
+                    "system",
+                    "testSystemPrompt"
+                ),
+                new PromptMessage(
+                    "user",
+                    "testUserPrompt"
+                )
+            )
+        );
+
         Mockito.when(openAiService.getResponse(Mockito.any()))
             .thenReturn(
                 new Gpt3TurboResponse(
@@ -43,6 +64,8 @@ class WorkshopControllerTest {
                     null,
                     null
                 ));
+
+        Mockito.when(promptBuilder.buildChallengeRequestWithPreviousData(any(Gpt3TurboResponse.class))).thenReturn(challengeRequest);
     }
 
     String testWorkshopFormData = """
@@ -72,6 +95,28 @@ class WorkshopControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords[0]").value("foo"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.buzzWords[1]").value("bar"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.likes").value(0));
+    }
+
+    @Test
+    @DirtiesContext
+    void expectWorkshop_whenGetWorkshopById() throws Exception {
+        //GIVEN
+        String result = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/workshop")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(testWorkshopFormData))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn().getResponse().getContentAsString();
+
+        Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
+        String id = saveResultWorkshop.id();
+
+        //WHEN
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/workshop/%s".formatted(id)))
+
+        //THEN
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().json(result));
     }
 
     @Test

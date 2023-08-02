@@ -1,12 +1,10 @@
 import {useStore} from "../hooks/useStore.ts";
 import {Workshop} from "../utils/types.ts";
 import {useEffect} from "react";
-import LikeStar from "./LikeStar.tsx";
-import DeleteButton from "./DeleteButton.tsx";
-import ContentField from "./ContentField.tsx";
+import WorkshopPreview from "./WorkshopPreview.tsx";
+import styled from "@emotion/styled";
 
 export default function WorkshopList() {
-
     const workshops = useStore(state => state.workshops);
     const isReadingWorkshops = useStore(state => state.isReadingWorkshops);
     const readWorkshops = useStore(state => state.readWorkshops);
@@ -20,18 +18,25 @@ export default function WorkshopList() {
     return (
         <>
             <h3>Workshops</h3>
+            <a href={"/create"}>Create Workshop</a>
+            <StyledContainer>
             {workshops.map((workshop: Workshop) => {
                 return (
-                    <div key={workshop.id + "_list"}>
-                        <h2>Workshop</h2>
-                        <p>Language: {workshop.language}</p>
-                        <p>Topic: {workshop.topic}</p>
-                        <LikeStar workshop={workshop}/>
-                        <DeleteButton id={workshop.id}/>
-                        <ContentField content={workshop.content.choices[0].message.content}/>
-                    </div>
+                    <WorkshopPreview key={"preview" + workshop.id} workshop={workshop}/>
                 )
             })}
+            </StyledContainer>
         </>
     )
 }
+
+const StyledContainer = styled.section`
+  width: 80vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    width: 90vw;
+  }
+`;
