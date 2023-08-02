@@ -103,6 +103,9 @@ public class PromptBuilder {
 
         String systemPrompt = """
             You are reviewing answers to a coding challenge, and you need to validate the answer.
+            
+            The students answer is always ONLY CODE out of an editor.
+            
             Either the student has solved the challenge or not. The decision is binary.
             You decide if a student passes or fail, be fair. Solutions slightly partial answers are also acceptable.
             The challenges programming language was %s and the topic was %s.
@@ -136,7 +139,7 @@ public class PromptBuilder {
             
             You may provide hints but NEVER the solution.
             
-            The students answer to the challenge was:
+            The students code answer to the challenge was:
             
             ###
             %s
