@@ -25,6 +25,11 @@ public class WorkshopController {
         return workshopService.readWorkshops();
     }
 
+    @GetMapping("/{id}")
+    public Workshop getWorkshopById(@PathVariable String id) {
+        return workshopService.getWorkshopById(id);
+    }
+
     @PutMapping("/{id}")
     public Workshop updatePersonalStatus(@PathVariable String id, @RequestBody PersonalStatus personalStatus) {
         return workshopService.updatePersonalStatus(id, personalStatus);

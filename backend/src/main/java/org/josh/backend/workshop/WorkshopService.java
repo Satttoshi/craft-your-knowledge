@@ -48,7 +48,12 @@ public class WorkshopService {
         return workshopRepository.findAll();
     }
 
-    public Workshop updatePersonalStatus(String id, PersonalStatus personalStatus){
+    public Workshop getWorkshopById(String id) {
+        return workshopRepository.findById(id).orElseThrow(() -> new NoSuchWorkshopException("No workshop found with " +
+                                                                                             "Id: " + id));
+    }
+
+    public Workshop updatePersonalStatus(String id, PersonalStatus personalStatus) {
         Workshop workshopBefore = workshopRepository.findById(id).orElseThrow();
         List<PersonalStatus> personalStatuses = alterPersonalStatuses(personalStatus, workshopBefore);
 
@@ -66,7 +71,8 @@ public class WorkshopService {
         return workshopRepository.save(workshopToSave);
     }
 
-    private static List<PersonalStatus> alterPersonalStatuses(PersonalStatus workshopPersonalStatus, Workshop workshopBefore) {
+    private static List<PersonalStatus> alterPersonalStatuses(PersonalStatus workshopPersonalStatus,
+                                                              Workshop workshopBefore) {
         // Search if user already has a personal status for this workshop and update it if so or add it if not
 
         List<PersonalStatus> personalStatuses = new ArrayList<>(workshopBefore.personalStatuses());
