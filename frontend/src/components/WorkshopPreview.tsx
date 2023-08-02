@@ -31,7 +31,7 @@ export default function WorkshopPreview({workshop}: Props) {
                 return <StyledBuzzword
                     key={workshop.id + buzzWord}>{index < workshop.buzzWords.length - 1 ? buzzWord + ", " : buzzWord}</StyledBuzzword>
             })}
-            <StyledStatus>{progressStatus ? progressStatus : "not started"}</StyledStatus>
+            <StyledStatus>{progressStatus || "not started"}</StyledStatus>
             <LikeStar workshop={workshop}/>
             <DeleteButton id={workshop.id}/>
         </StyledPreviewContainer>
