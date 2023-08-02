@@ -97,6 +97,20 @@ class WorkshopServiceTest {
     }
 
     @Test
+    void test_getWorkshopById() {
+        // given
+        String id = "testId42069";
+        Workshop expected = testWorkshop;
+
+        // when
+        when(workshopRepo.findById(id)).thenReturn(Optional.of(expected));
+        Workshop actual = workshopService.getWorkshopById(id);
+
+        // then
+        Assertions.assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
     void test_updatePersonalStatus() {
         // given
         // when
