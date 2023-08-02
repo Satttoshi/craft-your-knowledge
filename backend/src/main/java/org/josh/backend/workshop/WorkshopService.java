@@ -1,8 +1,8 @@
 package org.josh.backend.workshop;
 
 import lombok.RequiredArgsConstructor;
-import org.josh.backend.dto.ChallengeAndAnswer;
 import org.josh.backend.dto.WorkshopFormData;
+import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.exception.NoSuchWorkshopException;
 import org.josh.backend.dto.Gpt3TurboRequest;
 import org.josh.backend.dto.Gpt3TurboResponse;
@@ -101,7 +101,7 @@ public class WorkshopService {
         workshopRepository.deleteById(id);
     }
 
-    public Gpt3TurboResponse validateChallenge(String id, ChallengeAndAnswer challengeAndAnswer) {
-
+    public Gpt3TurboResponse validateChallenge(String id, WorkshopUserChallenge workshopUserChallenge) {
+        return openAiService.getResponse(promptBuilder.buildChallengeValidationRequest(workshopUserChallenge));
     }
 }

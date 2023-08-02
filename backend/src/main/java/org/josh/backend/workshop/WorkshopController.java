@@ -2,9 +2,9 @@ package org.josh.backend.workshop;
 
 import lombok.RequiredArgsConstructor;
 import org.josh.backend.dto.WorkshopFormData;
+import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.exception.ErrorMessage;
 import org.josh.backend.exception.NoSuchWorkshopException;
-import org.josh.backend.dto.ChallengeAndAnswer;
 import org.josh.backend.dto.Gpt3TurboResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +44,8 @@ public class WorkshopController {
     }
 
     @PostMapping("/{id}/validate")
-    public Gpt3TurboResponse validateChallenge(@PathVariable String id, @RequestBody ChallengeAndAnswer challengeAndAnswer) {
-        return workshopService.validateChallenge(id, challengeAndAnswer);
+    public Gpt3TurboResponse validateChallenge(@PathVariable String id, @RequestBody WorkshopUserChallenge workshopUserChallenge) {
+        return workshopService.validateChallenge(id, workshopUserChallenge);
     }
 
     @ExceptionHandler({NoSuchWorkshopException.class})
