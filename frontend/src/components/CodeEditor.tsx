@@ -1,5 +1,6 @@
 import Editor from '@monaco-editor/react';
-import {useState} from "react";
+import {FormEvent, useState} from "react";
+import styled from "@emotion/styled";
 
 type Props = {
     language: string;
@@ -10,14 +11,42 @@ export default function CodeEditor({language}: Props) {
 
     const editorLanguage = language.toLowerCase();
 
-    return <form><Editor
+    function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+        event.preventDefault();
+        console.log(code);
+    }
+
+    return <StyledForm onSubmit={handleSubmit}><Editor
         height="80vh"
-        width="60vw"
-        theme="hc-black"
+        theme="vs-dark"
         defaultLanguage={editorLanguage}
         defaultValue="// start coding here ..."
         onChange={(value) => setCode(value)}
+        options={{minimap: {enabled: false}}}
     />
-    </form>
-
+        <button type="submit">Submit</button>
+    </StyledForm>
 }
+
+const StyledForm = styled.form`
+  margin-top: 1rem;
+  padding: 2rem;
+  background-color: var(--color2);
+  border: 2px solid var(--color4);
+  width: 60vw;
+  overflow: hidden;
+  border-radius: 15px;
+
+  @media (max-width: 768px) {
+    width: 100vw;
+  }
+
+  .monaco-editor-background {
+    background-color: var(--color2);
+  }
+
+  .margin {
+    background-color: var(--color2) !important;
+  }
+
+`;
