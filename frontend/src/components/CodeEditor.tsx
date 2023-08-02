@@ -1,19 +1,31 @@
 import Editor from '@monaco-editor/react';
 import {FormEvent, useState} from "react";
 import styled from "@emotion/styled";
+import {Workshop} from "../utils/types.ts";
 
 type Props = {
-    language: string;
+    workshop: Workshop;
 }
 
-export default function CodeEditor({language}: Props) {
+export default function CodeEditor({workshop}: Props) {
     const [code, setCode] = useState<string | undefined>("// start coding here ...");
 
-    const editorLanguage = language.toLowerCase();
+    const editorLanguage = workshop.language.toLowerCase();
 
     function handleSubmit(event: FormEvent<HTMLFormElement>): void {
         event.preventDefault();
         console.log(code);
+
+        validateChallenge(workshop.id, {
+            user: {
+                id: "1",
+                name: "Default User"
+            },
+            language: editorLanguage,
+            topic: workshop.topic,
+            challenge: workshop.challenge.choices[0].message.content,
+            answer: code
+        })
     }
 
     return <StyledForm onSubmit={handleSubmit}><Editor

@@ -38,6 +38,6 @@ export default function WorkshopDetail() {
         <LikeStar workshop={currentWorkshop}/>
         <DeleteButton id={currentWorkshop.id}/>
         <ContentField content={articleAndChallenge}/>
-        <CodeEditor language={currentWorkshop.language}/>
+        <CodeEditor workshop={currentWorkshop}/>
     </>)
 }
