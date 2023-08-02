@@ -17,6 +17,7 @@ export default function WorkshopPreview({workshop}: Props) {
     const progressStatus = formatProgressStatusEnum(workshop.personalStatuses[0]?.progressStatus)
 
 
+
     return (
         <StyledPreviewContainer>
             <StyledLanguage>{workshop.language}</StyledLanguage>
@@ -25,7 +26,7 @@ export default function WorkshopPreview({workshop}: Props) {
                 return <StyledBuzzword
                     key={workshop.id + buzzWord}>{index < workshop.buzzWords.length - 1 ? buzzWord + ", " : buzzWord}</StyledBuzzword>
             })}
-            <StyledStatus>{progressStatus}</StyledStatus>
+            <StyledStatus>{progressStatus ? progressStatus : "not started"}</StyledStatus>
             <LikeStar workshop={workshop}/>
             <DeleteButton id={workshop.id}/>
         </StyledPreviewContainer>
