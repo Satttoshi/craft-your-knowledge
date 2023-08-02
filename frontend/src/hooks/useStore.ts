@@ -1,6 +1,6 @@
 import {create} from "zustand";
 import axios from "axios";
-import {PersonalStatus, Workshop, WorkshopFormData} from "../utils/types.ts";
+import {Gpt3TurboResponse, PersonalStatus, Workshop, WorkshopFormData, WorkshopUserChallenge} from "../utils/types.ts";
 
 
 type State = {
@@ -16,6 +16,7 @@ type State = {
     getWorkshopById: (id: string) => Workshop,
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => void,
     deleteWorkshop: (workshopId: string) => void,
+    validateChallenge: (workshopId: string, workshopUserChallenge: WorkshopUserChallenge) => Promise<Gpt3TurboResponse>
 }
 
 export const useStore = create<State>((set, get) => ({
@@ -92,6 +93,16 @@ export const useStore = create<State>((set, get) => ({
         axios.delete(`/api/workshop/${workshopId}`)
             .catch(console.error)
             .finally(readWorkshops)
+    },
+
+    validateChallenge: async (workshopId: string, workshopUserChallenge: WorkshopUserChallenge) => {
+        try {
+            const response = await axios.post(`/api/workshop/${workshopId}/validate`, workshopUserChallenge);
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     },
 
     // STORE END
