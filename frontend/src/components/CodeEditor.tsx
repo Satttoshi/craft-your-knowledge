@@ -11,12 +11,22 @@ type Props = {
 export default function CodeEditor({workshop}: Props) {
     const [code, setCode] = useState<string | undefined>("// start coding here ...");
     const validateChallenge = useStore((state) => state.validateChallenge);
+    const [challengeResponse, setChallengeResponse] = useState<string | undefined>("");
 
     const editorLanguage = workshop.language.toLowerCase();
 
     function handleSubmit(event: FormEvent<HTMLFormElement>): void {
         event.preventDefault();
-        console.log(code);
+
+        if (!code) {
+            alert("Your code is empty. Please try again.");
+            return;
+        }
+
+        if (code.length < 100) {
+            alert("Your code is too short. Please try again.");
+            return;
+        }
 
         validateChallenge(workshop.id, {
             user: {
@@ -28,20 +38,23 @@ export default function CodeEditor({workshop}: Props) {
             challenge: workshop.challenge.choices[0].message.content,
             answer: code
         }).then((result) => {
-            console.log(result);
+            setChallengeResponse(result.choices[0].message.content);
         });
     }
 
-    return <StyledForm onSubmit={handleSubmit}><Editor
-        height="80vh"
-        theme="vs-dark"
-        defaultLanguage={editorLanguage}
-        defaultValue="// start coding here ..."
-        onChange={(value) => setCode(value)}
-        options={{minimap: {enabled: false}}}
-    />
-        <button type="submit">Submit</button>
-    </StyledForm>
+    return <>
+        <StyledForm onSubmit={handleSubmit}><Editor
+            height="80vh"
+            theme="vs-dark"
+            defaultLanguage={editorLanguage}
+            defaultValue="// start coding here ..."
+            onChange={(value) => setCode(value)}
+            options={{minimap: {enabled: false}}}
+        />
+            <button type="submit">Submit</button>
+        </StyledForm>
+        <p>{challengeResponse}</p>
+    </>
 }
 
 const StyledForm = styled.form`
