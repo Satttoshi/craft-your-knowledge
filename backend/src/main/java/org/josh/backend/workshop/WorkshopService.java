@@ -1,6 +1,7 @@
 package org.josh.backend.workshop;
 
 import lombok.RequiredArgsConstructor;
+import org.josh.backend.dto.ChallengeAndAnswer;
 import org.josh.backend.dto.WorkshopFormData;
 import org.josh.backend.exception.NoSuchWorkshopException;
 import org.josh.backend.dto.Gpt3TurboRequest;
@@ -98,5 +99,9 @@ public class WorkshopService {
             throw new NoSuchWorkshopException("No workshop found with Id: " + id);
         }
         workshopRepository.deleteById(id);
+    }
+
+    public Gpt3TurboResponse validateChallenge(String id, ChallengeAndAnswer challengeAndAnswer) {
+
     }
 }

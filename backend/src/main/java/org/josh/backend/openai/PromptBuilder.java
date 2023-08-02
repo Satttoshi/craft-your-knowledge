@@ -3,12 +3,15 @@ package org.josh.backend.openai;
 import org.josh.backend.dto.Gpt3TurboRequest;
 import org.josh.backend.dto.Gpt3TurboResponse;
 import org.josh.backend.dto.WorkshopFormData;
+import org.josh.backend.dto.WorkshopUserChallenge;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class PromptBuilder {
+
+    private static final String MODEL = "gpt-3.5-turbo";
     public Gpt3TurboRequest buildRequestWithFormData(WorkshopFormData workshopFormData) {
 
         String systemPrompt = """
@@ -33,7 +36,7 @@ public class PromptBuilder {
             workshopFormData.buzzWords().toString());
 
         return new Gpt3TurboRequest(
-            "gpt-3.5-turbo",
+            MODEL,
             List.of(
                 new PromptMessage(
                     "system",
@@ -83,7 +86,70 @@ public class PromptBuilder {
             """.formatted(previousArticle);
 
         return new Gpt3TurboRequest(
-            "gpt-3.5-turbo",
+            MODEL,
+            List.of(
+                new PromptMessage(
+                    "system",
+                    systemPrompt
+                ),
+                new PromptMessage(
+                    "user",
+                    prompt
+                )
+            ));
+    }
+
+    public Gpt3TurboRequest buildChallengeValidationRequest(WorkshopUserChallenge workshopUserChallenge){
+
+        String systemPrompt = """
+            You are reviewing answers to a coding challenge, and you need to validate the answer.
+            Either the student has solved the challenge or not. The decision is binary.
+            You decide if a student passes or fail, be fair. Solutions slightly partial answers are also acceptable.
+            The challenges programming language was %s and the topic was %s.
+            
+            First line of your response should ALWAYS be one of the 2 options:
+            
+            >>>PASS<<< or >>>FAIL<<<
+            
+            If you decide to pass the student, you should provide a short feedback on the solution followed by congratulations.
+            Else if you decide to fail the student, you should provide a short feedback on the solution followed by a suggestion to improve.
+            ONLY give hints, NEVER the complete solution.
+            
+            The text after the first line SHOULD be written in Markdown, like GitHub.
+            
+            In instances where you need to generate code blocks, ensure to format them with triple backticks (`) and specify the code language.
+            Here's an example:
+
+            ```js
+            // code here
+            ```
+            """.formatted(workshopUserChallenge.language(), workshopUserChallenge.topic());
+
+        String prompt = """
+            This was the challenge:
+            ###
+            %s
+            ###
+            
+            Your task is to:
+            Validate the students answer to the challenge and provide short feedback.
+            
+            You may provide hints but NEVER the solution.
+            
+            The students answer to the challenge was:
+            
+            ###
+            %s
+            ###
+            
+            After your task is done, finish up with:
+            Suggest topics the student should learn to improve, based on your assessment of the answer.
+            Leave a short motivational message at the end.
+            """.formatted(workshopUserChallenge.challenge(), workshopUserChallenge.answer());
+
+
+        return new Gpt3TurboRequest(
+            MODEL,
             List.of(
                 new PromptMessage(
                     "system",
