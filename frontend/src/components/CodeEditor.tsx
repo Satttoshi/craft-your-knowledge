@@ -2,6 +2,7 @@ import Editor from '@monaco-editor/react';
 import {FormEvent, useState} from "react";
 import styled from "@emotion/styled";
 import {Workshop} from "../utils/types.ts";
+import {useStore} from "../hooks/useStore.ts";
 
 type Props = {
     workshop: Workshop;
@@ -9,6 +10,7 @@ type Props = {
 
 export default function CodeEditor({workshop}: Props) {
     const [code, setCode] = useState<string | undefined>("// start coding here ...");
+    const validateChallenge = useStore((state) => state.validateChallenge);
 
     const editorLanguage = workshop.language.toLowerCase();
 
@@ -25,7 +27,9 @@ export default function CodeEditor({workshop}: Props) {
             topic: workshop.topic,
             challenge: workshop.challenge.choices[0].message.content,
             answer: code
-        })
+        }).then((result) => {
+            console.log(result);
+        });
     }
 
     return <StyledForm onSubmit={handleSubmit}><Editor

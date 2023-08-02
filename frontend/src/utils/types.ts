@@ -53,5 +53,9 @@ export type WorkshopUserChallenge = {
         id: string,
         name: string,
     },
+    language: string,
+    topic: string,
+    challenge: string,
+    answer: string | undefined
 
 }
