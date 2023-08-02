@@ -1,20 +1,20 @@
-import { useRef, useEffect, useState} from "react";
+import {useRef, useEffect, useState} from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { CodeBlock } from "./CodeBlock.tsx";
+import {CodeBlock} from "./CodeBlock.tsx";
 import styled from "@emotion/styled";
-import { keyframes} from "@emotion/css";
+import {keyframes} from "@emotion/css";
 import {useStore} from "../hooks/useStore.ts";
-
+import LinearProgress from "@mui/material/LinearProgress";
 
 type Props = {
     content: string;
 };
 
-export default function ContentField({ content }: Props) {
+export default function ContentField({content}: Props) {
     const contentRef = useRef<HTMLDivElement>(null);
     const [containerHeight, setContainerHeight] = useState<number>(0);
-    const isCreatingWorkshop = useStore(state => state.isCreatingWorkshop);
+    const playAnimation = useStore(state => state.playAnimation);
 
     useEffect(() => {
         if (contentRef.current) {
@@ -23,24 +23,27 @@ export default function ContentField({ content }: Props) {
     }, []);
 
     const fadeIn = keyframes`
-    from {
-      height: 0;
-    }
-    to {
-      height: ${containerHeight + 100}px;
-    }
-  `;
+      0% {
+        height: 0;
+      }
+      10%{
+        height: 0;
+      }
+      100% {
+        height: ${containerHeight + 100}px;
+      }
+    `;
 
     const StyledContentField = styled.article`
-      animation: ${(props: { isCreating: boolean }) =>
-              props.isCreating ? fadeIn : ""} 4s ease-in-out;
+      animation: ${(props: { playAnimation: boolean }) =>
+              props.playAnimation ? fadeIn : ""} 4s ease-in-out;
 
       width: 100vw;
       border-radius: 10px;
       padding: 2rem;
       margin: 0;
       overflow: hidden;
-      
+
       background: var(--color2);
 
       @media (min-width: 768px) {
@@ -58,8 +61,8 @@ export default function ContentField({ content }: Props) {
       }
     `;
 
-    return (
-        <StyledContentField isCreating={isCreatingWorkshop}>
+    return (<>
+        <StyledContentField playAnimation={playAnimation}>
             <div ref={contentRef}>
                 <ReactMarkdown
                     children={content}
@@ -72,5 +75,13 @@ export default function ContentField({ content }: Props) {
                 />
             </div>
         </StyledContentField>
-    );
+        {playAnimation && <StyledLoadingBar/>}
+    </>);
 }
+
+const StyledLoadingBar = styled(LinearProgress)`
+  width: 50vw;
+  height: 0.5rem;
+  margin: 1rem 0;
+  border-radius: 16px;
+`;

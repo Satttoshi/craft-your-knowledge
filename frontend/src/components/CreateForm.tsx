@@ -5,7 +5,6 @@ import {Save} from "@mui/icons-material";
 import styled from "@emotion/styled";
 import {useStore} from "../hooks/useStore.ts";
 import {WorkshopFormData} from "../utils/types.ts";
-import LinearProgress from '@mui/material/LinearProgress';
 import GearsLoading from "./GearsLoading.tsx";
 import {useNavigate} from "react-router-dom";
 
@@ -36,7 +35,6 @@ export default function CreateForm() {
     return (<>
 
         {isCreatingWorkshop && (<>
-            <StyledLoadingBar/>
             <StyledLoadingHeader>Generating...</StyledLoadingHeader>
             <GearsLoading/>
         </>)}
@@ -136,13 +134,6 @@ const StyledAutocomplete = styled(Autocomplete)`
 
 const StyledButton = styled(LoadingButton)`
   width: 100px;
-`;
-
-const StyledLoadingBar = styled(LinearProgress)`
-  width: 50vw;
-  height: 0.5rem;
-  margin: 1rem 0;
-  border-radius: 16px;
 `;
 
 const StyledLoadingHeader = styled.h2`

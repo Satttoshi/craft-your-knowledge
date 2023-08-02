@@ -8,6 +8,7 @@ type State = {
     workshop: Workshop | null,
     isCreatingWorkshop: boolean,
     isReadingWorkshops: boolean,
+    playAnimation: boolean,
 
     createWorkshop: (requestBody: WorkshopFormData) => Promise<Workshop>,
     readWorkshops: () => void,
@@ -26,6 +27,8 @@ export const useStore = create<State>((set, get) => ({
     isCreatingWorkshop: false,
     isReadingWorkshops: false,
 
+    playAnimation: false,
+
     createWorkshop: async (requestBody) => {
         const readWorkshops = get().readWorkshops;
         try {
@@ -38,7 +41,9 @@ export const useStore = create<State>((set, get) => ({
             set({ isCreatingWorkshop: false });
             throw error;
         } finally {
+            set({ playAnimation: true });
             set({ isCreatingWorkshop: false });
+            setTimeout(() => set({ playAnimation: false }), 4000);
         }
     },
 
@@ -76,8 +81,6 @@ export const useStore = create<State>((set, get) => ({
             .catch(console.error)
             .finally(readWorkshops)
     },
-
-
 
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => {
         axios.put(`/api/workshop/${workshopId}`, personalStatus)
