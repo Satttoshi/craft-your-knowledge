@@ -61,7 +61,7 @@ class ConfigTest {
     void expectExistingResource() throws IOException {
         //GIVEN;
         Resource location = new ClassPathResource("/static/");
-        String resourcePath = "existing-resource.txt";
+        String resourcePath = "existing-resource.csv";
         //WHEN
         Resource result = new PathResourceResolver() {
             public Resource callGetResource(String resourcePath, Resource location) throws IOException {
@@ -75,7 +75,7 @@ class ConfigTest {
     @Test
     void expectExistingResource_whenRequestingExistingResource() throws Exception {
         //GIVEN
-        String resourcePath = "/existing-resource.txt";
+        String resourcePath = "/existing-resource.csv";
         String expected = "This is a test";
         //WHEN
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(resourcePath);
@@ -89,7 +89,7 @@ class ConfigTest {
     @Test
     void expectFallbackResource_whenRequestingNonExistingResource() throws Exception {
         //GIVEN
-        String resourcePath = "/non-existing-resource.txt";
+        String resourcePath = "/non-existing-resource.csv";
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.get(resourcePath);
         //WHEN
         MockHttpServletResponse response = mockMvc.perform(requestBuilder).andReturn().getResponse();
