@@ -25,7 +25,7 @@ export default function WorkshopPreview({workshop}: Props) {
                 return <StyledBuzzword
                     key={workshop.id + buzzWord}>{index < workshop.buzzWords.length - 1 ? buzzWord + ", " : buzzWord}</StyledBuzzword>
             })}
-            <span>{progressStatus}</span>
+            <StyledStatus>{progressStatus}</StyledStatus>
             <LikeStar workshop={workshop}/>
             <DeleteButton id={workshop.id}/>
         </StyledPreviewContainer>
@@ -33,16 +33,23 @@ export default function WorkshopPreview({workshop}: Props) {
 }
 
 const StyledPreviewContainer = styled.article`
-  width: 35vw;
+  margin: 2rem 0;
   
+  position: relative;
+  width: 38vw;
+  height: 200px;
   background-color: var(--color2);
   border-radius: 10px;
-  padding: 1.5rem;
+  padding: 3rem 1.5rem 1.5rem 1.5rem;
   
-  
-  border: 1px solid red;
   font-family: var(--fontSans);
   color: var(--colorWhite);
+  box-shadow: var(--shadow1);
+  
+  @media (max-width: 768px) {
+    width: 90vw;
+    height: 220px;
+  }
 `;
 
 const StyledLanguage = styled.p`
@@ -51,10 +58,16 @@ const StyledLanguage = styled.p`
   font-size: 1.5rem;
   text-align: center;
 
-  height: 2rem;
+  padding-top: 0.5rem;
+  height: 3rem;
+  width: 12rem;
   background: var(--color3);
   border-radius: 10px;
   box-shadow: var(--shadow2);
+  margin: 0;
+  
+  position: absolute;
+  top: -1.5rem;
 `;
 
 const StyledTopic = styled.h2`
@@ -63,10 +76,16 @@ const StyledTopic = styled.h2`
   font-size: 1.7rem;
   font-weight: 500;
   margin: 0;
-
 `;
 
 const StyledBuzzword = styled.span`
-  font-family: var(--fontSans);
-  color: var(--color4)
+  font-family: var(--fontCode);
+  color: var(--color4);
+  font-size: 1rem;
+`;
+
+const StyledStatus = styled.span`
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
 `;
