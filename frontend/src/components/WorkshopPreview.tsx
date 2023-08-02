@@ -2,12 +2,15 @@ import LikeStar from "./LikeStar.tsx";
 import DeleteButton from "./DeleteButton.tsx";
 import type {Workshop} from "../utils/types.ts";
 import styled from "@emotion/styled";
+import {useNavigate} from "react-router-dom";
 
 type Props = {
     workshop: Workshop;
 }
 
 export default function WorkshopPreview({workshop}: Props) {
+
+    const navigate = useNavigate();
 
     function formatProgressStatusEnum(progressStatus: string) {
         if (!progressStatus) return "";
@@ -16,10 +19,12 @@ export default function WorkshopPreview({workshop}: Props) {
 
     const progressStatus = formatProgressStatusEnum(workshop.personalStatuses[0]?.progressStatus)
 
-
+    function handleOnClick() {
+        navigate(`/workshop/${workshop.id}`)
+    }
 
     return (
-        <StyledPreviewContainer>
+        <StyledPreviewContainer onClick={handleOnClick}>
             <StyledLanguage>{workshop.language}</StyledLanguage>
             <StyledTopic>{workshop.topic}</StyledTopic>
             {workshop.buzzWords.map((buzzWord: string, index: number) => {
@@ -35,21 +40,26 @@ export default function WorkshopPreview({workshop}: Props) {
 
 const StyledPreviewContainer = styled.article`
   margin: 2rem 0;
-  
+
   position: relative;
   width: 38vw;
   height: 200px;
   background-color: var(--color2);
   border-radius: 10px;
   padding: 3rem 1.5rem 1.5rem 1.5rem;
-  
+
   font-family: var(--fontSans);
   color: var(--colorWhite);
   box-shadow: var(--shadow1);
-  
+
   @media (max-width: 768px) {
     width: 90vw;
     height: 220px;
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: var(--color3);
   }
 `;
 
