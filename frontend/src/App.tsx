@@ -11,7 +11,7 @@ function App() {
         <>
             <GlobalStyles/>
             <ThemeProvider theme={theme}>
-            <Routes>
+                <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/create" element={<Create/>}/>
             </Routes>

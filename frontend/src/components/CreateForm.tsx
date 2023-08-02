@@ -45,11 +45,11 @@ export default function CreateForm() {
                     label="Language"
                     onChange={(e) => setLanguage(e.target.value)}
                 >
-                    <MenuItem value={"JAVASCRIPT"}>JavaScript</MenuItem>
-                    <MenuItem value={"JAVA"}>Java</MenuItem>
-                    <MenuItem value={"PYTHON"}>Python</MenuItem>
+                    <MenuItem value={"JavaScript"}>JavaScript</MenuItem>
+                    <MenuItem value={"Java"}>Java</MenuItem>
+                    <MenuItem value={"Python"}>Python</MenuItem>
                     <MenuItem value={"C"}>C</MenuItem>
-                    <MenuItem value={"CSHARP"}>C#</MenuItem>
+                    <MenuItem value={"C#"}>C#</MenuItem>
                 </Select>
             </FormControl>
 

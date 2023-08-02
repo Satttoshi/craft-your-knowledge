@@ -31,12 +31,14 @@ export default function GlobalStyles() {
         --color5: #F2BD1D;
         --colorWhite: #F1EEE6;
         --colorBlack: #01090E;
+        --shadow1: 0px 4px 0px rgba(0, 0, 0, 0.25);
+        --shadow2: 0px 2px 0px 0px rgba(0, 0, 0, 0.25);
       }
 
       body {
         font-family: var(--fontSans);
         color: var(--colorWhite);
-        background-color: var(--color2);
+        background-color: var(--color1);
 
         display: flex;
         flex-direction: column;
