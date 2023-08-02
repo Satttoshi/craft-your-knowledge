@@ -48,6 +48,18 @@ export const useStore = create<State>((set, get) => ({
             })
     },
 
+    getWorkshopById: (id: string): Workshop => {
+        if (!id) {
+            throw new Error("Workshop ID is invalid")
+        }
+        const workshops = get().workshops;
+        const workshop = workshops.find(workshop => workshop.id === id);
+        if (!workshop) {
+            throw new Error("Workshop not found")
+        }
+        return workshop;
+    },
+
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => {
         axios.put(`/api/workshop/${workshopId}`, personalStatus)
             .catch(console.error)

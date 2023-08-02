@@ -1,13 +1,12 @@
 import LikeStar from "./LikeStar.tsx";
 import DeleteButton from "./DeleteButton.tsx";
 import ContentField from "./ContentField.tsx";
-import type {Workshop} from "../utils/types.ts";
 
-type Props = {
-    workshop: Workshop;
-}
 
-export default function WorkshopDetail({workshop}: Props) {
+
+export default function WorkshopDetail() {
+
+
     const articleAndChallenge = workshop.article.choices[0].message.content + "\n" + workshop.challenge.choices[0].message.content;
 
     return (<>

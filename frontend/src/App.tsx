@@ -15,7 +15,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Home/>}/>
                     <Route path="/create" element={<Create/>}/>
-{/*                    <Route path="/workshop/:id" element={<WorkshopDetail/>}/>*/}
+                    <Route path="/workshop/:id" element={<WorkshopDetail/>}/>
                     <Route path="*" element={<h1>404</h1>}/>
                 </Routes>
             </ThemeProvider>
