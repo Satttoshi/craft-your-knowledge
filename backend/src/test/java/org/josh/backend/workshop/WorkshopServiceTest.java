@@ -146,4 +146,9 @@ class WorkshopServiceTest {
         assertThrows(NoSuchWorkshopException.class, () -> workshopService.deleteWorkshop(invalidId));
     }
 
+    @Test
+    void test_validateChallenge(){
+
+    }
+
 }
