@@ -1,6 +1,8 @@
 package org.josh.backend.openai;
 
 import jakarta.annotation.PostConstruct;
+import org.josh.backend.dto.Gpt3TurboRequest;
+import org.josh.backend.dto.Gpt3TurboResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

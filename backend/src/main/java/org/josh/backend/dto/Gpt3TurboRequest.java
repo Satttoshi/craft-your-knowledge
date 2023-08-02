@@ -1,4 +1,6 @@
-package org.josh.backend.openai;
+package org.josh.backend.dto;
+
+import org.josh.backend.openai.PromptMessage;
 
 import java.util.List;
 

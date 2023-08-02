@@ -1,8 +1,9 @@
 package org.josh.backend.workshop;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.josh.backend.dto.Gpt3TurboRequest;
+import org.josh.backend.dto.Gpt3TurboResponse;
 import org.josh.backend.openai.*;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -1,7 +1,9 @@
 package org.josh.backend.openai;
 
 import org.assertj.core.api.Assertions;
-import org.josh.backend.workshop.WorkshopFormData;
+import org.josh.backend.dto.Gpt3TurboRequest;
+import org.josh.backend.dto.Gpt3TurboResponse;
+import org.josh.backend.dto.WorkshopFormData;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

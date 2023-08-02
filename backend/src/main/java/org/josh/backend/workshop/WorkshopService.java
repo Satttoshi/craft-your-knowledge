@@ -1,9 +1,10 @@
 package org.josh.backend.workshop;
 
 import lombok.RequiredArgsConstructor;
+import org.josh.backend.dto.WorkshopFormData;
 import org.josh.backend.exception.NoSuchWorkshopException;
-import org.josh.backend.openai.Gpt3TurboRequest;
-import org.josh.backend.openai.Gpt3TurboResponse;
+import org.josh.backend.dto.Gpt3TurboRequest;
+import org.josh.backend.dto.Gpt3TurboResponse;
 import org.josh.backend.openai.OpenAiService;
 import org.josh.backend.openai.PromptBuilder;
 import org.josh.backend.security.MongoUserWithoutPassword;
@@ -92,7 +93,6 @@ public class WorkshopService {
         }
         return personalStatuses;
     }
-
     public void deleteWorkshop(String id) {
         if (!workshopRepository.existsById(id)) {
             throw new NoSuchWorkshopException("No workshop found with Id: " + id);

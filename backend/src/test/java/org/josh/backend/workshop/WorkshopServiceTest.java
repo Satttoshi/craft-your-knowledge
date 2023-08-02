@@ -1,6 +1,9 @@
 package org.josh.backend.workshop;
 
 import org.assertj.core.api.Assertions;
+import org.josh.backend.dto.Gpt3TurboRequest;
+import org.josh.backend.dto.Gpt3TurboResponse;
+import org.josh.backend.dto.WorkshopFormData;
 import org.josh.backend.exception.NoSuchWorkshopException;
 import org.josh.backend.openai.*;
 import org.josh.backend.security.MongoUserWithoutPassword;

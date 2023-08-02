@@ -1,4 +1,4 @@
-package org.josh.backend.workshop;
+package org.josh.backend.dto;
 
 import java.util.List;
 
