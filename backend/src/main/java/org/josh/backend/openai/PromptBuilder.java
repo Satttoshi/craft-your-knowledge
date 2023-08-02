@@ -105,6 +105,7 @@ public class PromptBuilder {
             You are reviewing answers to a coding challenge, and you need to validate the answer.
             
             The students answer is always ONLY CODE out of an editor.
+            You always addressing the student directly and not a third party.
             
             Either the student has solved the challenge or not. The decision is binary.
             You decide if a student passes or fail, be fair. Solutions slightly partial answers are also acceptable.
