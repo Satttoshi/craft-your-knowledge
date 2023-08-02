@@ -10,6 +10,7 @@ import org.josh.backend.openai.OpenAiService;
 import org.josh.backend.openai.PromptBuilder;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
+import org.josh.backend.utils.ProgressStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -102,6 +103,11 @@ public class WorkshopService {
     }
 
     public Gpt3TurboResponse validateChallenge(String id, WorkshopUserChallenge workshopUserChallenge) {
-        return openAiService.getResponse(promptBuilder.buildChallengeValidationRequest(workshopUserChallenge));
+        Gpt3TurboResponse validationResponse = openAiService.getResponse(promptBuilder.buildChallengeValidationRequest(workshopUserChallenge));
+        if (validationResponse.choices().get(0).message().content().contains(">>>PASS<<<")) {
+            PersonalStatus personalStatus = new PersonalStatus(workshopUserChallenge.user(), ProgressStatus.COMPLETED, true);
+            updatePersonalStatus(id, personalStatus);
+        }
+        return validationResponse;
     }
 }
