@@ -98,6 +98,28 @@ class WorkshopControllerTest {
     }
 
     @Test
+    @DirtiesContext
+    void expectWorkshop_whenGetWorkshopById() throws Exception {
+        //GIVEN
+        String result = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/workshop")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(testWorkshopFormData))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn().getResponse().getContentAsString();
+
+        Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
+        String id = saveResultWorkshop.id();
+
+        //WHEN
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/workshop/%s".formatted(id)))
+
+        //THEN
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().json(result));
+    }
+
+    @Test
     void expectEmptyList_whenReadWorkshops() throws Exception {
         //GIVEN
         //WHEN
