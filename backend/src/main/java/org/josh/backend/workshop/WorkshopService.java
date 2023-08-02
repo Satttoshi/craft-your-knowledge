@@ -103,6 +103,9 @@ public class WorkshopService {
     }
 
     public Gpt3TurboResponse validateChallenge(String id, WorkshopUserChallenge workshopUserChallenge) {
+        if(!workshopRepository.existsById(id)) {
+            throw new NoSuchWorkshopException("No workshop found with Id: " + id);
+        }
         Gpt3TurboResponse validationResponse = openAiService.getResponse(promptBuilder.buildChallengeValidationRequest(workshopUserChallenge));
         if (validationResponse.choices().get(0).message().content().contains(">>>PASS<<<")) {
             PersonalStatus personalStatus = new PersonalStatus(workshopUserChallenge.user(), ProgressStatus.COMPLETED, true);
