@@ -5,7 +5,7 @@ import {Route, Routes} from "react-router-dom";
 import Home from "./pages/Home.tsx";
 import Create from "./pages/Create.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import WorkshopDetail from "./components/WorkshopDetail.tsx";
+import WorkshopDetail from "./pages/WorkshopDetail.tsx";
 
 function App() {
 

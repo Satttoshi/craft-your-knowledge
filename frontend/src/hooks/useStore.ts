@@ -5,35 +5,41 @@ import {PersonalStatus, Workshop, WorkshopFormData} from "../utils/types.ts";
 
 type State = {
     workshops: Workshop[],
+    workshop: Workshop | null,
     isCreatingWorkshop: boolean,
     isReadingWorkshops: boolean,
-    createWorkshop: (requestBody: WorkshopFormData) => void,
+
+    createWorkshop: (requestBody: WorkshopFormData) => Promise<Workshop>,
     readWorkshops: () => void,
+    readWorkshopById: (id: string) => void,
     getWorkshopById: (id: string) => Workshop,
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => void,
     deleteWorkshop: (workshopId: string) => void,
 }
 
-
 export const useStore = create<State>((set, get) => ({
     // STORE START
 
     workshops: [],
+    workshop: null,
+
     isCreatingWorkshop: false,
     isReadingWorkshops: false,
 
-
-    createWorkshop: (requestBody: WorkshopFormData) => {
+    createWorkshop: async (requestBody) => {
         const readWorkshops = get().readWorkshops;
-        set({isCreatingWorkshop: true});
-        axios.post("/api/workshop", requestBody)
-            .catch(console.error)
-            .finally(() => {
-                setTimeout(() => {
-                    set({isCreatingWorkshop: false});
-                }, 4000);
-                readWorkshops();
-            })
+        try {
+            set({ isCreatingWorkshop: true });
+            const response = await axios.post("/api/workshop", requestBody);
+            readWorkshops();
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            set({ isCreatingWorkshop: false });
+            throw error;
+        } finally {
+            set({ isCreatingWorkshop: false });
+        }
     },
 
     readWorkshops: () => {
@@ -60,6 +66,18 @@ export const useStore = create<State>((set, get) => ({
         }
         return workshop;
     },
+
+    readWorkshopById: (id: string) => {
+        const readWorkshops = get().readWorkshops;
+        axios.get(`/api/workshop/${id}`)
+            .then(response => {
+                set({workshop: response.data});
+            })
+            .catch(console.error)
+            .finally(readWorkshops)
+    },
+
+
 
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => {
         axios.put(`/api/workshop/${workshopId}`, personalStatus)

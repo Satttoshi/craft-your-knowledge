@@ -7,12 +7,14 @@ import {useStore} from "../hooks/useStore.ts";
 import {WorkshopFormData} from "../utils/types.ts";
 import LinearProgress from '@mui/material/LinearProgress';
 import GearsLoading from "./GearsLoading.tsx";
+import {useNavigate} from "react-router-dom";
 
 export default function CreateForm() {
     const [language, setLanguage] = useState<string>("")
     const [topic, setTopic] = useState<string>("");
     const [buzzWords, setBuzzWords] = useState<string[]>([]);
 
+    const navigate = useNavigate();
     const createWorkshop = useStore(state => state.createWorkshop);
     const isCreatingWorkshop = useStore(state => state.isCreatingWorkshop);
 
@@ -25,6 +27,10 @@ export default function CreateForm() {
             buzzWords
         }
         createWorkshop(workshopFormData)
+            .then((workshop)=>{
+                navigate(`/workshop/${workshop.id}`)
+            })
+            .catch(error => console.log(error))
     }
 
     return (<>

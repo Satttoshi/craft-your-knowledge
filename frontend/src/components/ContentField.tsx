@@ -37,9 +37,11 @@ export default function ContentField({ content }: Props) {
 
       width: 100vw;
       border-radius: 10px;
-      padding: 1rem;
+      padding: 2rem;
       margin: 0;
       overflow: hidden;
+      
+      background: var(--color2);
 
       @media (min-width: 768px) {
         width: 60vw;
