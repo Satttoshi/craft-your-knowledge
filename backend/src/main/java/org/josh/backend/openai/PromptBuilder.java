@@ -11,7 +11,6 @@ import java.util.List;
 @Component
 public class PromptBuilder {
 
-    private static final String MODEL = "gpt-3.5-turbo";
     public Gpt3TurboRequest buildRequestWithFormData(WorkshopFormData workshopFormData) {
 
         String systemPrompt = """
@@ -35,18 +34,7 @@ public class PromptBuilder {
             """.formatted(workshopFormData.topic(),
             workshopFormData.buzzWords().toString());
 
-        return new Gpt3TurboRequest(
-            MODEL,
-            List.of(
-                new PromptMessage(
-                    "system",
-                    systemPrompt
-                ),
-                new PromptMessage(
-                    "user",
-                    prompt
-                )
-            ));
+        return bundleRequest(systemPrompt, prompt);
     }
 
     public Gpt3TurboRequest buildChallengeRequestWithPreviousData(Gpt3TurboResponse previousResponse) {
@@ -85,18 +73,7 @@ public class PromptBuilder {
             ###
             """.formatted(previousArticle);
 
-        return new Gpt3TurboRequest(
-            MODEL,
-            List.of(
-                new PromptMessage(
-                    "system",
-                    systemPrompt
-                ),
-                new PromptMessage(
-                    "user",
-                    prompt
-                )
-            ));
+        return bundleRequest(systemPrompt, prompt);
     }
 
     public Gpt3TurboRequest buildChallengeValidationRequest(WorkshopUserChallenge workshopUserChallenge){
@@ -152,8 +129,12 @@ public class PromptBuilder {
             """.formatted(workshopUserChallenge.challenge(), workshopUserChallenge.answer());
 
 
+        return bundleRequest(systemPrompt, prompt);
+    }
+
+    private Gpt3TurboRequest bundleRequest(String systemPrompt, String prompt) {
         return new Gpt3TurboRequest(
-            MODEL,
+            "gpt-3.5-turbo",
             List.of(
                 new PromptMessage(
                     "system",
