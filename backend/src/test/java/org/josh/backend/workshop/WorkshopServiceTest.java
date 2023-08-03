@@ -1,6 +1,10 @@
 package org.josh.backend.workshop;
 
 import org.assertj.core.api.Assertions;
+import org.josh.backend.dto.Gpt3TurboRequest;
+import org.josh.backend.dto.Gpt3TurboResponse;
+import org.josh.backend.dto.WorkshopFormData;
+import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.exception.NoSuchWorkshopException;
 import org.josh.backend.openai.*;
 import org.josh.backend.security.MongoUserWithoutPassword;
@@ -50,6 +54,14 @@ class WorkshopServiceTest {
         "testTopic",
         "testSubTopic",
         List.of("testBuzzWord1", "testBuzzWord2")
+    );
+
+    WorkshopUserChallenge workshopUserChallenge = new WorkshopUserChallenge(
+        new MongoUserWithoutPassword("fakeUserId69", "fakeUserName69"),
+        "testTopic",
+        "testSubTopic",
+        "do back flips",
+        "i dont do back flips"
     );
 
     @Test
@@ -141,6 +153,68 @@ class WorkshopServiceTest {
         //When
         //Then
         assertThrows(NoSuchWorkshopException.class, () -> workshopService.deleteWorkshop(invalidId));
+    }
+
+    @Test
+    void test_validateChallenge() {
+        //given
+
+        Gpt3TurboRequest challengeRequest = new Gpt3TurboRequest(
+            "gpt-3.5-turbo",
+            List.of(
+                new PromptMessage(
+                    "system",
+                    "testSystemPrompt"
+                ),
+                new PromptMessage(
+                    "user",
+                    "testUserPrompt"
+                )
+            )
+        );
+
+        Gpt3TurboResponse challengeResponse = new Gpt3TurboResponse(
+            "fakeId69",
+            "chat.completion",
+            42069,
+            List.of(new Gpt3TurboResponse.Choices(
+                0,
+                new PromptMessage(
+                    "assistant",
+                    ">>>PASS<<<You did it!"
+                ),
+                "stop")
+            ),
+            new Gpt3TurboResponse.Usage(
+                42069,
+                42069,
+                42069)
+
+        );
+
+        String fakeId = "fakeId69";
+        when(idService.createId()).thenReturn(fakeId);
+        when(workshopRepo.existsById(fakeId)).thenReturn(true);
+        when(promptBuilder.buildChallengeValidationRequest(workshopUserChallenge)).thenReturn(challengeRequest);
+        when(openAiService.getResponse(challengeRequest)).thenReturn(challengeResponse);
+        when(workshopRepo.findById(fakeId)).thenReturn(Optional.of(testWorkshop));
+
+        // when
+        Gpt3TurboResponse actual = workshopService.validateChallenge(fakeId, workshopUserChallenge);
+
+        // then
+        Assertions.assertThat(actual).isNotNull();
+        Assertions.assertThat(actual.id()).isEqualTo(fakeId);
+
+    }
+
+    @Test
+    void expectNoSuchWorkshopException_whenValidateChallengeWithInvalidId() {
+        //Given
+        String invalidId = "invalidId";
+        //When
+        //Then
+        assertThrows(NoSuchWorkshopException.class, () -> workshopService.validateChallenge(invalidId, workshopUserChallenge));
     }
 
 }

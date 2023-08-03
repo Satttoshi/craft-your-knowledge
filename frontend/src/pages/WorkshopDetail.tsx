@@ -4,6 +4,7 @@ import ContentField from "../components/ContentField.tsx";
 import {useParams} from "react-router-dom";
 import {useStore} from "../hooks/useStore.ts";
 import NotFound from "../pages/NotFound.tsx";
+import CodeEditor from "../components/CodeEditor.tsx";
 
 export default function WorkshopDetail() {
 
@@ -37,5 +38,6 @@ export default function WorkshopDetail() {
         <LikeStar workshop={currentWorkshop}/>
         <DeleteButton id={currentWorkshop.id}/>
         <ContentField content={articleAndChallenge}/>
+        <CodeEditor workshop={currentWorkshop}/>
     </>)
 }

@@ -1,7 +1,11 @@
 package org.josh.backend.openai;
 
 import org.assertj.core.api.Assertions;
-import org.josh.backend.workshop.WorkshopFormData;
+import org.josh.backend.dto.Gpt3TurboRequest;
+import org.josh.backend.dto.Gpt3TurboResponse;
+import org.josh.backend.dto.WorkshopFormData;
+import org.josh.backend.dto.WorkshopUserChallenge;
+import org.josh.backend.security.MongoUserWithoutPassword;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -130,6 +134,95 @@ class PromptBuilderTest {
 
         // when
         Gpt3TurboRequest request = promptBuilder.buildChallengeRequestWithPreviousData(previousResponse);
+
+        // then
+        Assertions.assertThat(request)
+            .isNotNull()
+            .isEqualTo(expectedRequest);
+    }
+
+    @Test
+    void test_buildChallengeValidationRequest() {
+        // given
+        MongoUserWithoutPassword user = new MongoUserWithoutPassword(
+            "testId",
+            "testUsername"
+        );
+
+        WorkshopUserChallenge workshopUserChallenge = new WorkshopUserChallenge(
+            user,
+            "testTopic",
+            "testSubTopic",
+            "do a back flip",
+            "for(int i = 0; i < 10; i++) {\n\tSystem.out.println(\"Back Flip!\");\n}"
+        );
+
+        String systemPrompt = """
+            You are reviewing answers to a coding challenge, and you need to validate the answer.
+            
+            The students answer is always ONLY CODE out of an editor.
+            You NEVER write student, you ALWAYS address directly with "you".
+            
+            Either the student has solved the challenge or not. The decision is binary.
+            You decide if a student passes or fail, be fair. Solutions slightly partial answers are also acceptable.
+            The challenges programming language was %s and the topic was %s.
+            
+            First line of your response should ALWAYS be one of the 2 options:
+            
+            >>>PASS<<< or >>>FAIL<<<
+            
+            If you decide to pass the student, you should provide a short feedback on the solution followed by congratulations.
+            Else if you decide to fail the student, you should provide a short feedback on the solution followed by a suggestion to improve.
+            ONLY give hints, NEVER the complete solution.
+            
+            The text after the first line SHOULD be written in Markdown, like GitHub.
+            
+            In instances where you need to generate code blocks, ensure to format them with triple backticks (`) and specify the code language.
+            Here's an example:
+
+            ```js
+            // code here
+            ```
+            """.formatted(workshopUserChallenge.language(), workshopUserChallenge.topic());
+
+        String prompt = """
+            This was the challenge:
+            ###
+            %s
+            ###
+            
+            Your task is to:
+            Validate the students answer to the challenge and provide short feedback.
+            
+            You may provide hints but NEVER the solution.
+            
+            The students code answer to the challenge was:
+            
+            ###
+            %s
+            ###
+            
+            After your task is done, finish up with:
+            Suggest topics the student should learn to improve, based on your assessment of the answer.
+            Leave a short motivational message at the end.
+            """.formatted(workshopUserChallenge.challenge(), workshopUserChallenge.answer());
+
+        Gpt3TurboRequest expectedRequest = new Gpt3TurboRequest(
+            "gpt-3.5-turbo",
+            List.of(
+                new PromptMessage(
+                    "system",
+                    systemPrompt
+                ),
+                new PromptMessage(
+                    "user",
+                    prompt
+                )
+            )
+        );
+
+        // when
+        Gpt3TurboRequest request = promptBuilder.buildChallengeValidationRequest(workshopUserChallenge);
 
         // then
         Assertions.assertThat(request)

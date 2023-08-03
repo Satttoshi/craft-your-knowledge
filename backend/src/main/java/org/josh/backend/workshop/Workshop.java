@@ -1,6 +1,6 @@
 package org.josh.backend.workshop;
 
-import org.josh.backend.openai.Gpt3TurboResponse;
+import org.josh.backend.dto.Gpt3TurboResponse;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

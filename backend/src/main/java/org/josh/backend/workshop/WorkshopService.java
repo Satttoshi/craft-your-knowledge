@@ -1,13 +1,16 @@
 package org.josh.backend.workshop;
 
 import lombok.RequiredArgsConstructor;
+import org.josh.backend.dto.WorkshopFormData;
+import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.exception.NoSuchWorkshopException;
-import org.josh.backend.openai.Gpt3TurboRequest;
-import org.josh.backend.openai.Gpt3TurboResponse;
+import org.josh.backend.dto.Gpt3TurboRequest;
+import org.josh.backend.dto.Gpt3TurboResponse;
 import org.josh.backend.openai.OpenAiService;
 import org.josh.backend.openai.PromptBuilder;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
+import org.josh.backend.utils.ProgressStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -92,11 +95,23 @@ public class WorkshopService {
         }
         return personalStatuses;
     }
-
     public void deleteWorkshop(String id) {
         if (!workshopRepository.existsById(id)) {
             throw new NoSuchWorkshopException("No workshop found with Id: " + id);
         }
         workshopRepository.deleteById(id);
+    }
+
+    public Gpt3TurboResponse validateChallenge(String id, WorkshopUserChallenge workshopUserChallenge) {
+        if(!workshopRepository.existsById(id)) {
+            throw new NoSuchWorkshopException("No workshop found with Id: " + id);
+        }
+        Gpt3TurboRequest validationRequest = promptBuilder.buildChallengeValidationRequest(workshopUserChallenge);
+        Gpt3TurboResponse validationResponse = openAiService.getResponse(validationRequest);
+        if (validationResponse.choices().get(0).message().content().contains(">>>PASS<<<")) {
+            PersonalStatus personalStatus = new PersonalStatus(workshopUserChallenge.user(), ProgressStatus.COMPLETED, true);
+            updatePersonalStatus(id, personalStatus);
+        }
+        return validationResponse;
     }
 }

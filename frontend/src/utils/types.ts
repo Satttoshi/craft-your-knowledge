@@ -47,3 +47,15 @@ export type WorkshopFormData = {
     topic: string,
     buzzWords: string[]
 }
+
+export type WorkshopUserChallenge = {
+    user: {
+        id: string,
+        name: string,
+    },
+    language: string,
+    topic: string,
+    challenge: string,
+    answer: string | undefined
+
+}

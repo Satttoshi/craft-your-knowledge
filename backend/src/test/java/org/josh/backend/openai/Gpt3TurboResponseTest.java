@@ -1,5 +1,6 @@
 package org.josh.backend.openai;
 
+import org.josh.backend.dto.Gpt3TurboResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
