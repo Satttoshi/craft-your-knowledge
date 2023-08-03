@@ -3,7 +3,9 @@ package org.josh.backend.workshop;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.josh.backend.dto.Gpt3TurboRequest;
 import org.josh.backend.dto.Gpt3TurboResponse;
+import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.openai.*;
+import org.josh.backend.security.MongoUserWithoutPassword;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -42,7 +44,7 @@ class WorkshopControllerTest {
     @BeforeEach
     void setUp() {
 
-        Gpt3TurboRequest challengeRequest = new Gpt3TurboRequest(
+        Gpt3TurboRequest gpt3TurboRequest = new Gpt3TurboRequest(
             "gpt-3.5-turbo",
             List.of(
                 new PromptMessage(
@@ -57,16 +59,26 @@ class WorkshopControllerTest {
         );
 
         Mockito.when(openAiService.getResponse(Mockito.any()))
-            .thenReturn(
-                new Gpt3TurboResponse(
-                    "id",
-                    "object",
+            .thenReturn(new Gpt3TurboResponse(
+                "fakeId69",
+                "chat.completion",
+                42069,
+                List.of(new Gpt3TurboResponse.Choices(
                     0,
-                    null,
-                    null
-                ));
+                    new PromptMessage(
+                        "assistant",
+                        ">>>PASS<<<You did it!"
+                    ),
+                    "stop")
+                ),
+                new Gpt3TurboResponse.Usage(
+                    42069,
+                    42069,
+                    42069)
 
-        Mockito.when(promptBuilder.buildChallengeRequestWithPreviousData(any(Gpt3TurboResponse.class))).thenReturn(challengeRequest);
+            ));
+
+        Mockito.when(promptBuilder.buildChallengeRequestWithPreviousData(any(Gpt3TurboResponse.class))).thenReturn(gpt3TurboRequest);
     }
 
     String testWorkshopFormData = """
@@ -115,7 +127,7 @@ class WorkshopControllerTest {
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/workshop/%s".formatted(id)))
 
-        //THEN
+            //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().json(result));
     }
@@ -246,4 +258,35 @@ class WorkshopControllerTest {
             .andExpect(MockMvcResultMatchers.status().isNotFound())
             .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("No workshop found with Id: %s".formatted(id)));
     }
+
+    @Test
+    void expectValidation_whenValidateChallenge() throws Exception {
+        //GIVEN
+        String result = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/workshop")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(testWorkshopFormData))
+            .andReturn().getResponse().getContentAsString();
+
+        Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
+        String id = saveResultWorkshop.id();
+
+        WorkshopUserChallenge workshopUserChallenge = new WorkshopUserChallenge(
+            new MongoUserWithoutPassword("fakeUserId69", "fakeUserName69"),
+            "testTopic",
+            "testSubTopic",
+            "do back flips",
+            "i dont do back flips"
+        );
+
+        //WHEN
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/workshop/%s/validate".formatted(id))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(workshopUserChallenge)))
+
+            //THEN
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("fakeId69"));
+    }
+
 }
