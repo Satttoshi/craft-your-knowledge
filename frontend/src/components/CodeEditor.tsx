@@ -48,6 +48,7 @@ export default function CodeEditor({workshop}: Props) {
     return <StyledContainer>
 
         <StyledEditorContainer onSubmit={handleSubmit}>
+            <StyledChallengeResponse><p>{challengeResponse}</p></StyledChallengeResponse>
             <Editor
                 height="66vh"
                 theme="vs-dark"
@@ -76,7 +77,23 @@ const StyledContainer = styled.div`
   justify-content: space-between;
 `;
 
+const StyledChallengeResponse = styled.div`
+  background: red;
+  width: 90%;
+  height: auto;
+  position: absolute;
+  z-index: 100;
+  transform: translateX(5%);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+`;
+
 const StyledEditorContainer = styled.section`
+  position: relative;
+  
   padding: 2rem;
   background-color: var(--color2);
   border: 2px solid var(--color4);
