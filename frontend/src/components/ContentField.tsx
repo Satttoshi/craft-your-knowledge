@@ -45,7 +45,7 @@ export default function ContentField({content}: Props) {
 
       background: var(--color2);
       
-      height: 90vh;
+      height: 92vh;
 
       ::-webkit-scrollbar {
         width: 0.5rem;

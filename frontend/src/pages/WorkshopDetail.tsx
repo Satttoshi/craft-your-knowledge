@@ -67,7 +67,7 @@ const StyledBanner = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 3rem;
+  padding: 1vh 3rem;
 
   h2 {
     margin: 0;
@@ -121,6 +121,8 @@ const StyledMain = styled.main`
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
   gap: 1rem;
+  align-items: end;
+  
   position: fixed;
   bottom: 0;
 `;

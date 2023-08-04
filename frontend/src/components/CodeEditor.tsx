@@ -3,6 +3,8 @@ import {FormEvent, useState} from "react";
 import styled from "@emotion/styled";
 import {Workshop} from "../utils/types.ts";
 import {useStore} from "../hooks/useStore.ts";
+import LoadingButton from '@mui/lab/LoadingButton';
+import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
 
 type Props = {
     workshop: Workshop;
@@ -46,7 +48,7 @@ export default function CodeEditor({workshop}: Props) {
 
         <StyledEditorContainer onSubmit={handleSubmit}>
             <Editor
-                height="20vh"
+                height="66vh"
                 theme="vs-dark"
                 defaultLanguage={editorLanguage}
                 defaultValue="// start coding here ..."
@@ -55,31 +57,20 @@ export default function CodeEditor({workshop}: Props) {
             />
         </StyledEditorContainer>
         <StyledForm onSubmit={handleSubmit}>
-            <button type="submit">Submit</button>
+            <LoadingButton color="secondary" variant="outlined" endIcon={<LibraryAddCheckIcon />}>Submit</LoadingButton>
         </StyledForm>
-        <p>{challengeResponse}</p>
     </StyledContainer>
 }
 
 const StyledContainer = styled.div`
-    overflow: hidden;
-`;
-
-const StyledForm = styled.form`
-  padding: 2rem;
-  background-color: var(--color2);
+  padding: 0;
+  margin: 0;
   overflow: hidden;
-  border-radius: 10px 10px 0 0;
-  height: 15vh;
-  
-  .monaco-editor-background {
-    background-color: var(--color2);
-  }
+  height: 92vh;
 
-  .margin {
-    background-color: var(--color2) !important;
-  }
-
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const StyledEditorContainer = styled.section`
@@ -88,8 +79,25 @@ const StyledEditorContainer = styled.section`
   border: 2px solid var(--color4);
   overflow: hidden;
   border-radius: 10px;
-  height: 50vh;
+  height: 72vh;
 
+  .monaco-editor-background {
+    background-color: var(--color2);
+  }
+
+  .margin {
+    background-color: var(--color2) !important;
+  }
+`;
+
+const StyledForm = styled.form`
+  padding: 2rem;
+  background-color: var(--color2);
+  overflow: hidden;
+  border-radius: 10px;
+  height: 15vh;
+  margin-bottom: 2.5vh;
+  
   .monaco-editor-background {
     background-color: var(--color2);
   }
