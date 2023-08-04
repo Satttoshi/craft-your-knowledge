@@ -7,6 +7,7 @@ import NotFound from "../pages/NotFound.tsx";
 import CodeEditor from "../components/CodeEditor.tsx";
 import styled from "@emotion/styled";
 import Button from '@mui/material/Button';
+import {ReactComponent as UserIcon} from "../assets/usericon.svg";
 
 export default function WorkshopDetail() {
 
@@ -40,10 +41,15 @@ export default function WorkshopDetail() {
 
     return (<>
         <StyledBanner>
-            <Button onClick={handleBack} variant="outlined"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--color4)"><path d="M21,11H6.83L10.41,7.41L9,6L3,12L9,18L10.41,16.58L6.83,13H21V11Z" /></svg></Button>
-            <h2>Workshop</h2>
-            <p>Language: {currentWorkshop.language}</p>
-            <p>Topic: {currentWorkshop.topic}</p>
+            <StyledBackButton onClick={handleBack} variant="outlined">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M21,11H6.83L10.41,7.41L9,6L3,12L9,18L10.41,16.58L6.83,13H21V11Z"/>
+                </svg>
+            </StyledBackButton>
+            <StyledTitle>Workshop</StyledTitle>
+            <StyledUserInfo><UserIcon/>
+                <p>Default User</p></StyledUserInfo>
+
         </StyledBanner>
         <LikeStar workshop={currentWorkshop}/>
         <DeleteButton id={currentWorkshop.id}/>
@@ -53,20 +59,61 @@ export default function WorkshopDetail() {
 }
 
 const StyledBanner = styled.div`
-  width: 95vw;
-  background-color: var(--color3);
-  border-radius: 10px;
+  
+  position: fixed;
+  top: 0;
+  border-radius: 0 0 10px 10px;
+  width: 96vw;
+  background-color: var(--color2);
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 3rem;
 
   h2 {
     margin: 0;
+
+  }
+
+`;
+
+const StyledBackButton = styled(Button)`
+  
+  width: 5rem;
+  padding: 0;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    fill: var(--color4);
+    padding: 0;
+    
+  }
+
+`;
+
+
+const StyledTitle = styled.h2`
+
+    font-family: var(--fontCode);
+    font-size: 1.7rem;
+    font-weight: 300;
+`;
+
+const StyledUserInfo = styled.div`
+
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    fill: var(--color4);
   }
 
   p {
     margin: 0;
+    padding: 0;
   }
-
-
-
-
 `;

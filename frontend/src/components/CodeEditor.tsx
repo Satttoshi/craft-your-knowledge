@@ -43,14 +43,15 @@ export default function CodeEditor({workshop}: Props) {
     }
 
     return <>
-        <StyledForm onSubmit={handleSubmit}><Editor
-            height="80vh"
-            theme="vs-dark"
-            defaultLanguage={editorLanguage}
-            defaultValue="// start coding here ..."
-            onChange={(value) => setCode(value)}
-            options={{minimap: {enabled: false}}}
-        />
+        <StyledForm onSubmit={handleSubmit}>
+            <Editor
+                height="80vh"
+                theme="vs-dark"
+                defaultLanguage={editorLanguage}
+                defaultValue="// start coding here ..."
+                onChange={(value) => setCode(value)}
+                options={{minimap: {enabled: false}}}
+            />
             <button type="submit">Submit</button>
         </StyledForm>
         <p>{challengeResponse}</p>
