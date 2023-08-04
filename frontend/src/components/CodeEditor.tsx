@@ -6,6 +6,9 @@ import {useStore} from "../hooks/useStore.ts";
 import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
 import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
+import remarkGfm from "remark-gfm";
+import {CodeBlock} from "./CodeBlock.tsx";
+import ReactMarkdown from "react-markdown";
 
 type Props = {
     workshop: Workshop;
@@ -47,10 +50,20 @@ export default function CodeEditor({workshop}: Props) {
         });
     }
 
+    const content: string = (challengeResponse ?? "").replace(">>>PASS<<<", "").replace(">>>FAIL<<<", "");
+
     return <StyledContainer>
 
         <StyledEditorContainer onSubmit={handleSubmit}>
-            {isModalOpen && <StyledChallengeResponse><p>{challengeResponse}</p></StyledChallengeResponse>}
+            {isModalOpen && <StyledChallengeResponse><ReactMarkdown
+                children={content}
+                remarkPlugins={[remarkGfm]}
+                components={{
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    code: CodeBlock
+                }}
+            /></StyledChallengeResponse>}
             <Editor
                 height="66vh"
                 theme="vs-dark"
@@ -61,10 +74,11 @@ export default function CodeEditor({workshop}: Props) {
             />
         </StyledEditorContainer>
         <StyledForm onSubmit={handleSubmit}>
-            {challengeResponse &&(challengeResponse.includes(">>>PASS<<<") ? <div>pass</div> : <div>failed</div>)}
+            {challengeResponse && (challengeResponse.includes(">>>PASS<<<") ? <div>pass</div> : <div>failed</div>)}
             <LoadingButton type="submit" color="secondary" loading={isValidatingChallenge} variant="outlined"
                            endIcon={<LibraryAddCheckIcon/>}>Submit</LoadingButton>
-            <Button variant="contained" style={{transform: "translateX(-100%)"}}>Show Details</Button>
+            <Button onClick={() => setIsModalOpen(!isModalOpen)} variant="contained"
+                    style={{transform: "translateX(-100%)"}}>Show Details</Button>
         </StyledForm>
     </StyledContainer>
 }
@@ -82,7 +96,7 @@ const StyledContainer = styled.div`
 
 const StyledChallengeResponse = styled.div`
   background: red;
-  
+
 
   position: absolute;
   z-index: 100;
