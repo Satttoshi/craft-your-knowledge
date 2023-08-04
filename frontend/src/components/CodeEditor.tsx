@@ -10,6 +10,10 @@ import remarkGfm from "remark-gfm";
 import {CodeBlock} from "./CodeBlock.tsx";
 import ReactMarkdown from "react-markdown";
 
+import Lottie from "lottie-react";
+import failAnimation from "../assets/animations/fail.json";
+import successAnimation from "../assets/animations/success.json";
+
 type Props = {
     workshop: Workshop;
 }
@@ -78,9 +82,15 @@ export default function CodeEditor({workshop}: Props) {
         </StyledEditorContainer>
         <StyledForm onSubmit={handleSubmit}>
             {challengeResponse && (challengeResponse.includes(">>>PASS<<<") ?
-                    <h3>pass</h3>
+                    <div>
+                        <StyledLottieAnimation animationData={successAnimation} loop={false}/>
+                        <h3>Good Job! you solved the challenge!</h3>
+                    </div>
                     :
-                    <h3>failed</h3>
+                    <div>
+                        <StyledLottieAnimation animationData={failAnimation} loop={false}/>
+                        <h3>Your approach seems to be incorrect</h3>
+                    </div>
             )}
             <Button onClick={() => setIsModalOpen(!isModalOpen)} variant="contained">Show Details</Button>
             <LoadingButton type="submit" color="secondary" loading={isValidatingChallenge} variant="outlined"
@@ -88,6 +98,10 @@ export default function CodeEditor({workshop}: Props) {
         </StyledForm>
     </StyledContainer>
 }
+
+const StyledLottieAnimation = styled(Lottie)`
+  width: 4rem;
+`;
 
 const StyledContainer = styled.div`
   padding: 0;
@@ -141,9 +155,9 @@ const StyledForm = styled.form`
   position: inherit;
 
   display: grid;
-    grid-template-columns: 4fr 1fr 1fr;
-    grid-template-rows: 1fr;
-    gap: 1.5rem;
+  grid-template-columns: 4fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 1.5rem;
 
   h3 {
     margin: 0;
