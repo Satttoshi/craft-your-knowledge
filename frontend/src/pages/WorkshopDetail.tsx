@@ -1,5 +1,3 @@
-import LikeStar from "../components/LikeStar.tsx";
-import DeleteButton from "../components/DeleteButton.tsx";
 import ContentField from "../components/ContentField.tsx";
 import {useParams, useNavigate} from "react-router-dom";
 import {useStore} from "../hooks/useStore.ts";
@@ -7,7 +5,8 @@ import NotFound from "../pages/NotFound.tsx";
 import CodeEditor from "../components/CodeEditor.tsx";
 import styled from "@emotion/styled";
 import Button from '@mui/material/Button';
-import {ReactComponent as UserIcon} from "../assets/usericon.svg";
+import {ReactComponent as User} from "../assets/user.svg";
+import {ReactComponent as Back} from "../assets/back.svg";
 
 export default function WorkshopDetail() {
 
@@ -42,24 +41,24 @@ export default function WorkshopDetail() {
     return (<>
         <StyledBanner>
             <StyledBackButton onClick={handleBack} variant="outlined">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path d="M21,11H6.83L10.41,7.41L9,6L3,12L9,18L10.41,16.58L6.83,13H21V11Z"/>
-                </svg>
+                <Back/>
             </StyledBackButton>
             <StyledTitle>Workshop</StyledTitle>
-            <StyledUserInfo><UserIcon/>
+            <StyledUserInfo><User/>
                 <p>Default User</p></StyledUserInfo>
 
         </StyledBanner>
-        <LikeStar workshop={currentWorkshop}/>
-        <DeleteButton id={currentWorkshop.id}/>
-        <ContentField content={articleAndChallenge}/>
-        <CodeEditor workshop={currentWorkshop}/>
+        <StyledMain>
+            <ContentField content={articleAndChallenge}/>
+            <CodeEditor workshop={currentWorkshop}/>
+        </StyledMain>
+{/*        <LikeStar workshop={currentWorkshop}/>
+        <DeleteButton id={currentWorkshop.id}/>*/}
     </>)
 }
 
 const StyledBanner = styled.div`
-  
+
   position: fixed;
   top: 0;
   border-radius: 0 0 10px 10px;
@@ -78,7 +77,7 @@ const StyledBanner = styled.div`
 `;
 
 const StyledBackButton = styled(Button)`
-  
+
   width: 5rem;
   padding: 0;
 
@@ -87,17 +86,15 @@ const StyledBackButton = styled(Button)`
     height: 2rem;
     fill: var(--color4);
     padding: 0;
-    
   }
 
 `;
 
-
 const StyledTitle = styled.h2`
 
-    font-family: var(--fontCode);
-    font-size: 1.7rem;
-    font-weight: 300;
+  font-family: var(--fontCode);
+  font-size: 1.7rem;
+  font-weight: 300;
 `;
 
 const StyledUserInfo = styled.div`
@@ -116,4 +113,14 @@ const StyledUserInfo = styled.div`
     margin: 0;
     padding: 0;
   }
+`;
+
+const StyledMain = styled.main`
+  margin-top: 3.5rem;
+  width: 96vw;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 1rem;
+  position: fixed;
+  bottom: 0;
 `;

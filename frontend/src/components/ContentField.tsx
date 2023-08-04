@@ -38,17 +38,26 @@ export default function ContentField({content}: Props) {
       animation: ${(props: { playAnimation: boolean }) =>
               props.playAnimation ? fadeIn : ""} 4s ease-in-out;
 
-      width: 100vw;
       border-radius: 10px;
       padding: 2rem;
       margin: 0;
-      overflow: hidden;
+      overflow: auto;
 
       background: var(--color2);
+      
+      height: 90vh;
 
-      @media (min-width: 768px) {
-        width: 60vw;
+      ::-webkit-scrollbar {
+        width: 0.5rem;
+        background: var(--color3);
+        border-radius: 0 10px 10px 0;
       }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--color4);
+        border-radius: 0 10px 10px 0;
+      }
+
 
       h1 {
         color: var(--color5);

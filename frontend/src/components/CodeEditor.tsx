@@ -42,35 +42,36 @@ export default function CodeEditor({workshop}: Props) {
         });
     }
 
-    return <>
-        <StyledForm onSubmit={handleSubmit}>
+    return <StyledContainer>
+
+        <StyledEditorContainer onSubmit={handleSubmit}>
             <Editor
-                height="80vh"
+                height="20vh"
                 theme="vs-dark"
                 defaultLanguage={editorLanguage}
                 defaultValue="// start coding here ..."
                 onChange={(value) => setCode(value)}
                 options={{minimap: {enabled: false}}}
             />
+        </StyledEditorContainer>
+        <StyledForm onSubmit={handleSubmit}>
             <button type="submit">Submit</button>
         </StyledForm>
         <p>{challengeResponse}</p>
-    </>
+    </StyledContainer>
 }
 
+const StyledContainer = styled.div`
+    overflow: hidden;
+`;
+
 const StyledForm = styled.form`
-  margin-top: 1rem;
   padding: 2rem;
   background-color: var(--color2);
-  border: 2px solid var(--color4);
-  width: 60vw;
   overflow: hidden;
-  border-radius: 15px;
-
-  @media (max-width: 768px) {
-    width: 100vw;
-  }
-
+  border-radius: 10px 10px 0 0;
+  height: 15vh;
+  
   .monaco-editor-background {
     background-color: var(--color2);
   }
@@ -79,4 +80,21 @@ const StyledForm = styled.form`
     background-color: var(--color2) !important;
   }
 
+`;
+
+const StyledEditorContainer = styled.section`
+  padding: 2rem;
+  background-color: var(--color2);
+  border: 2px solid var(--color4);
+  overflow: hidden;
+  border-radius: 10px;
+  height: 50vh;
+
+  .monaco-editor-background {
+    background-color: var(--color2);
+  }
+
+  .margin {
+    background-color: var(--color2) !important;
+  }
 `;
