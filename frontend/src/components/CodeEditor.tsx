@@ -4,15 +4,11 @@ import styled from "@emotion/styled";
 import {Workshop} from "../utils/types.ts";
 import {useStore} from "../hooks/useStore.ts";
 import LoadingButton from '@mui/lab/LoadingButton';
-import Button from '@mui/material/Button';
 import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
 import remarkGfm from "remark-gfm";
 import {CodeBlock} from "./CodeBlock.tsx";
 import ReactMarkdown from "react-markdown";
-
-import Lottie from "lottie-react";
-import failAnimation from "../assets/animations/fail.json";
-import successAnimation from "../assets/animations/success.json";
+import ChallengeResponse from "./ChallengeResponse.tsx";
 
 type Props = {
     workshop: Workshop;
@@ -81,27 +77,14 @@ export default function CodeEditor({workshop}: Props) {
             />
         </StyledEditorContainer>
         <StyledForm onSubmit={handleSubmit}>
-            {challengeResponse && (challengeResponse.includes(">>>PASS<<<") ?
-                    <div>
-                        <StyledLottieAnimation animationData={successAnimation} loop={false}/>
-                        <h3>Good Job! you solved the challenge!</h3>
-                    </div>
-                    :
-                    <div>
-                        <StyledLottieAnimation animationData={failAnimation} loop={false}/>
-                        <h3>Your approach seems to be incorrect</h3>
-                    </div>
-            )}
-            <Button onClick={() => setIsModalOpen(!isModalOpen)} variant="contained">Show Details</Button>
+            <ChallengeResponse challengeResponse={challengeResponse} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
             <LoadingButton type="submit" color="secondary" loading={isValidatingChallenge} variant="outlined"
                            endIcon={<LibraryAddCheckIcon/>}>Submit</LoadingButton>
         </StyledForm>
     </StyledContainer>
 }
 
-const StyledLottieAnimation = styled(Lottie)`
-  width: 4rem;
-`;
+
 
 const StyledContainer = styled.div`
   padding: 0;
