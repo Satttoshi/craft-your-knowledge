@@ -14,6 +14,7 @@ export default function CodeEditor({workshop}: Props) {
     const [code, setCode] = useState<string | undefined>("// start coding here ...");
     const validateChallenge = useStore((state) => state.validateChallenge);
     const [challengeResponse, setChallengeResponse] = useState<string | undefined>("");
+    const isValidatingChallenge = useStore((state) => state.isValidatingChallenge);
 
     const editorLanguage = workshop.language.toLowerCase();
 
@@ -57,7 +58,9 @@ export default function CodeEditor({workshop}: Props) {
             />
         </StyledEditorContainer>
         <StyledForm onSubmit={handleSubmit}>
-            <LoadingButton color="secondary" variant="outlined" endIcon={<LibraryAddCheckIcon />}>Submit</LoadingButton>
+            {challengeResponse &&(challengeResponse.includes(">>>PASS<<<") ? <div>pass</div> : <div>failed</div>)}
+            <LoadingButton type="submit" color="secondary" loading={isValidatingChallenge} variant="outlined"
+                           endIcon={<LibraryAddCheckIcon/>}>Submit</LoadingButton>
         </StyledForm>
     </StyledContainer>
 }
@@ -97,7 +100,14 @@ const StyledForm = styled.form`
   border-radius: 10px;
   height: 15vh;
   margin-bottom: 2.5vh;
-  
+
+  position: inherit;
+
+  button {
+    position: absolute;
+    right: 1rem;
+  }
+
   .monaco-editor-background {
     background-color: var(--color2);
   }
