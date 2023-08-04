@@ -53,17 +53,20 @@ export default function CodeEditor({workshop}: Props) {
     const content: string = (challengeResponse ?? "").replace(">>>PASS<<<", "").replace(">>>FAIL<<<", "");
 
     return <StyledContainer>
-
         <StyledEditorContainer onSubmit={handleSubmit}>
-            {isModalOpen && <StyledChallengeResponse><ReactMarkdown
-                children={content}
-                remarkPlugins={[remarkGfm]}
-                components={{
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    code: CodeBlock
-                }}
-            /></StyledChallengeResponse>}
+            {isModalOpen && <StyledChallengeResponse>
+                <StyledMarkdownContainer>
+                    <ReactMarkdown
+                        children={content}
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            code: CodeBlock
+                        }}
+                    />
+                </StyledMarkdownContainer>
+            </StyledChallengeResponse>}
             <Editor
                 height="66vh"
                 theme="vs-dark"
@@ -74,11 +77,14 @@ export default function CodeEditor({workshop}: Props) {
             />
         </StyledEditorContainer>
         <StyledForm onSubmit={handleSubmit}>
-            {challengeResponse && (challengeResponse.includes(">>>PASS<<<") ? <div>pass</div> : <div>failed</div>)}
+            {challengeResponse && (challengeResponse.includes(">>>PASS<<<") ?
+                    <h3>pass</h3>
+                    :
+                    <h3>failed</h3>
+            )}
+            <Button onClick={() => setIsModalOpen(!isModalOpen)} variant="contained">Show Details</Button>
             <LoadingButton type="submit" color="secondary" loading={isValidatingChallenge} variant="outlined"
                            endIcon={<LibraryAddCheckIcon/>}>Submit</LoadingButton>
-            <Button onClick={() => setIsModalOpen(!isModalOpen)} variant="contained"
-                    style={{transform: "translateX(-100%)"}}>Show Details</Button>
         </StyledForm>
     </StyledContainer>
 }
@@ -95,8 +101,7 @@ const StyledContainer = styled.div`
 `;
 
 const StyledChallengeResponse = styled.div`
-  background: red;
-
+  background-color: var(--color2);
 
   position: absolute;
   z-index: 100;
@@ -135,8 +140,17 @@ const StyledForm = styled.form`
 
   position: inherit;
 
+  display: grid;
+    grid-template-columns: 4fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 1.5rem;
+
+  h3 {
+    margin: 0;
+    padding: 0;
+  }
+
   button {
-    position: absolute;
     right: 1rem;
   }
 
@@ -146,5 +160,38 @@ const StyledForm = styled.form`
 
   .margin {
     background-color: var(--color2) !important;
+  }
+`;
+
+const StyledMarkdownContainer = styled.article`
+  border-radius: 10px;
+  padding: 2rem 12vw 2rem 2rem;
+  margin: 0;
+  overflow: auto;
+
+  background: var(--color3);
+
+  height: 92vh;
+
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+    background: var(--color3);
+    border-radius: 0 10px 10px 0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color4);
+    border-radius: 0 10px 10px 0;
+  }
+
+
+  h1 {
+    color: var(--color5);
+  }
+
+  h2,
+  h3,
+  h4 {
+    color: var(--color4);
   }
 `;
