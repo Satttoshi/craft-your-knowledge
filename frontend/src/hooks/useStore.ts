@@ -9,6 +9,7 @@ type State = {
     isCreatingWorkshop: boolean,
     isReadingWorkshops: boolean,
     playAnimation: boolean,
+    isValidatingChallenge: boolean,
 
     createWorkshop: (requestBody: WorkshopFormData) => Promise<Workshop>,
     readWorkshops: () => void,
@@ -29,22 +30,23 @@ export const useStore = create<State>((set, get) => ({
     isReadingWorkshops: false,
 
     playAnimation: false,
+    isValidatingChallenge: false,
 
     createWorkshop: async (requestBody) => {
         const readWorkshops = get().readWorkshops;
         try {
-            set({ isCreatingWorkshop: true });
+            set({isCreatingWorkshop: true});
             const response = await axios.post("/api/workshop", requestBody);
             readWorkshops();
             return response.data;
         } catch (error) {
             console.error(error);
-            set({ isCreatingWorkshop: false });
+            set({isCreatingWorkshop: false});
             throw error;
         } finally {
-            set({ playAnimation: true });
-            set({ isCreatingWorkshop: false });
-            setTimeout(() => set({ playAnimation: false }), 4000);
+            set({playAnimation: true});
+            set({isCreatingWorkshop: false});
+            setTimeout(() => set({playAnimation: false}), 4000);
         }
     },
 
@@ -96,12 +98,15 @@ export const useStore = create<State>((set, get) => ({
     },
 
     validateChallenge: async (workshopId: string, workshopUserChallenge: WorkshopUserChallenge) => {
+        set({isValidatingChallenge: true});
         try {
             const response = await axios.post(`/api/workshop/${workshopId}/validate`, workshopUserChallenge);
             return response.data;
         } catch (error) {
             console.error(error);
             throw error;
+        } finally {
+            set({isValidatingChallenge: false});
         }
     },
 
