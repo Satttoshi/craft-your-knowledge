@@ -81,7 +81,7 @@ const StyledBanner = styled.div`
     border-radius: 0;
     width: 100vw;
     height: 8vh;
-    padding: 1vh 1rem 1vh 0.5rem;
+    padding: 1vh 3vw;
     h2 {
       display: none;
     }

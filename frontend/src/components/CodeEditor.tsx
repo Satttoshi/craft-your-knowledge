@@ -124,6 +124,10 @@ const StyledChallengeResponse = styled.div`
   bottom: 0;
   left: 0;
 
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
 `;
 
 const StyledEditorContainer = styled.section`
