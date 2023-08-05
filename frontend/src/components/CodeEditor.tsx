@@ -82,7 +82,7 @@ export default function CodeEditor({workshop}: Props) {
                 <LoadingButton type="submit" color="secondary" loading={isValidatingChallenge} variant="outlined"
                                endIcon={<LibraryAddCheckIcon/>}>Submit</LoadingButton>
                 {challengeResponse &&
-                    <Button style={{width: "9rem", minWidth: "9rem"}}
+                    <Button style={{width: "9rem", minWidth: "9rem", marginLeft: "1rem"}}
                             onClick={() => setIsModalOpen(!isModalOpen)}
                             variant={isModalOpen ? "outlined" : "contained"}>
                         {isModalOpen ? "Hide Details" : "Show Details"}
@@ -98,6 +98,7 @@ const StyledButtonGroup = styled.div`
   align-items: center;
   flex-direction: row-reverse;
   gap: 1rem;
+  height: 4rem;
 `;
 
 
@@ -143,11 +144,13 @@ const StyledEditorContainer = styled.section`
   
   @media (max-width: 768px) {
     padding: 2rem 1rem 2rem 0.5rem;
+    border-radius: 0;
+    
   }
 `;
 
 const StyledForm = styled.form`
-  padding: 2rem;
+  padding: 0 2rem;
   background-color: var(--color2);
   overflow: hidden;
   border-radius: 10px;
@@ -158,7 +161,8 @@ const StyledForm = styled.form`
 
   display: flex;
   flex-direction: row-reverse;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
 
 
@@ -173,6 +177,12 @@ const StyledForm = styled.form`
 
   .margin {
     background-color: var(--color2) !important;
+  }
+
+  @media (max-width: 768px) {
+    height: 18vh;
+    margin-bottom: 0.5vh;
+    border-radius: 0;
   }
 `;
 

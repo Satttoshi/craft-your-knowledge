@@ -28,14 +28,29 @@ export default function ChallengeResponse({challengeResponse}: Props) {
 const StyledContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
+  height: 2rem;
 
   h3 {
     white-space: nowrap;
+    margin-right: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    h3 {
+      font-size: 1rem;
+    }
   }
 `;
 
 const StyledLottieAnimation = styled(Lottie)`
   width: 3rem;
   min-width: 3rem;
+  transform: translateY(0.2rem);
+
+  @media (max-width: 768px) {
+    width: 2rem;
+    min-width: 2rem;
+  }
 `;

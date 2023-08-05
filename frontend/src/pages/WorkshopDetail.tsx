@@ -61,7 +61,7 @@ const StyledBanner = styled.div`
 
   position: fixed;
   height: 6vh;
-  
+
   top: 0;
   border-radius: 0 0 10px 10px;
   width: 96vw;
@@ -70,18 +70,22 @@ const StyledBanner = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1vh 3rem;
+  
+  z-index: 200;
 
   h2 {
     margin: 0;
   }
-  
-    @media (max-width: 768px) {
+
+  @media (max-width: 768px) {
+    border-radius: 0;
     width: 100vw;
-      padding: 1vh 2rem;
-      h2 {
-        display: none;
-      }
+    height: 8vh;
+    padding: 1vh 1rem 1vh 0.5rem;
+    h2 {
+      display: none;
     }
+  }
 
 `;
 
@@ -138,10 +142,8 @@ const StyledMain = styled.main`
   gap: 1rem;
   align-items: end;
   
-  
-  
-  
   @media (max-width: 768px) {
+    margin-top: 8vh;
     grid-template-columns: 1fr;
     width: 100vw;
   }

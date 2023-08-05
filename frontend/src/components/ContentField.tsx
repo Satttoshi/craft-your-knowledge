@@ -74,8 +74,8 @@ export default function ContentField({content}: Props) {
       
       @media (max-width: 768px) {
         
-        padding: 1rem;
-        height: 3000px;
+        padding: 0.5rem;
+        border-radius: 0;
 
         ::-webkit-scrollbar {
           display: none;
