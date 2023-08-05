@@ -9,6 +9,7 @@ import remarkGfm from "remark-gfm";
 import {CodeBlock} from "./CodeBlock.tsx";
 import ReactMarkdown from "react-markdown";
 import ChallengeResponse from "./ChallengeResponse.tsx";
+import Button from "@mui/material/Button";
 
 type Props = {
     workshop: Workshop;
@@ -77,13 +78,27 @@ export default function CodeEditor({workshop}: Props) {
             />
         </StyledEditorContainer>
         <StyledForm onSubmit={handleSubmit}>
-            <ChallengeResponse challengeResponse={challengeResponse} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-            <LoadingButton type="submit" color="secondary" loading={isValidatingChallenge} variant="outlined"
-                           endIcon={<LibraryAddCheckIcon/>}>Submit</LoadingButton>
+            <StyledButtonGroup>
+                <LoadingButton type="submit" color="secondary" loading={isValidatingChallenge} variant="outlined"
+                               endIcon={<LibraryAddCheckIcon/>}>Submit</LoadingButton>
+                {challengeResponse &&
+                    <Button style={{width: "9rem", minWidth: "9rem"}}
+                            onClick={() => setIsModalOpen(!isModalOpen)}
+                            variant={isModalOpen ? "outlined" : "contained"}>
+                        {isModalOpen ? "Hide Details" : "Show Details"}
+                    </Button>}
+            </StyledButtonGroup>
+            <ChallengeResponse challengeResponse={challengeResponse}/>
         </StyledForm>
     </StyledContainer>
 }
 
+const StyledButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse;
+  gap: 1rem;
+`;
 
 
 const StyledContainer = styled.div`
@@ -125,6 +140,10 @@ const StyledEditorContainer = styled.section`
   .margin {
     background-color: var(--color2) !important;
   }
+  
+  @media (max-width: 768px) {
+    padding: 2rem 1rem 2rem 0.5rem;
+  }
 `;
 
 const StyledForm = styled.form`
@@ -137,18 +156,15 @@ const StyledForm = styled.form`
 
   position: inherit;
 
-  display: grid;
-  grid-template-columns: 4fr 1fr 1fr;
-  grid-template-rows: 1fr;
-  gap: 1.5rem;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
 
   h3 {
     margin: 0;
     padding: 0;
-  }
-
-  button {
-    right: 1rem;
   }
 
   .monaco-editor-background {

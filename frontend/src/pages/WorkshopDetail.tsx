@@ -60,6 +60,8 @@ export default function WorkshopDetail() {
 const StyledBanner = styled.div`
 
   position: fixed;
+  height: 6vh;
+  
   top: 0;
   border-radius: 0 0 10px 10px;
   width: 96vw;
@@ -71,8 +73,15 @@ const StyledBanner = styled.div`
 
   h2 {
     margin: 0;
-
   }
+  
+    @media (max-width: 768px) {
+    width: 100vw;
+      padding: 1vh 2rem;
+      h2 {
+        display: none;
+      }
+    }
 
 `;
 
@@ -116,13 +125,24 @@ const StyledUserInfo = styled.div`
 `;
 
 const StyledMain = styled.main`
+  @media (min-width: 769px) {
+    bottom: 0;
+    position: fixed;
+    width: 96vw;
+  }
+  
   margin-top: 3.5rem;
-  width: 96vw;
+  
   display: grid;
   grid-template-columns: 0.9fr 1.1fr;
   gap: 1rem;
   align-items: end;
   
-  position: fixed;
-  bottom: 0;
+  
+  
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    width: 100vw;
+  }
 `;

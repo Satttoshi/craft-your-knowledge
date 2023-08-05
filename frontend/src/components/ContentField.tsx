@@ -35,6 +35,9 @@ export default function ContentField({content}: Props) {
     `;
 
     const StyledContentField = styled.article`
+      
+      
+      
       animation: ${(props: { playAnimation: boolean }) =>
               props.playAnimation ? fadeIn : ""} 4s ease-in-out;
 
@@ -67,6 +70,21 @@ export default function ContentField({content}: Props) {
       h3,
       h4 {
         color: var(--color4);
+      }
+      
+      @media (max-width: 768px) {
+        
+        padding: 1rem;
+        height: 3000px;
+
+        ::-webkit-scrollbar {
+          display: none;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          display: none;
+        }
+        
       }
     `;
 
