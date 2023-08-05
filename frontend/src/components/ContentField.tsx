@@ -35,9 +35,7 @@ export default function ContentField({content}: Props) {
     `;
 
     const StyledContentField = styled.article`
-      
-      
-      
+
       animation: ${(props: { playAnimation: boolean }) =>
               props.playAnimation ? fadeIn : ""} 4s ease-in-out;
 
@@ -47,7 +45,7 @@ export default function ContentField({content}: Props) {
       overflow: auto;
 
       background: var(--color2);
-      
+
       height: 92vh;
 
       ::-webkit-scrollbar {
@@ -71,9 +69,9 @@ export default function ContentField({content}: Props) {
       h4 {
         color: var(--color4);
       }
-      
+
       @media (max-width: 768px) {
-        
+
         padding: 0.5rem;
         border-radius: 0;
 
@@ -84,7 +82,7 @@ export default function ContentField({content}: Props) {
         ::-webkit-scrollbar-thumb {
           display: none;
         }
-        
+
       }
     `;
 

@@ -115,6 +115,7 @@ const StyledContainer = styled.div`
 
 const StyledChallengeResponse = styled.div`
   background-color: var(--color2);
+  overflow: scroll;
 
   position: absolute;
   z-index: 100;
