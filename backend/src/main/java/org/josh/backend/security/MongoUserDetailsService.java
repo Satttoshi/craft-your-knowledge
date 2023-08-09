@@ -1,5 +1,6 @@
 package org.josh.backend.security;
 
+import org.josh.backend.dto.UserWithoutId;
 import org.josh.backend.utils.IdService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +23,7 @@ public class MongoUserDetailsService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        MongoUser mongoUser = mongoUserRepository.findByUsername(username).orElseThrow(() ->
+        MongoUser mongoUser = mongoUserRepository.findByName(username).orElseThrow(() ->
             new UsernameNotFoundException("Username" + username + "not found"));
 
         return new User(mongoUser.name(), mongoUser.password(), Collections.emptyList());
@@ -35,4 +36,5 @@ public class MongoUserDetailsService implements UserDetailsService{
         MongoUser newUser = new MongoUser(idService.createId() ,userWithoutId.name(), encodedPassword);
         mongoUserRepository.save(newUser);
     }
+
 }

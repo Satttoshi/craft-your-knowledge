@@ -1,4 +1,4 @@
-package org.josh.backend.security;
+package org.josh.backend.dto;
 
 public record UserWithoutId(
     String name,

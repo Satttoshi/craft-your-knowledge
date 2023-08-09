@@ -2,6 +2,7 @@ package org.josh.backend.security;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.josh.backend.dto.UserWithoutId;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
