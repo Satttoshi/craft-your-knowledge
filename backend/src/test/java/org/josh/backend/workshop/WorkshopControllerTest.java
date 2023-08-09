@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -98,7 +99,8 @@ class WorkshopControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(testWorkshopFormData))
+                    .content(testWorkshopFormData)
+                    .with(csrf()))
             //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
@@ -117,7 +119,8 @@ class WorkshopControllerTest {
         String result = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(testWorkshopFormData))
+                    .content(testWorkshopFormData)
+                    .with(csrf()))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn().getResponse().getContentAsString();
 
@@ -149,7 +152,8 @@ class WorkshopControllerTest {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/api/workshop")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(testWorkshopFormData));
+                .content(testWorkshopFormData)
+                .with(csrf()));
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/workshop"))
             //THEN
@@ -181,7 +185,8 @@ class WorkshopControllerTest {
         String result = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(testWorkshopFormData))
+                    .content(testWorkshopFormData)
+                    .with(csrf()))
             .andReturn().getResponse().getContentAsString();
 
         Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
@@ -213,7 +218,8 @@ class WorkshopControllerTest {
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.put("/api/workshop/%s".formatted(id))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(testPersonalStatus))
+                .content(testPersonalStatus)
+                .with(csrf()))
 
             //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
@@ -228,14 +234,16 @@ class WorkshopControllerTest {
         String result = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(testWorkshopFormData))
+                    .content(testWorkshopFormData)
+                    .with(csrf()))
             .andReturn().getResponse().getContentAsString();
 
         Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
         String id = saveResultWorkshop.id();
 
         //WHEN
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/workshop/%s".formatted(id)))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/workshop/%s".formatted(id))
+                .with(csrf()))
 
             //THEN
             .andExpect(MockMvcResultMatchers.status().isOk());
@@ -252,7 +260,8 @@ class WorkshopControllerTest {
         String id = "fakeId";
 
         //WHEN
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/workshop/%s".formatted(id)))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/workshop/%s".formatted(id))
+                .with(csrf()))
 
             //THEN
             .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -265,7 +274,8 @@ class WorkshopControllerTest {
         String result = mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/workshop")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(testWorkshopFormData))
+                    .content(testWorkshopFormData)
+                    .with(csrf()))
             .andReturn().getResponse().getContentAsString();
 
         Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
@@ -282,7 +292,8 @@ class WorkshopControllerTest {
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.post("/api/workshop/%s/validate".formatted(id))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(workshopUserChallenge)))
+                .content(objectMapper.writeValueAsString(workshopUserChallenge))
+                .with(csrf()))
 
             //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
