@@ -7,5 +7,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MongoUserDetailsService implements UserDetailsService{
+    private final MongoUserRepository mongoUserRepository;
 
 }
