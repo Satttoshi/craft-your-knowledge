@@ -9,6 +9,8 @@ import WorkshopDetail from "./pages/WorkshopDetail.tsx";
 
 function App() {
 
+
+
     return (
         <>
             <GlobalStyles/>

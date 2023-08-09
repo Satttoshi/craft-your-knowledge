@@ -1,6 +1,7 @@
 import {create} from "zustand";
 import axios from "axios";
 import {Gpt3TurboResponse, PersonalStatus, Workshop, WorkshopFormData, WorkshopUserChallenge} from "../utils/types.ts";
+import {NavigateFunction} from "react-router-dom";
 
 
 type State = {
@@ -18,6 +19,11 @@ type State = {
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => void,
     deleteWorkshop: (workshopId: string) => void,
     validateChallenge: (workshopId: string, workshopUserChallenge: WorkshopUserChallenge) => Promise<Gpt3TurboResponse>
+
+    user: string,
+    me: () => void,
+    login: (userName: string, password: string, navigate: NavigateFunction) => void,
+    register: (userName: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => void,
 }
 
 export const useStore = create<State>((set, get) => ({
@@ -107,6 +113,46 @@ export const useStore = create<State>((set, get) => ({
             throw error;
         } finally {
             set({isValidatingChallenge: false});
+        }
+    },
+
+    user: "",
+
+    me: () => {
+        axios.get("/api/user/me")
+            .then(response => set({user: response.data}))
+    },
+
+    login: (userName: string, password: string, navigate: NavigateFunction) => {
+        axios.post("/api/user/login", null, {
+            auth: {
+                username: userName,
+                password: password
+            }
+        })
+            .then(response => {
+                set({user: response.data})
+                navigate("/")
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    },
+
+    register: (userName: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => {
+        const newUserData = {
+            "username": `${userName}`,
+            "password": `${password}`
+        }
+
+        if (password === repeatedPassword) {
+
+            axios.post("/api/user/register", newUserData)
+                .then(() => navigate("/login"))
+                .catch((error) => {
+                    console.error(error);
+                })
+
         }
     },
 
