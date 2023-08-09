@@ -1,8 +1,9 @@
 package org.josh.backend.security;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -10,5 +11,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class MongoUserController {
 
     private final MongoUserDetailsService mongoUserDetailsService;
+
+    @GetMapping("/me")
+    public String getUserInfo() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    @PostMapping("/login")
+    public String login() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    @PostMapping("/logout")
+    public void logout() {
+        SecurityContextHolder.clearContext();
+    }
+
+    @PostMapping("/register")
+    public String register(@Valid @RequestBody UserWithoutId userWithoutId) {
+        mongoUserDetailsService.registerNewUser(userWithoutId);
+        return "registered user " + userWithoutId.name();
+
+    }
 
 }
