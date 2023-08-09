@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -26,6 +27,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@WithMockUser(username = "testUser", password = "secretPass3")
 class WorkshopControllerTest {
 
     // Flapdoodle Test-Dependency -> empty MongoDB will be used for testing
@@ -43,7 +45,23 @@ class WorkshopControllerTest {
     PromptBuilder promptBuilder;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
+
+        String testUserWithoutId = """
+                {
+                    "name": "testUser",
+                    "password": "secretPass3"
+                }
+            """;
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(testUserWithoutId)
+            .with(csrf())).andExpect(MockMvcResultMatchers.status().isOk());
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login")
+            .with(csrf())
+        ).andExpect(MockMvcResultMatchers.status().isOk());
 
         Gpt3TurboRequest gpt3TurboRequest = new Gpt3TurboRequest(
             "gpt-3.5-turbo",
