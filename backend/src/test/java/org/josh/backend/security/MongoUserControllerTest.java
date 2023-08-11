@@ -12,8 +12,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class MongoUserControllerTest {
@@ -34,14 +32,6 @@ class MongoUserControllerTest {
             }
         """;
 
-    private String getToken() throws Exception {
-        return mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(userWithoutIdJson))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andReturn().getResponse().getContentAsString();
-    }
-
     @Test
     void getAnonymousUser_whenGetUserName() throws Exception {
         // GIVEN that user is not logged in
@@ -59,7 +49,7 @@ class MongoUserControllerTest {
         mongoUserRepository.save(new MongoUser("testId", "testUser", passwordEncoder.encode("testPassword")));
         // WHEN
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user/me")
-                .header(HttpHeaders.AUTHORIZATION,"Bearer " + getToken()))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + getToken()))
             // THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string("testUser"));
@@ -78,7 +68,16 @@ class MongoUserControllerTest {
             .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    private String getToken() throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userWithoutIdJson))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn().getResponse().getContentAsString();
+    }
+
     @Test
+    @DirtiesContext
     void expectRegistration_whenRegisterUser() throws Exception {
         //GIVEN
         String testUserWithoutId = """
@@ -91,8 +90,7 @@ class MongoUserControllerTest {
         //WHEN
         mockMvc.perform(MockMvcRequestBuilders.post("/api/user/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(testUserWithoutId)
-                .with(csrf()))
+                .content(testUserWithoutId))
             //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string("registered user testUser"));
