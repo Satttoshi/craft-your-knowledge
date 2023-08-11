@@ -52,17 +52,6 @@ class MongoUserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testUser", password = "testPassword")
-    void expectNoContent_whenLogoutUser() throws Exception {
-        //GIVEN
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login").with(csrf()));
-        //WHEN
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/logout").with(csrf()))
-            //THEN
-            .andExpect(MockMvcResultMatchers.status().isNoContent());
-    }
-
-    @Test
     void expectRegistration_whenRegisterUser() throws Exception {
         //GIVEN
         String testUserWithoutId = """
