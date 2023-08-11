@@ -2,7 +2,6 @@ package org.josh.backend.security;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.josh.backend.dto.LoginData;
 import org.josh.backend.dto.UserWithoutId;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,9 +23,9 @@ public class MongoUserController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginData loginData) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken((loginData.username()), loginData.password()));
-        return jwtService.createToken(loginData.username());
+    public String login(@RequestBody UserWithoutId loginData) {
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken((loginData.name()), loginData.password()));
+        return jwtService.createToken(loginData.name());
     }
 
     @PostMapping("/register")
