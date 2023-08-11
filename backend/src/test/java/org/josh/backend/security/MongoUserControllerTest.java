@@ -36,7 +36,7 @@ class MongoUserControllerTest {
         """;
 
     private String getToken() throws Exception {
-        return mockMvc.perform(MockMvcRequestBuilders.post("/api/users/login")
+        return mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(userWithoutIdJson))
             .andExpect(MockMvcResultMatchers.status().isOk())
