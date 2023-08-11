@@ -23,7 +23,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -58,7 +57,14 @@ class WorkshopControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(testUserWithoutId)).andExpect(MockMvcResultMatchers.status().isOk());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("""
+                    {
+                        "username": "testUser",
+                        "password": "secretPass3"
+                    }
+                """))
             .andExpect(MockMvcResultMatchers.status().isOk());
 
         Gpt3TurboRequest gpt3TurboRequest = new Gpt3TurboRequest(
