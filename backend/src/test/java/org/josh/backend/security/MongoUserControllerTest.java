@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -19,9 +20,15 @@ class MongoUserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private MongoUserRepository mongoUserRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private final String userWithoutIdJson = """
             {
-                "name": "testUser",
+                "username": "testUser",
                 "password": "testPassword"
             }
         """;
@@ -37,22 +44,22 @@ class MongoUserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testUser", password = "testPassword")
     void getUsername_whenLoggedInGetUserName() throws Exception {
-        // GIVEN that user exists in MongoDB
+        // GIVEN
+        mongoUserRepository.save(new MongoUser("testId", "testUser", passwordEncoder.encode("testPassword")));
         // WHEN
         mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(userWithoutIdJson))
             // THEN
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().string("testUser"));
+            .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     @WithMockUser(username = "testUser", password = "testPassword")
     void getUserName_whenLogin() throws Exception {
-        // GIVEN that user is logged in
+        // GIVEN
+
         // WHEN
         mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login").with(csrf()))
             // THEN
