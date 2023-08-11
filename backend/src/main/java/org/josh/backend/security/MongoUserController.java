@@ -29,11 +29,6 @@ public class MongoUserController {
         return jwtService.createToken(loginData.username());
     }
 
-    @PostMapping("/logout")
-    public void logout() {
-        SecurityContextHolder.clearContext();
-    }
-
     @PostMapping("/register")
     public String register(@Valid @RequestBody UserWithoutId userWithoutId) {
         mongoUserDetailsService.registerNewUser(userWithoutId);
