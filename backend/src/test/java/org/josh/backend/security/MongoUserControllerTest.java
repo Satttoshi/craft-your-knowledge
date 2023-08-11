@@ -4,9 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -33,6 +35,14 @@ class MongoUserControllerTest {
             }
         """;
 
+    private String getToken() throws Exception {
+        return mockMvc.perform(MockMvcRequestBuilders.post("/api/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userWithoutIdJson))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andReturn().getResponse().getContentAsString();
+    }
+
     @Test
     void getAnonymousUser_whenGetUserName() throws Exception {
         // GIVEN that user is not logged in
@@ -44,7 +54,21 @@ class MongoUserControllerTest {
     }
 
     @Test
-    void getUsername_whenLoggedInGetUserName() throws Exception {
+    @DirtiesContext
+    void expectHeader_whenFetchMe() throws Exception {
+        // GIVEN
+        mongoUserRepository.save(new MongoUser("testId", "testUser", passwordEncoder.encode("testPassword")));
+        // WHEN
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/me")
+                .header(HttpHeaders.AUTHORIZATION,"Bearer " + getToken()))
+            // THEN
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().string("testUser"));
+    }
+
+    @Test
+    @DirtiesContext
+    void loginSuccessfully_whenLoggingIn() throws Exception {
         // GIVEN
         mongoUserRepository.save(new MongoUser("testId", "testUser", passwordEncoder.encode("testPassword")));
         // WHEN
@@ -86,4 +110,5 @@ class MongoUserControllerTest {
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string("registered user testUser"));
     }
+
 }

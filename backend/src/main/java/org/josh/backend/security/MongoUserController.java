@@ -8,6 +8,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/user")
@@ -18,13 +20,18 @@ public class MongoUserController {
     private final JwtService jwtService;
 
     @GetMapping("/me")
-    public String getUserInfo() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+    public String getUserInfo(Principal principal) {
+        if (principal != null) {
+            return principal.getName();
+        } else {
+            return "anonymousUser";
+        }
     }
 
     @PostMapping("/login")
     public String login(@RequestBody UserWithoutId loginData) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken((loginData.username()), loginData.password()));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken((loginData.username()),
+            loginData.password()));
         return jwtService.createToken(loginData.username());
     }
 
