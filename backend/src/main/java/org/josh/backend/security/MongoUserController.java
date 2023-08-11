@@ -3,6 +3,7 @@ package org.josh.backend.security;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.josh.backend.dto.UserWithoutId;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class MongoUserController {
 
     private final MongoUserDetailsService mongoUserDetailsService;
+    private final AuthenticationManager authenticationManager;
 
     @GetMapping("/me")
     public String getUserInfo() {
