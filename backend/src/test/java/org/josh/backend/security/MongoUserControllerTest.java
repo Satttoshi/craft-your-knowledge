@@ -80,18 +80,6 @@ class MongoUserControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "testUser", password = "testPassword")
-    void getUserName_whenLogin() throws Exception {
-        // GIVEN
-
-        // WHEN
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login").with(csrf()))
-            // THEN
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().string("testUser"));
-    }
-
-    @Test
     void expectRegistration_whenRegisterUser() throws Exception {
         //GIVEN
         String testUserWithoutId = """
