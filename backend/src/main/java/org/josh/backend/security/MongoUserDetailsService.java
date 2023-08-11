@@ -26,14 +26,14 @@ public class MongoUserDetailsService implements UserDetailsService{
         MongoUser mongoUser = mongoUserRepository.findByName(username).orElseThrow(() ->
             new UsernameNotFoundException("Username" + username + "not found"));
 
-        return new User(mongoUser.name(), mongoUser.password(), Collections.emptyList());
+        return new User(mongoUser.username(), mongoUser.password(), Collections.emptyList());
     }
 
     public void registerNewUser(UserWithoutId userWithoutId) {
         PasswordEncoder encoder = new Argon2PasswordEncoder(16, 32, 8, 1 << 16, 4);
         String encodedPassword = encoder.encode(userWithoutId.password());
 
-        MongoUser newUser = new MongoUser(idService.createId() ,userWithoutId.name(), encodedPassword);
+        MongoUser newUser = new MongoUser(idService.createId() ,userWithoutId.username(), encodedPassword);
         mongoUserRepository.save(newUser);
     }
 

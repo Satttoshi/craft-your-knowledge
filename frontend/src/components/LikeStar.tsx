@@ -18,7 +18,7 @@ export default function LikeStar({workshop}: Props) {
             updatePersonalStatus(workshop.id, {
                 user: {
                     id: "1",
-                    name: "Default User",
+                    username: "Default User",
                 },
                 progressStatus: "NOT_STARTED",
                 isLiked: true

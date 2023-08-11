@@ -1,6 +1,6 @@
 package org.josh.backend.dto;
 
 public record UserWithoutId(
-    String name,
+    String username,
     String password) {
 }

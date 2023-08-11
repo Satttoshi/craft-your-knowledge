@@ -24,14 +24,14 @@ public class MongoUserController {
 
     @PostMapping("/login")
     public String login(@RequestBody UserWithoutId loginData) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken((loginData.name()), loginData.password()));
-        return jwtService.createToken(loginData.name());
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken((loginData.username()), loginData.password()));
+        return jwtService.createToken(loginData.username());
     }
 
     @PostMapping("/register")
     public String register(@Valid @RequestBody UserWithoutId userWithoutId) {
         mongoUserDetailsService.registerNewUser(userWithoutId);
-        return "registered user " + userWithoutId.name();
+        return "registered user " + userWithoutId.username();
 
     }
 

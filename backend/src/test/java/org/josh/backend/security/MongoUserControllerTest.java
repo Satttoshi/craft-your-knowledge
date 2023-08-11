@@ -19,6 +19,13 @@ class MongoUserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    private final String userWithoutIdJson = """
+            {
+                "name": "testUser",
+                "password": "testPassword"
+            }
+        """;
+
     @Test
     void getAnonymousUser_whenGetUserName() throws Exception {
         // GIVEN that user is not logged in
@@ -32,9 +39,11 @@ class MongoUserControllerTest {
     @Test
     @WithMockUser(username = "testUser", password = "testPassword")
     void getUsername_whenLoggedInGetUserName() throws Exception {
-        // GIVEN that user is logged in
+        // GIVEN that user exists in MongoDB
         // WHEN
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login").with(csrf()))
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userWithoutIdJson))
             // THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().string("testUser"));
