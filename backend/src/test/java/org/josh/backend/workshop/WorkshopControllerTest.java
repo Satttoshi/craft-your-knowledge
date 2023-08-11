@@ -156,6 +156,7 @@ class WorkshopControllerTest {
     }
 
     @Test
+    @DirtiesContext
     void expectEmptyList_whenReadWorkshops() throws Exception {
         //GIVEN
         //WHEN
@@ -269,6 +270,7 @@ class WorkshopControllerTest {
     }
 
     @Test
+    @DirtiesContext
     void expectErrorMessage_whenDeleteWorkshopById() throws Exception {
 
         //GIVEN
@@ -283,6 +285,7 @@ class WorkshopControllerTest {
     }
 
     @Test
+    @DirtiesContext
     void expectValidation_whenValidateChallenge() throws Exception {
         //GIVEN
         String result = mockMvc.perform(
