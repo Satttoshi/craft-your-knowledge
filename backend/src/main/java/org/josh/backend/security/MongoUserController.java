@@ -16,6 +16,7 @@ public class MongoUserController {
 
     private final MongoUserDetailsService mongoUserDetailsService;
     private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
 
     @GetMapping("/me")
     public String getUserInfo() {
@@ -25,7 +26,7 @@ public class MongoUserController {
     @PostMapping("/login")
     public String login(@RequestBody LoginData loginData) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken((loginData.username()), loginData.password()));
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+        return jwtService.createToken(loginData.username());
     }
 
     @PostMapping("/logout")
