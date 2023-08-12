@@ -6,10 +6,13 @@ import Home from "./pages/Home.tsx";
 import Create from "./pages/Create.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import WorkshopDetail from "./pages/WorkshopDetail.tsx";
+import {useEffect} from "react";
+import {useStore} from "./hooks/useStore.ts";
 
 function App() {
+    const me = useStore(state => state.me)
 
-
+    useEffect(me, [me])
 
     return (
         <>
