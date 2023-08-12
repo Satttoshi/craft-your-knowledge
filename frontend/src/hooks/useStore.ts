@@ -21,6 +21,7 @@ type State = {
     validateChallenge: (workshopId: string, workshopUserChallenge: WorkshopUserChallenge) => Promise<Gpt3TurboResponse>
 
     user: string,
+    jwt: string,
     me: () => void,
     login: (userName: string, password: string, navigate: NavigateFunction) => void,
     register: (userName: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => void,
@@ -117,21 +118,22 @@ export const useStore = create<State>((set, get) => ({
     },
 
     user: "",
+    jwt: "",
 
     me: () => {
-        axios.get("/api/user/me")
-            .then(response => set({user: response.data}))
+        const jwt = get().jwt;
+        axios.get("/api/user/me", {headers: {Authorization: jwt ? "Bearer " + jwt : ""}})
+            .then(response => {
+                set({user: response.data});
+            })
+            .catch(console.error);
     },
 
-    login: (userName: string, password: string, navigate: NavigateFunction) => {
-        axios.post("/api/user/login", null, {
-            auth: {
-                username: userName,
-                password: password
-            }
-        })
+    login: (username: string, password: string, navigate: NavigateFunction) => {
+        axios.post("/api/user/login", {username, password})
             .then(response => {
-                set({user: response.data})
+                set({jwt: response.data});
+                get().me();
                 navigate("/")
             })
             .catch((error) => {
@@ -139,9 +141,9 @@ export const useStore = create<State>((set, get) => ({
             });
     },
 
-    register: (userName: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => {
+    register: (username: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => {
         const newUserData = {
-            "username": `${userName}`,
+            "username": `${username}`,
             "password": `${password}`
         }
 
