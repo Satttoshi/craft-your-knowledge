@@ -27,9 +27,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(httpRequests ->
                 httpRequests
                     .requestMatchers(HttpMethod.GET, "/api/workshop").permitAll()
-                    .requestMatchers("/api/workshop").permitAll()
+                    .requestMatchers("/api/workshop").authenticated()
                     .requestMatchers(HttpMethod.GET, "/api/workshop/**").permitAll()
-                    .requestMatchers("/api/workshop/**").permitAll()
+                    .requestMatchers("/api/workshop/**").authenticated()
                     .requestMatchers("/api/user/me").permitAll()
                     .requestMatchers("/api/user/login").permitAll()
                     .requestMatchers("/api/user/register").permitAll()
