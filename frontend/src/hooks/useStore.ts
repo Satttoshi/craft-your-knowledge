@@ -43,7 +43,11 @@ export const useStore = create<State>((set, get) => ({
         const readWorkshops = get().readWorkshops;
         try {
             set({isCreatingWorkshop: true});
-            const response = await axios.post("/api/workshop", requestBody);
+            const response = await axios.post(
+                "/api/workshop",
+                requestBody,
+                authorisationHeader(get().jwt)
+            );
             readWorkshops();
             return response.data;
         } catch (error) {
@@ -93,13 +97,13 @@ export const useStore = create<State>((set, get) => ({
     },
 
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => {
-        axios.put(`/api/workshop/${workshopId}`, personalStatus)
+        axios.put(`/api/workshop/${workshopId}`, personalStatus, authorisationHeader(get().jwt))
             .catch(console.error)
     },
 
     deleteWorkshop: (workshopId: string) => {
         const readWorkshops = get().readWorkshops;
-        axios.delete(`/api/workshop/${workshopId}`)
+        axios.delete(`/api/workshop/${workshopId}`, authorisationHeader(get().jwt))
             .catch(console.error)
             .finally(readWorkshops)
     },
@@ -107,7 +111,11 @@ export const useStore = create<State>((set, get) => ({
     validateChallenge: async (workshopId: string, workshopUserChallenge: WorkshopUserChallenge) => {
         set({isValidatingChallenge: true});
         try {
-            const response = await axios.post(`/api/workshop/${workshopId}/validate`, workshopUserChallenge);
+            const response = await axios.post(
+                `/api/workshop/${workshopId}/validate`,
+                workshopUserChallenge,
+                authorisationHeader(get().jwt)
+            );
             return response.data;
         } catch (error) {
             console.error(error);
@@ -121,8 +129,7 @@ export const useStore = create<State>((set, get) => ({
     jwt: "",
 
     me: () => {
-        const jwt = get().jwt;
-        axios.get("/api/user/me", authorisationHeader(jwt))
+        axios.get("/api/user/me", authorisationHeader(get().jwt))
             .then(response => {
                 set({user: response.data});
             })
