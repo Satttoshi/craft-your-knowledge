@@ -39,7 +39,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
             catch (Exception e) {
-                response.setStatus(403);
+                response.setStatus(405);
                 return;
             }
         }
