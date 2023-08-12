@@ -150,7 +150,9 @@ export const useStore = create<State>((set, get) => ({
         if (password === repeatedPassword) {
 
             axios.post("/api/user/register", newUserData)
-                .then(() => navigate("/login"))
+                .then(() => {
+                    get().login(username, password, navigate);
+                })
                 .catch((error) => {
                     console.error(error);
                 })
