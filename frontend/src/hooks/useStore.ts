@@ -122,7 +122,7 @@ export const useStore = create<State>((set, get) => ({
 
     me: () => {
         const jwt = get().jwt;
-        axios.get("/api/user/me", {headers: {Authorization: jwt ? "Bearer " + jwt : ""}})
+        axios.get("/api/user/me", authorisationHeader(jwt))
             .then(response => {
                 set({user: response.data});
             })
@@ -162,3 +162,7 @@ export const useStore = create<State>((set, get) => ({
 
     // STORE END
 }));
+
+function authorisationHeader(jwt: string) {
+    return {headers: {Authorization: jwt ? "Bearer " + jwt : ""}};
+}
