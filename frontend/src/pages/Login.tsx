@@ -1,17 +1,33 @@
-import {TextField, IconButton, InputAdornment} from "@mui/material";
+import {TextField, IconButton, InputAdornment, Button} from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import styled from "@emotion/styled";
-import {useState} from "react";
+import {FormEvent, useState} from "react";
+import {useStore} from "../hooks/useStore.ts";
+import {useNavigate} from "react-router-dom";
 
 export default function Login() {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const login = useStore(state => state.login);
+    const navigate = useNavigate();
 
+    async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
+        event.preventDefault();
+
+        try {
+            await login(username, password, navigate);
+        } catch (error) {
+            console.error(error);
+            alert("Wrong Credentials, please try again.");
+            setUsername("");
+            setPassword("");
+        }
+    }
 
     return (<>
-        <StyledForm>
+        <StyledForm onSubmit={handleSubmit}>
             <h2>Login</h2>
             <TextField
                 id="login-username"
@@ -40,6 +56,9 @@ export default function Login() {
                     ),
                 }}
             />
+            <Button variant="contained" color="primary" type="submit">
+                Submit
+            </Button>
         </StyledForm>
 
     </>)

@@ -23,7 +23,7 @@ type State = {
     user: string,
     jwt: string,
     me: () => void,
-    login: (userName: string, password: string, navigate: NavigateFunction) => void,
+    login: (userName: string, password: string, navigate: NavigateFunction) => Promise<void>,
     register: (userName: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => void,
 }
 
@@ -146,7 +146,7 @@ export const useStore = create<State>((set, get) => ({
     },
 
     login: (username: string, password: string, navigate: NavigateFunction) => {
-        axios.post("/api/user/login", {username, password})
+        return axios.post("/api/user/login", {username, password})
             .then(response => {
                 set({jwt: response.data});
                 get().me();
@@ -154,6 +154,7 @@ export const useStore = create<State>((set, get) => ({
             })
             .catch((error) => {
                 console.error(error);
+                throw new Error("Login failed");
             });
     },
 
