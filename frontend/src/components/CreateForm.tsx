@@ -7,6 +7,7 @@ import {useStore} from "../hooks/useStore.ts";
 import {WorkshopFormData} from "../utils/types.ts";
 import GearsLoading from "./GearsLoading.tsx";
 import {useNavigate} from "react-router-dom";
+import UserInfo from "./UserInfo.tsx";
 
 export default function CreateForm() {
     const [language, setLanguage] = useState<string>("")
@@ -33,6 +34,8 @@ export default function CreateForm() {
     }
 
     return (<>
+
+        <UserInfo/>
 
         {isCreatingWorkshop && (<>
             <StyledLoadingHeader>Generating...</StyledLoadingHeader>

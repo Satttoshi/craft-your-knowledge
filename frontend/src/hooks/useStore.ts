@@ -145,17 +145,16 @@ export const useStore = create<State>((set, get) => ({
             });
     },
 
-    login: (username: string, password: string, navigate: NavigateFunction) => {
-        return axios.post("/api/user/login", {username, password})
-            .then(response => {
-                set({jwt: response.data});
-                get().me();
-                navigate("/")
-            })
-            .catch((error) => {
-                console.error(error);
-                throw new Error("Login failed");
-            });
+    login: async (username: string, password: string, navigate: NavigateFunction) => {
+        try {
+            const response = await axios.post("/api/user/login", {username, password});
+            set({jwt: response.data});
+            get().me();
+            navigate("/");
+        } catch (error) {
+            console.error(error);
+            throw new Error("Login failed");
+        }
     },
 
     register: (username: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => {

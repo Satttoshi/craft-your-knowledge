@@ -21,6 +21,7 @@ export default function WorkshopList() {
             <UserInfo/>
             <h3>Workshops</h3>
             <a href={"/create"}>Create Workshop</a>
+            <a href={"/login"}>Login</a>
             <StyledContainer>
             {workshops.map((workshop: Workshop) => {
                 return (
