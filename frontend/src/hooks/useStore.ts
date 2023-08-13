@@ -149,7 +149,7 @@ export const useStore = create<State>((set, get) => ({
         try {
             const response = await axios.post("/api/user/login", {username, password});
             set({jwt: response.data});
-            get().me();
+            await get().me();
             navigate("/");
         } catch (error) {
             console.error(error);

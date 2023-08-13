@@ -4,6 +4,7 @@ import {useEffect} from "react";
 import WorkshopPreview from "./WorkshopPreview.tsx";
 import styled from "@emotion/styled";
 import UserInfo from "./UserInfo.tsx";
+import {Link} from "react-router-dom";
 
 export default function WorkshopList() {
     const workshops = useStore(state => state.workshops);
@@ -20,8 +21,8 @@ export default function WorkshopList() {
         <>
             <UserInfo/>
             <h3>Workshops</h3>
-            <a href={"/create"}>Create Workshop</a>
-            <a href={"/login"}>Login</a>
+            <Link to="/create">Create Workshop</Link>
+            <Link to="/login">Login</Link>
             <StyledContainer>
             {workshops.map((workshop: Workshop) => {
                 return (
