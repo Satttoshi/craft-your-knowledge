@@ -5,8 +5,10 @@ import NotFound from "../pages/NotFound.tsx";
 import CodeEditor from "../components/CodeEditor.tsx";
 import styled from "@emotion/styled";
 import Button from '@mui/material/Button';
-import {ReactComponent as User} from "../assets/user.svg";
 import {ReactComponent as Back} from "../assets/back.svg";
+import UserInfo from "../components/UserInfo.tsx";
+
+
 
 export default function WorkshopDetail() {
 
@@ -44,16 +46,12 @@ export default function WorkshopDetail() {
                 <Back/>
             </StyledBackButton>
             <StyledTitle>Workshop</StyledTitle>
-            <StyledUserInfo><User/>
-                <p>Default User</p></StyledUserInfo>
-
+            <UserInfo/>
         </StyledBanner>
         <StyledMain>
             <ContentField content={articleAndChallenge}/>
             <CodeEditor workshop={currentWorkshop}/>
         </StyledMain>
-{/*        <LikeStar workshop={currentWorkshop}/>
-        <DeleteButton id={currentWorkshop.id}/>*/}
     </>)
 }
 
@@ -108,24 +106,6 @@ const StyledTitle = styled.h2`
   font-family: var(--fontCode);
   font-size: 1.7rem;
   font-weight: 300;
-`;
-
-const StyledUserInfo = styled.div`
-
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-
-  svg {
-    width: 2rem;
-    height: 2rem;
-    fill: var(--color4);
-  }
-
-  p {
-    margin: 0;
-    padding: 0;
-  }
 `;
 
 const StyledMain = styled.main`
