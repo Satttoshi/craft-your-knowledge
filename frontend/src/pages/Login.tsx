@@ -4,7 +4,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import styled from "@emotion/styled";
 import {FormEvent, useState} from "react";
 import {useStore} from "../hooks/useStore.ts";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate, useLocation} from "react-router-dom";
 
 export default function Login() {
     const [username, setUsername] = useState<string>("");
@@ -12,6 +12,7 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const login = useStore(state => state.login);
     const navigate = useNavigate();
+    const isRegister = useLocation().pathname === "/register";
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>): Promise<void> {
         event.preventDefault();
@@ -28,7 +29,7 @@ export default function Login() {
 
     return (<>
         <StyledForm onSubmit={handleSubmit}>
-            <h2>Login</h2>
+            {isRegister ? <h2>Register</h2> : <h2>Login</h2>}
             <TextField
                 id="login-username"
                 label="Username"
@@ -60,6 +61,12 @@ export default function Login() {
                 Submit
             </Button>
         </StyledForm>
+        {
+            isRegister ?
+                <span>Already have an account?<Link to="/login">Login</Link></span>
+                :
+                <span>Don't have an account? <Link to="/register">Register</Link></span>
+        }
 
     </>)
 }

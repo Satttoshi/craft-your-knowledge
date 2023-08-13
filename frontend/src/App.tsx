@@ -26,6 +26,7 @@ function App() {
                     <Route path="*" element={<NotFound/>}/>
 
                     <Route path="/login" element={<Login/>}/>
+                    <Route path="/register" element={<Login/>}/>
                 </Routes>
             </ThemeProvider>
         </>
