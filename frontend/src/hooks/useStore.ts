@@ -3,7 +3,6 @@ import axios from "axios";
 import {Gpt3TurboResponse, PersonalStatus, Workshop, WorkshopFormData, WorkshopUserChallenge} from "../utils/types.ts";
 import {NavigateFunction} from "react-router-dom";
 
-
 type State = {
     workshops: Workshop[],
     workshop: Workshop | null,
@@ -129,16 +128,25 @@ export const useStore = create<State>((set, get) => ({
     jwt: "",
 
     me: () => {
-        axios.get("/api/user/me", authorisationHeader(get().jwt))
+        const storedJwt = localStorage.getItem("jwt");
+        const jwt = storedJwt ?? get().jwt;
+        axios.get("/api/user/me", authorisationHeader(jwt))
             .then(response => {
                 if (response.status === 200) {
-                set({user: response.data});
+                    set({user: response.data});
+                    localStorage.setItem("jwt", jwt);
                 }
             })
             .catch(error => {
-                if(error.response && error.response.status === 403) {
-                    set({user: "anonymousUser"});
-                    set({jwt: ""});
+                if (error.response && error.response.status === 403) {
+                    if(storedJwt) {
+                        set({user: "anonymousUser"});
+                        set({jwt: ""});
+                        localStorage.removeItem("jwt");
+                    } else {
+                        set({user: "anonymousUser"});
+                    }
+
                 } else {
                     console.error(error);
                 }
@@ -149,7 +157,7 @@ export const useStore = create<State>((set, get) => ({
         try {
             const response = await axios.post("/api/user/login", {username, password});
             set({jwt: response.data});
-            await get().me();
+            get().me();
             navigate("/");
         } catch (error) {
             console.error(error);
@@ -167,7 +175,8 @@ export const useStore = create<State>((set, get) => ({
 
             axios.post("/api/user/register", newUserData)
                 .then(() => {
-                    get().login(username, password, navigate);
+                    get().login(username, password, navigate)
+                        .catch(console.error);
                 })
                 .catch((error) => {
                     console.error(error);
