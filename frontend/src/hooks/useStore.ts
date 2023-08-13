@@ -125,15 +125,24 @@ export const useStore = create<State>((set, get) => ({
         }
     },
 
-    user: "",
+    user: "anonymousUser",
     jwt: "",
 
     me: () => {
         axios.get("/api/user/me", authorisationHeader(get().jwt))
             .then(response => {
+                if (response.status === 200) {
                 set({user: response.data});
+                }
             })
-            .catch(console.error);
+            .catch(error => {
+                if(error.response && error.response.status === 403) {
+                    set({user: "anonymousUser"});
+                    set({jwt: ""});
+                } else {
+                    console.error(error);
+                }
+            });
     },
 
     login: (username: string, password: string, navigate: NavigateFunction) => {
