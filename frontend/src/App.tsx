@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound.tsx";
 import WorkshopDetail from "./pages/WorkshopDetail.tsx";
 import {useEffect} from "react";
 import {useStore} from "./hooks/useStore.ts";
+import Login from "./pages/Login.tsx";
 
 function App() {
     const me = useStore(state => state.me)
@@ -23,6 +24,8 @@ function App() {
                     <Route path="/create" element={<Create/>}/>
                     <Route path="/workshop/:id" element={<WorkshopDetail/>}/>
                     <Route path="*" element={<NotFound/>}/>
+
+                    <Route path="/login" element={<Login/>}/>
                 </Routes>
             </ThemeProvider>
         </>

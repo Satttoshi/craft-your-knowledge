@@ -3,6 +3,7 @@ import {Workshop} from "../utils/types.ts";
 import {useEffect} from "react";
 import WorkshopPreview from "./WorkshopPreview.tsx";
 import styled from "@emotion/styled";
+import UserInfo from "./UserInfo.tsx";
 
 export default function WorkshopList() {
     const workshops = useStore(state => state.workshops);
@@ -17,6 +18,7 @@ export default function WorkshopList() {
 
     return (
         <>
+            <UserInfo/>
             <h3>Workshops</h3>
             <a href={"/create"}>Create Workshop</a>
             <StyledContainer>
