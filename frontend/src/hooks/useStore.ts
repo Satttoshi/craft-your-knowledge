@@ -23,7 +23,7 @@ type State = {
     jwt: string,
     me: () => void,
     login: (userName: string, password: string, navigate: NavigateFunction) => Promise<void>,
-    register: (userName: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => void,
+    register: (userName: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => Promise<void>,
 }
 
 export const useStore = create<State>((set, get) => ({
@@ -165,7 +165,7 @@ export const useStore = create<State>((set, get) => ({
         }
     },
 
-    register: (username: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => {
+    register: async (username: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => {
         const newUserData = {
             "username": `${username}`,
             "password": `${password}`
@@ -173,15 +173,15 @@ export const useStore = create<State>((set, get) => ({
 
         if (password === repeatedPassword) {
 
-            axios.post("/api/user/register", newUserData)
+            return axios.post("/api/user/register", newUserData)
                 .then(() => {
                     get().login(username, password, navigate)
                         .catch(console.error);
                 })
                 .catch((error) => {
                     console.error(error);
+                    throw new Error("Registration failed");
                 })
-
         }
     },
 
