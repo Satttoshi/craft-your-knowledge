@@ -79,7 +79,7 @@ export default function Login() {
         <StyledForm onSubmit={e => handleSubmit(e, isRegister)}>
             {isRegister ? <h2>Register</h2> : <h2>Login</h2>}
             <StyledInput>
-                <TextField
+                <StyledTextField
                     id="login-username"
                     label="Username"
                     variant="outlined"
@@ -89,7 +89,7 @@ export default function Login() {
                 />
             </StyledInput>
             <StyledInput>
-                <TextField
+                <StyledTextField
                     id="login-adornment-password"
                     label="Password"
                     variant="outlined"
@@ -116,7 +116,7 @@ export default function Login() {
             </StyledInput>
             {isRegister &&
                 <StyledInput>
-                    <TextField
+                    <StyledTextField
                         id="register-password"
                         label="Repeat Password"
                         variant="outlined"
@@ -157,7 +157,12 @@ const StyledInput = styled.div`
 
   display: flex;
   justify-content: center;
+`;
 
+const StyledTextField = styled(TextField)`
+  width: 50vw;
+  min-width: 20rem;
+  max-width: 30rem;
 `;
 
 type ValidationProps = {
