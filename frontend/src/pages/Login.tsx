@@ -6,6 +6,7 @@ import {ChangeEvent, FormEvent, useState} from "react";
 import {useStore} from "../hooks/useStore.ts";
 import {Link, useNavigate, useLocation} from "react-router-dom";
 import PasswordValidator from "../utils/passwordValidator.ts";
+import {ReactComponent as Back} from "../assets/back.svg";
 
 export default function Login() {
     const [username, setUsername] = useState<string>("");
@@ -75,7 +76,17 @@ export default function Login() {
         }
     }
 
+    function handleBack() {
+        navigate("/");
+    }
+
     return (<>
+        <StyledHeader>
+            <StyledBackButton onClick={handleBack} variant="outlined">
+                <Back/>
+            </StyledBackButton>
+            <h1>Craft Your Knowledge</h1>
+        </StyledHeader>
         <StyledForm onSubmit={e => handleSubmit(e, isRegister)}>
             {isRegister ? <h2>Register</h2> : <h2>Login</h2>}
             <StyledInput>
@@ -144,6 +155,50 @@ export default function Login() {
 
     </>)
 }
+
+const StyledHeader = styled.header`
+  display: flex;
+  width: 80vw;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+
+  button {
+    position: absolute;
+    left: 0;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--fontCode);
+    font-weight: 300;
+    text-align: center;
+
+    font-size: clamp(1.2rem, 4.5vw, 3rem);
+    white-space: nowrap;
+    flex: 1;
+  }
+
+  @media (max-width: 768px) {
+    margin: 1rem 0;
+    width: 90vw;
+    h1 {
+      text-align: right;
+    }
+  }
+`;
+
+const StyledBackButton = styled(Button)`
+  width: 5rem;
+  padding: 0;
+  
+  svg {
+    width: 2rem;
+    height: 2rem;
+    fill: var(--color4);
+    padding: 0;
+  }
+`;
 
 const StyledForm = styled.form`
   display: flex;

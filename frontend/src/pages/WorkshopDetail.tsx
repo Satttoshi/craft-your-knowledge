@@ -8,8 +8,6 @@ import Button from '@mui/material/Button';
 import {ReactComponent as Back} from "../assets/back.svg";
 import UserInfo from "../components/UserInfo.tsx";
 
-
-
 export default function WorkshopDetail() {
 
     const urlParams = useParams();
@@ -56,7 +54,6 @@ export default function WorkshopDetail() {
 }
 
 const StyledBanner = styled.div`
-
   position: fixed;
   height: 6vh;
 
@@ -88,7 +85,6 @@ const StyledBanner = styled.div`
 `;
 
 const StyledBackButton = styled(Button)`
-
   width: 5rem;
   padding: 0;
 
@@ -102,7 +98,6 @@ const StyledBackButton = styled(Button)`
 `;
 
 const StyledTitle = styled.h2`
-
   font-family: var(--fontCode);
   font-size: 1.7rem;
   font-weight: 300;

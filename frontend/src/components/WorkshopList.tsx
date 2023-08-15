@@ -15,7 +15,7 @@ export default function WorkshopList() {
     useEffect(readWorkshops, [readWorkshops]);
 
     if (isReadingWorkshops) {
-        return <h2>Loading...</h2>
+        return null;
     }
 
     return (
@@ -77,6 +77,7 @@ const StyledHeader = styled.header`
   }
 
   @media (max-width: 768px) {
+    margin: 1rem 0;
     width: 90vw;
     h1 {
       text-align: left;
