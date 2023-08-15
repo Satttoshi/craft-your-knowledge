@@ -5,6 +5,7 @@ import WorkshopPreview from "./WorkshopPreview.tsx";
 import styled from "@emotion/styled";
 import UserInfo from "./UserInfo.tsx";
 import {Link} from "react-router-dom";
+import Button from "@mui/material/Button";
 
 export default function WorkshopList() {
     const workshops = useStore(state => state.workshops);
@@ -19,16 +20,19 @@ export default function WorkshopList() {
 
     return (
         <>
-            <UserInfo/>
+            <StyledHeader>
+                <h1>Craft Your Knowledge</h1>
+                <UserInfo/>
+            </StyledHeader>
+
             <h3>Workshops</h3>
-            <Link to="/create">Create Workshop</Link>
-            <Link to="/login">Login</Link>
+            <Link to="/create"><Button variant="contained">Create Workshop</Button></Link>
             <StyledContainer>
-            {workshops.map((workshop: Workshop) => {
-                return (
-                    <WorkshopPreview key={"preview" + workshop.id} workshop={workshop}/>
-                )
-            })}
+                {workshops.map((workshop: Workshop) => {
+                    return (
+                        <WorkshopPreview key={"preview" + workshop.id} workshop={workshop}/>
+                    )
+                })}
             </StyledContainer>
         </>
     )
@@ -42,5 +46,40 @@ const StyledContainer = styled.section`
 
   @media (max-width: 768px) {
     width: 90vw;
+  }
+`;
+
+const StyledHeader = styled.header`
+  display: flex;
+  width: 80vw;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+
+  h1 {
+    margin: 0;
+    font-family: var(--fontCode);
+    font-weight: 300;
+    text-align: center;
+
+    font-size: clamp(1.2rem, 4.5vw, 3rem);
+    white-space: nowrap;
+    flex: 1;
+  }
+
+  .userInfo {
+    position: absolute;
+    right: 0;
+  }
+  
+  button {
+    height: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 90vw;
+    h1 {
+      text-align: left;
+    }
   }
 `;

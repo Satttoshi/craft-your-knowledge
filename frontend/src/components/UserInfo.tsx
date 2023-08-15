@@ -2,15 +2,16 @@ import {ReactComponent as User} from "../assets/user.svg";
 import styled from "@emotion/styled";
 import {useStore} from "../hooks/useStore.ts";
 import {Link} from "react-router-dom";
+import Button from "@mui/material/Button";
 
 export default function UserInfo() {
     const user = useStore((state) => state.user);
 
-    return <StyledUserInfo>
+    return <StyledUserInfo className="userInfo">
         {
             user === "" || user === "anonymousUser"
                 ?
-                <Link to={"/login"}>login</Link>
+                <Link to={"/login"}><Button variant="contained">login</Button></Link>
                 :
                 <>
                     <User/>
