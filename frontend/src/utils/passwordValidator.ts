@@ -31,7 +31,7 @@ export default class PasswordValidator {
             return PasswordValidationCode.CaseRequired;
         }
 
-        if (!/(?=.*[\W_])/.test(this.password)) {
+        if (!/[^\w\s]/.test(this.password)) {
             return PasswordValidationCode.SpecialCharRequired;
         }
 

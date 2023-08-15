@@ -93,6 +93,5 @@ const StyledContentField = styled.article`
     ::-webkit-scrollbar-thumb {
       display: none;
     }
-
   }
 `;
