@@ -57,16 +57,6 @@ class WorkshopControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(testUserWithoutId)).andExpect(MockMvcResultMatchers.status().isOk());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/login")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("""
-                    {
-                        "username": "testUser",
-                        "password": "secretPass3"
-                    }
-                """))
-            .andExpect(MockMvcResultMatchers.status().isOk());
-
         Gpt3TurboRequest gpt3TurboRequest = new Gpt3TurboRequest(
             "gpt-3.5-turbo",
             List.of(

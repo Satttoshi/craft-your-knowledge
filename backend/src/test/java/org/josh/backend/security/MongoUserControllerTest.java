@@ -65,7 +65,8 @@ class MongoUserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(userWithoutIdJson))
             // THEN
-            .andExpect(MockMvcResultMatchers.status().isOk());
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().string(org.hamcrest.Matchers.notNullValue(String.class)));
     }
 
     private String getToken() throws Exception {

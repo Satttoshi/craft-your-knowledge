@@ -19,7 +19,7 @@ type State = {
     deleteWorkshop: (workshopId: string) => void,
     validateChallenge: (workshopId: string, workshopUserChallenge: WorkshopUserChallenge) => Promise<Gpt3TurboResponse>
 
-    user: string,
+    username: string,
     jwt: string,
     me: () => void,
     login: (userName: string, password: string, navigate: NavigateFunction) => Promise<void>,
@@ -124,7 +124,7 @@ export const useStore = create<State>((set, get) => ({
         }
     },
 
-    user: "anonymousUser",
+    username: "anonymousUser",
     jwt: "",
 
     me: () => {
@@ -132,19 +132,17 @@ export const useStore = create<State>((set, get) => ({
         const jwt = storedJwt ?? get().jwt;
         axios.get("/api/user/me", authorisationHeader(jwt))
             .then(response => {
-                if (response.status === 200) {
-                    set({user: response.data});
+                    set({username: response.data});
                     localStorage.setItem("jwt", jwt);
-                }
             })
             .catch(error => {
                 if (error.response && error.response.status === 403) {
                     if(storedJwt) {
-                        set({user: "anonymousUser"});
+                        set({username: "anonymousUser"});
                         set({jwt: ""});
                         localStorage.removeItem("jwt");
                     } else {
-                        set({user: "anonymousUser"});
+                        set({username: "anonymousUser"});
                     }
 
                 } else {
