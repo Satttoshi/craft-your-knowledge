@@ -95,6 +95,7 @@ public class WorkshopService {
         }
         return personalStatuses;
     }
+
     public void deleteWorkshop(String id) {
         if (!workshopRepository.existsById(id)) {
             throw new NoSuchWorkshopException("No workshop found with Id: " + id);
@@ -103,13 +104,14 @@ public class WorkshopService {
     }
 
     public Gpt3TurboResponse validateChallenge(String id, WorkshopUserChallenge workshopUserChallenge) {
-        if(!workshopRepository.existsById(id)) {
+        if (!workshopRepository.existsById(id)) {
             throw new NoSuchWorkshopException("No workshop found with Id: " + id);
         }
         Gpt3TurboRequest validationRequest = promptBuilder.buildChallengeValidationRequest(workshopUserChallenge);
         Gpt3TurboResponse validationResponse = openAiService.getResponse(validationRequest);
         if (validationResponse.choices().get(0).message().content().contains(">>>PASS<<<")) {
-            PersonalStatus personalStatus = new PersonalStatus(workshopUserChallenge.user(), ProgressStatus.COMPLETED, true);
+            PersonalStatus personalStatus = new PersonalStatus(workshopUserChallenge.user(), ProgressStatus.COMPLETED
+                , true);
             updatePersonalStatus(id, personalStatus);
         }
         return validationResponse;

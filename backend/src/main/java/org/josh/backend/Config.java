@@ -3,6 +3,7 @@ package org.josh.backend;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
@@ -18,8 +19,8 @@ public class Config implements WebMvcConfigurer {
             .addResolver(new PathResourceResolver() {
                 @Override
                 protected Resource getResource(
-                    String resourcePath,
-                    Resource location
+                    @NonNull String resourcePath,
+                    @NonNull Resource location
                 ) throws IOException {
                     Resource requestedResource = location.createRelative(
                         resourcePath

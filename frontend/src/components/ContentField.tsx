@@ -67,6 +67,8 @@ const StyledContentField = styled.article`
 
   h1 {
     color: var(--color5);
+    font-size: clamp(1.5rem, 2vw, 4rem);
+    font-weight: 400;
   }
 
   h2,
@@ -76,6 +78,10 @@ const StyledContentField = styled.article`
   }
 
   @media (max-width: 768px) {
+
+    h1 {
+      font-size: clamp(1.5rem, 2vw, 3rem);
+    }
 
     padding: 3vw;
     border-radius: 0;
@@ -87,6 +93,5 @@ const StyledContentField = styled.article`
     ::-webkit-scrollbar-thumb {
       display: none;
     }
-
   }
 `;

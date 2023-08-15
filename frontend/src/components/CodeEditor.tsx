@@ -40,7 +40,7 @@ export default function CodeEditor({workshop}: Props) {
         validateChallenge(workshop.id, {
             user: {
                 id: "1",
-                name: "Default User"
+                username: "Default User"
             },
             language: editorLanguage,
             topic: workshop.topic,

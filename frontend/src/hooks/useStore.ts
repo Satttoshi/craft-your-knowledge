@@ -1,7 +1,7 @@
 import {create} from "zustand";
 import axios from "axios";
 import {Gpt3TurboResponse, PersonalStatus, Workshop, WorkshopFormData, WorkshopUserChallenge} from "../utils/types.ts";
-
+import {NavigateFunction} from "react-router-dom";
 
 type State = {
     workshops: Workshop[],
@@ -18,6 +18,12 @@ type State = {
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => void,
     deleteWorkshop: (workshopId: string) => void,
     validateChallenge: (workshopId: string, workshopUserChallenge: WorkshopUserChallenge) => Promise<Gpt3TurboResponse>
+
+    username: string,
+    jwt: string,
+    me: () => void,
+    login: (userName: string, password: string, navigate: NavigateFunction) => Promise<void>,
+    register: (userName: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => Promise<void>,
 }
 
 export const useStore = create<State>((set, get) => ({
@@ -36,7 +42,11 @@ export const useStore = create<State>((set, get) => ({
         const readWorkshops = get().readWorkshops;
         try {
             set({isCreatingWorkshop: true});
-            const response = await axios.post("/api/workshop", requestBody);
+            const response = await axios.post(
+                "/api/workshop",
+                requestBody,
+                authorisationHeader(get().jwt)
+            );
             readWorkshops();
             return response.data;
         } catch (error) {
@@ -86,13 +96,13 @@ export const useStore = create<State>((set, get) => ({
     },
 
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => {
-        axios.put(`/api/workshop/${workshopId}`, personalStatus)
+        axios.put(`/api/workshop/${workshopId}`, personalStatus, authorisationHeader(get().jwt))
             .catch(console.error)
     },
 
     deleteWorkshop: (workshopId: string) => {
         const readWorkshops = get().readWorkshops;
-        axios.delete(`/api/workshop/${workshopId}`)
+        axios.delete(`/api/workshop/${workshopId}`, authorisationHeader(get().jwt))
             .catch(console.error)
             .finally(readWorkshops)
     },
@@ -100,7 +110,11 @@ export const useStore = create<State>((set, get) => ({
     validateChallenge: async (workshopId: string, workshopUserChallenge: WorkshopUserChallenge) => {
         set({isValidatingChallenge: true});
         try {
-            const response = await axios.post(`/api/workshop/${workshopId}/validate`, workshopUserChallenge);
+            const response = await axios.post(
+                `/api/workshop/${workshopId}/validate`,
+                workshopUserChallenge,
+                authorisationHeader(get().jwt)
+            );
             return response.data;
         } catch (error) {
             console.error(error);
@@ -110,5 +124,68 @@ export const useStore = create<State>((set, get) => ({
         }
     },
 
+    username: "anonymousUser",
+    jwt: "",
+
+    me: () => {
+        const storedJwt = localStorage.getItem("jwt");
+        const jwt = storedJwt ?? get().jwt;
+        axios.get("/api/user/me", authorisationHeader(jwt))
+            .then(response => {
+                    set({username: response.data});
+                    localStorage.setItem("jwt", jwt);
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 403) {
+                    if(storedJwt) {
+                        set({username: "anonymousUser"});
+                        set({jwt: ""});
+                        localStorage.removeItem("jwt");
+                    } else {
+                        set({username: "anonymousUser"});
+                    }
+
+                } else {
+                    console.error(error);
+                }
+            });
+    },
+
+    login: async (username: string, password: string, navigate: NavigateFunction) => {
+        try {
+            const response = await axios.post("/api/user/login", {username, password});
+            set({jwt: response.data});
+            get().me();
+            navigate("/");
+        } catch (error) {
+            console.error(error);
+            throw new Error("Login failed");
+        }
+    },
+
+    register: async (username: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => {
+        const newUserData = {
+            "username": `${username}`,
+            "password": `${password}`
+        }
+
+        if (password === repeatedPassword) {
+
+            return axios.post("/api/user/register", newUserData)
+                .then(() => {
+                    get().login(username, password, navigate)
+                        .catch(console.error);
+                })
+                .catch((error) => {
+                    console.error(error);
+                    throw new Error("Registration failed");
+                })
+        }
+    },
+
     // STORE END
 }));
+
+function authorisationHeader(jwt: string) {
+    return {headers: {Authorization: jwt ? "Bearer " + jwt : ""}};
+}

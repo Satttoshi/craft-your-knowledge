@@ -60,6 +60,7 @@ public class PromptBuilder {
 
         String prompt = """
             Formulate a small interactive challenge based on the article you wrote previously.
+            Coding Challenge should be similar to the ones of tech interview questions.
             Make sure that the Challenge is not too difficult and can be solved in 10 to 30 minutes.
             
             This challenge should be carefully designed so as not to be overly complex, with an estimated completion time between 10 and 30 minutes.

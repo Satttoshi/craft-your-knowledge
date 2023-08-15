@@ -36,7 +36,7 @@ export type GptMessage = {
 export type PersonalStatus = {
     user: {
         id: string,
-        name: string,
+        username: string,
     },
     progressStatus: string,
     isLiked: boolean
@@ -51,7 +51,7 @@ export type WorkshopFormData = {
 export type WorkshopUserChallenge = {
     user: {
         id: string,
-        name: string,
+        username: string,
     },
     language: string,
     topic: string,

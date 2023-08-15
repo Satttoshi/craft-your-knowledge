@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -25,6 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@WithMockUser(username = "testUser", password = "secretPass3")
 class WorkshopControllerTest {
 
     // Flapdoodle Test-Dependency -> empty MongoDB will be used for testing
@@ -42,7 +44,18 @@ class WorkshopControllerTest {
     PromptBuilder promptBuilder;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
+
+        String testUserWithoutId = """
+                {
+                    "username": "testUser",
+                    "password": "secretPass3"
+                }
+            """;
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/user/register")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(testUserWithoutId)).andExpect(MockMvcResultMatchers.status().isOk());
 
         Gpt3TurboRequest gpt3TurboRequest = new Gpt3TurboRequest(
             "gpt-3.5-turbo",
@@ -133,6 +146,7 @@ class WorkshopControllerTest {
     }
 
     @Test
+    @DirtiesContext
     void expectEmptyList_whenReadWorkshops() throws Exception {
         //GIVEN
         //WHEN
@@ -171,7 +185,7 @@ class WorkshopControllerTest {
                 {
                     "user": {
                         "id": "adminId",
-                        "name": "AdminName"
+                        "username": "AdminName"
                     },
                     "progressStatus": "NOT_STARTED",
                     "isLiked": true
@@ -191,7 +205,7 @@ class WorkshopControllerTest {
                     "id": "%s",
                     "author": {
                         "id": "adminId",
-                        "name": "AdminName"
+                        "username": "AdminName"
                     },
                     "language": "fizz",
                     "topic": "buzz",
@@ -201,7 +215,7 @@ class WorkshopControllerTest {
                         {
                             "user": {
                                 "id": "adminId",
-                                "name": "AdminName"
+                                "username": "AdminName"
                             },
                             "progressStatus": "NOT_STARTED",
                             "isLiked": true
@@ -246,6 +260,7 @@ class WorkshopControllerTest {
     }
 
     @Test
+    @DirtiesContext
     void expectErrorMessage_whenDeleteWorkshopById() throws Exception {
 
         //GIVEN
@@ -260,6 +275,7 @@ class WorkshopControllerTest {
     }
 
     @Test
+    @DirtiesContext
     void expectValidation_whenValidateChallenge() throws Exception {
         //GIVEN
         String result = mockMvc.perform(
