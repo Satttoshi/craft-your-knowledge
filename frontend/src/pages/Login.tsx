@@ -13,6 +13,7 @@ export default function Login() {
     const [errors, setErrors] = useState<string>("");
     const [repeatPassword, setRepeatPassword] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [isStrong, setIsStrong] = useState<boolean>(false);
     const login = useStore(state => state.login);
     const register = useStore(state => state.register);
     const navigate = useNavigate();
@@ -52,7 +53,9 @@ export default function Login() {
             const validator = new PasswordValidator(password);
             const validationState = validator.validate();
             const validationMessage = validator.getValidationMessage(validationState);
+            const strong = validator.isStrong()
             setErrors(validationMessage);
+            setIsStrong(strong);
         }
 
     }
