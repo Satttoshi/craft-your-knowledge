@@ -7,7 +7,7 @@ enum PasswordValidationCode {
     SpecialCharRequired
 }
 
-export class PasswordValidator {
+export default class PasswordValidator {
     private readonly password: string;
 
     constructor(password: string) {
@@ -31,21 +31,25 @@ export class PasswordValidator {
             return PasswordValidationCode.CaseRequired;
         }
 
-        if (!/[@$!%*?&#]/.test(this.password)) {
+        if (!/(?=.*[\W_])/.test(this.password)) {
             return PasswordValidationCode.SpecialCharRequired;
         }
 
         return PasswordValidationCode.NoIssues;
     }
 
+    isStrong(): boolean {
+        return this.validate() === PasswordValidationCode.NoIssues;
+    }
+
     getValidationMessage(code?: PasswordValidationCode): string {
         const validationMessages: { [key in PasswordValidationCode]: string } = {
-            [PasswordValidationCode.NoIssues]: "No issues found.",
-            [PasswordValidationCode.MinLength]: "The password must be at least 8 characters long.",
-            [PasswordValidationCode.MaxLength]: "The password must not exceed 40 characters.",
-            [PasswordValidationCode.NumberRequired]: "The password must contain at least one number.",
-            [PasswordValidationCode.CaseRequired]: "The password must contain both upper and lower case letters.",
-            [PasswordValidationCode.SpecialCharRequired]: "The password must contain at least one special character (e.g. @, $, !, %, *, ?, &, #)."
+            [PasswordValidationCode.NoIssues]: "Good password",
+            [PasswordValidationCode.MinLength]: "Password needs to be at least 8 characters long.",
+            [PasswordValidationCode.MaxLength]: "Password must not exceed 40 characters.",
+            [PasswordValidationCode.NumberRequired]: "Password must contain at least one number.",
+            [PasswordValidationCode.CaseRequired]: "Must contain both upper and lower case letters.",
+            [PasswordValidationCode.SpecialCharRequired]: "Must contain at least one special character."
         };
 
         if (code !== undefined) {

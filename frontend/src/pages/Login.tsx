@@ -2,13 +2,15 @@ import {TextField, IconButton, InputAdornment, Button} from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import styled from "@emotion/styled";
-import {FormEvent, useState} from "react";
+import {ChangeEvent, FormEvent, useState} from "react";
 import {useStore} from "../hooks/useStore.ts";
 import {Link, useNavigate, useLocation} from "react-router-dom";
+import PasswordValidator from "../utils/passwordValidator.ts";
 
 export default function Login() {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [errors, setErrors] = useState<string>("");
     const [repeatPassword, setRepeatPassword] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const login = useStore(state => state.login);
@@ -41,6 +43,20 @@ export default function Login() {
         }
     }
 
+    function handlePassword(event: ChangeEvent<HTMLInputElement>): void {
+        event.preventDefault();
+        const password = event.target.value;
+        setPassword(password);
+
+        if (isRegister) {
+            const validator = new PasswordValidator(password);
+            const validationState = validator.validate();
+            const validationMessage = validator.getValidationMessage(validationState);
+            setErrors(validationMessage);
+        }
+
+    }
+
     return (<>
         <StyledForm onSubmit={e => handleSubmit(e, isRegister)}>
             {isRegister ? <h2>Register</h2> : <h2>Login</h2>}
@@ -57,7 +73,7 @@ export default function Login() {
                 variant="outlined"
                 value={password}
                 type={showPassword ? 'text' : 'password'}
-                onChange={e => setPassword(e.target.value)}
+                onChange={handlePassword}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
@@ -71,6 +87,7 @@ export default function Login() {
                     ),
                 }}
             />
+            <span>{errors}</span>
             {
                 isRegister && <TextField
                     id="register-password"
