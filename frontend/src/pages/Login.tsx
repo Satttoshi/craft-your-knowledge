@@ -11,6 +11,7 @@ export default function Login() {
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [errors, setErrors] = useState<string>("");
+    const [errorsRepeatPassword, setErrorsRepeatPassword] = useState<string>("");
     const [repeatPassword, setRepeatPassword] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [isStrong, setIsStrong] = useState<boolean>(false);
@@ -65,7 +66,13 @@ export default function Login() {
         event.preventDefault();
         const repeatPassword = event.target.value;
         setRepeatPassword(repeatPassword);
-        password === repeatPassword ? setIsValidRepeatPassword(true) : setIsValidRepeatPassword(false);
+        if (password === repeatPassword) {
+            setIsValidRepeatPassword(true);
+            setErrorsRepeatPassword("Correct repeating password")
+        } else {
+            setIsValidRepeatPassword(false);
+            setErrorsRepeatPassword("Password must match")
+        }
     }
 
     return (<>
@@ -120,14 +127,14 @@ export default function Login() {
                     />
                     {isRegister &&
                         <StyledPasswordValidation isValid={isValidRepeatPassword}>
-                            {isValidRepeatPassword ? "Correct repeating password" : "Password must match"}
+                            {errorsRepeatPassword}
                         </StyledPasswordValidation>
                     }
                 </StyledInput>
             }
-            <Button variant="contained" color="primary" type="submit">
+            <StyledSubmitButton variant="contained" color="primary" type="submit">
                 Submit
-            </Button>
+            </StyledSubmitButton>
         </StyledForm>
         {isRegister ?
             <span>Already have an account? <StyledLink to="/login">Login</StyledLink></span>
@@ -169,4 +176,8 @@ const StyledPasswordValidation = styled.span<ValidationProps>`
 
 const StyledLink = styled(Link)`
   color: var(--color5);
+`;
+
+const StyledSubmitButton = styled(Button)`
+  margin: 1rem 0;
 `;
