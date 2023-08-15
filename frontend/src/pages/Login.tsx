@@ -14,6 +14,7 @@ export default function Login() {
     const [repeatPassword, setRepeatPassword] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [isStrong, setIsStrong] = useState<boolean>(false);
+    const [isValidRepeatPassword, setIsValidRepeatPassword] = useState<boolean>(false);
     const login = useStore(state => state.login);
     const register = useStore(state => state.register);
     const navigate = useNavigate();
@@ -57,7 +58,13 @@ export default function Login() {
             setErrors(validationMessage);
             setIsStrong(strong);
         }
+    }
 
+    function handleRepeatPassword(event: ChangeEvent<HTMLInputElement>): void {
+        event.preventDefault();
+        const repeatPassword = event.target.value;
+        setRepeatPassword(repeatPassword);
+        password === repeatPassword ? setIsValidRepeatPassword(true) : setIsValidRepeatPassword(false);
     }
 
     return (<>
@@ -90,7 +97,7 @@ export default function Login() {
                     ),
                 }}
             />
-            <span>{errors}</span>
+            <StyledPasswordValidation isValid={isStrong}>{errors}</StyledPasswordValidation>
             {
                 isRegister && <TextField
                     id="register-password"
@@ -98,8 +105,11 @@ export default function Login() {
                     variant="outlined"
                     value={repeatPassword}
                     type={showPassword ? 'text' : 'password'}
-                    onChange={e => setRepeatPassword(e.target.value)}
+                    onChange={handleRepeatPassword}
                 />}
+            <StyledPasswordValidation isValid={isValidRepeatPassword}>
+                {isValidRepeatPassword ? "Correct repeating password" : "Password must match"}
+            </StyledPasswordValidation>
             <Button variant="contained" color="primary" type="submit">
                 Submit
             </Button>
@@ -119,4 +129,13 @@ const StyledForm = styled.form`
   flex-direction: column;
   align-items: center;
   gap: 2rem
+`;
+
+type ValidationProps = {
+    isValid: boolean
+}
+
+const StyledPasswordValidation = styled.span<ValidationProps>`
+  height: 1rem;
+  ${props => !props.isValid ? "color: red;" : "color: green;"}
 `;
