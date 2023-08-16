@@ -80,7 +80,7 @@ const StyledLanguage = styled.p`
   border-radius: 10px;
   box-shadow: var(--shadow2);
   margin: 0;
-  
+
   position: absolute;
   top: -1.5rem;
 `;
