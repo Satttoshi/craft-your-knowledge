@@ -6,6 +6,7 @@ import styled from "@emotion/styled";
 import UserInfo from "./UserInfo.tsx";
 import {Link} from "react-router-dom";
 import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function WorkshopList() {
     const workshops = useStore(state => state.workshops);
@@ -26,11 +27,15 @@ export default function WorkshopList() {
                 <UserInfo/>
             </StyledHeader>
             <StyledTitleContainer>
-                <h3>Available Workshops to explore</h3>
+                <h3>Available workshops to explore</h3>
                 {isLoggedIn() ?
                     <Link to="/create"><Button variant="contained">Create Workshop</Button></Link>
                     :
-                    <Button disabled variant="contained">Create Workshop</Button>
+                    <Tooltip title="You need to be logged in to create a workshop">
+                <span>
+            <Button disabled variant="contained">Create Workshop</Button>
+                </span>
+                    </Tooltip>
                 }
             </StyledTitleContainer>
             <StyledContainer>
@@ -64,7 +69,7 @@ const StyledTitleContainer = styled.div`
   background: var(--color3);
   border-radius: 10px;
   padding: 1rem 2rem;
-  
+
   h3 {
     margin: 0;
     white-space: nowrap;
