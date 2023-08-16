@@ -51,7 +51,7 @@ export default function CreateForm() {
                     <Back/>
                 </StyledBackButton>
                 <h1>Craft Your Knowledge</h1>
-                <UserInfo />
+                <UserInfo/>
             </StyledHeader>
             <StyledForm onSubmit={handleSubmit}>
                 <FormControl fullWidth>
@@ -60,14 +60,28 @@ export default function CreateForm() {
                         labelId="language"
                         id="language"
                         value={language}
+                        required
                         label="Language"
                         onChange={(e) => setLanguage(e.target.value)}
                     >
                         <MenuItem value={"JavaScript"}>JavaScript</MenuItem>
+                        <MenuItem value={"TypeScript"}>TypeScript</MenuItem>
+                        <MenuItem value={"HTML"}>HTML</MenuItem>
+                        <MenuItem value={"CSS"}>CSS</MenuItem>
                         <MenuItem value={"Java"}>Java</MenuItem>
+                        <MenuItem value={"Kotlin"}>Kotlin</MenuItem>
                         <MenuItem value={"Python"}>Python</MenuItem>
                         <MenuItem value={"C"}>C</MenuItem>
                         <MenuItem value={"C#"}>C#</MenuItem>
+                        <MenuItem value={"C++"}>C++</MenuItem>
+                        <MenuItem value={"PHP"}>PHP</MenuItem>
+                        <MenuItem value={"Ruby"}>Ruby</MenuItem>
+                        <MenuItem value={"Rust"}>Rust</MenuItem>
+                        <MenuItem value={"Golang"}>Golang</MenuItem>
+                        <MenuItem value={"Perl"}>Perl</MenuItem>
+                        <MenuItem value={"SQL"}>SQL</MenuItem>
+                        <MenuItem value={"Haskell"}>Haskell</MenuItem>
+                        <MenuItem value={"Scala"}>Scala</MenuItem>
                     </Select>
                 </FormControl>
 
@@ -76,6 +90,7 @@ export default function CreateForm() {
                     name="topic"
                     label="Topic"
                     value={topic}
+                    required
                     onChange={(e) => setTopic(e.target.value)}
                 />
 
@@ -142,7 +157,7 @@ const StyledHeader = styled.header`
     position: absolute;
     left: 0;
   }
-  
+
   .userInfo {
     position: absolute;
     right: 0;
@@ -182,7 +197,9 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 60vw;
+  width: 50vw;
+  min-width: 20rem;
+  max-width: 30rem;
   gap: 2rem;
 `;
 

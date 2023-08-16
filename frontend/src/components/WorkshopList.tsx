@@ -11,6 +11,7 @@ export default function WorkshopList() {
     const workshops = useStore(state => state.workshops);
     const isReadingWorkshops = useStore(state => state.isReadingWorkshops);
     const readWorkshops = useStore(state => state.readWorkshops);
+    const isLoggedIn = useStore(state => state.isLoggedIn);
 
     useEffect(readWorkshops, [readWorkshops]);
 
@@ -24,9 +25,14 @@ export default function WorkshopList() {
                 <h1>Craft Your Knowledge</h1>
                 <UserInfo/>
             </StyledHeader>
-
-            <h3>Workshops</h3>
-            <Link to="/create"><Button variant="contained">Create Workshop</Button></Link>
+            <StyledTitleContainer>
+                <h3>Available Workshops to explore</h3>
+                {isLoggedIn() ?
+                    <Link to="/create"><Button variant="contained">Create Workshop</Button></Link>
+                    :
+                    <Button disabled variant="contained">Create Workshop</Button>
+                }
+            </StyledTitleContainer>
             <StyledContainer>
                 {workshops.map((workshop: Workshop) => {
                     return (
@@ -43,6 +49,21 @@ const StyledContainer = styled.section`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    width: 90vw;
+  }
+`;
+
+const StyledTitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 80vw;
+  gap: 2rem;
+  margin: 2rem 0;
+  background: var(--color3);
+  border-radius: 10px;
+  padding: 0.5rem 2rem;
 
   @media (max-width: 768px) {
     width: 90vw;
@@ -71,7 +92,7 @@ const StyledHeader = styled.header`
     position: absolute;
     right: 0;
   }
-  
+
   button {
     height: 2rem;
   }

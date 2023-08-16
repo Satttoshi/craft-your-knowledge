@@ -24,6 +24,7 @@ type State = {
     me: () => void,
     login: (userName: string, password: string, navigate: NavigateFunction) => Promise<void>,
     register: (userName: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => Promise<void>,
+    isLoggedIn: () => boolean,
 }
 
 export const useStore = create<State>((set, get) => ({
@@ -155,8 +156,8 @@ export const useStore = create<State>((set, get) => ({
         try {
             const response = await axios.post("/api/user/login", {username, password});
             set({jwt: response.data});
-            get().me();
             navigate("/");
+            get().me();
         } catch (error) {
             console.error(error);
             throw new Error("Login failed");
@@ -181,6 +182,10 @@ export const useStore = create<State>((set, get) => ({
                     throw new Error("Registration failed");
                 })
         }
+    },
+
+    isLoggedIn: () => {
+        return get().username !== "anonymousUser";
     },
 
     // STORE END
