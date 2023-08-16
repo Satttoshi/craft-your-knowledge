@@ -65,6 +65,7 @@ const StyledBanner = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 1vh 3rem;
+  box-shadow: var(--shadow1);
   
   z-index: 200;
 

@@ -38,6 +38,7 @@ const StyledTitleContainer = styled.div`
     margin: 0;
     white-space: nowrap;
     font-size: clamp(0.95rem, 1.5vw, 1.5rem);
+    font-weight: 300;
     @media (max-width: 768px) {
       font-size: clamp(1.2rem, 3vw, 1.5rem);
     }

@@ -101,7 +101,6 @@ const StyledButtonGroup = styled.div`
   height: 4rem;
 `;
 
-
 const StyledContainer = styled.div`
   padding: 0;
   margin: 0;
@@ -138,6 +137,7 @@ const StyledEditorContainer = styled.section`
   overflow: hidden;
   border-radius: 10px;
   height: 72vh;
+  box-shadow: var(--shadow1);
 
   .monaco-editor-background {
     background-color: var(--color2);
@@ -146,11 +146,10 @@ const StyledEditorContainer = styled.section`
   .margin {
     background-color: var(--color2) !important;
   }
-  
+
   @media (max-width: 768px) {
     padding: 2rem 1rem 2rem 0.5rem;
     border-radius: 0;
-    
   }
 `;
 
@@ -161,6 +160,7 @@ const StyledForm = styled.form`
   border-radius: 10px;
   height: 15vh;
   margin-bottom: 2.5vh;
+  box-shadow: var(--shadow1);
 
   position: inherit;
 
@@ -169,7 +169,6 @@ const StyledForm = styled.form`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-
 
   h3 {
     margin: 0;
@@ -211,7 +210,6 @@ const StyledMarkdownContainer = styled.article`
     background: var(--color4);
     border-radius: 0 10px 10px 0;
   }
-
 
   h1 {
     color: var(--color5);
