@@ -40,7 +40,6 @@ export default function CreateForm() {
 
     return (<>
 
-
         {isCreatingWorkshop && (<>
             <StyledLoadingHeader>Generating...</StyledLoadingHeader>
             <GearsLoading/>

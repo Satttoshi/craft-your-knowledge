@@ -42,7 +42,7 @@ const StyledPreviewContainer = styled.article`
   margin: 2rem 0;
 
   position: relative;
-  width: 38vw;
+  width: 25vw;
   height: 200px;
   background-color: var(--color2);
   border-radius: 10px;
@@ -51,6 +51,10 @@ const StyledPreviewContainer = styled.article`
   font-family: var(--fontSans);
   color: var(--colorWhite);
   box-shadow: var(--shadow1);
+
+  @media (max-width: 1024px) {
+    width: 37vw;
+  }
 
   @media (max-width: 768px) {
     width: 90vw;
