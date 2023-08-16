@@ -40,6 +40,13 @@ const StyledContainer = styled.section`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  
+  @media (min-width: 1025px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    place-items: center;
+    gap: 1rem;
+  }
 
   @media (max-width: 768px) {
     width: 90vw;
