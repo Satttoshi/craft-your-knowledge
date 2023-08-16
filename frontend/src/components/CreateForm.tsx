@@ -9,6 +9,7 @@ import GearsLoading from "./GearsLoading.tsx";
 import {useNavigate} from "react-router-dom";
 import UserInfo from "./UserInfo.tsx";
 import {ReactComponent as Back} from "../assets/back.svg";
+import programmingLanguages from "../utils/programmingLanguages.ts";
 
 export default function CreateForm() {
     const [language, setLanguage] = useState<string>("")
@@ -64,24 +65,11 @@ export default function CreateForm() {
                         label="Language"
                         onChange={(e) => setLanguage(e.target.value)}
                     >
-                        <MenuItem value={"JavaScript"}>JavaScript</MenuItem>
-                        <MenuItem value={"TypeScript"}>TypeScript</MenuItem>
-                        <MenuItem value={"HTML"}>HTML</MenuItem>
-                        <MenuItem value={"CSS"}>CSS</MenuItem>
-                        <MenuItem value={"Java"}>Java</MenuItem>
-                        <MenuItem value={"Kotlin"}>Kotlin</MenuItem>
-                        <MenuItem value={"Python"}>Python</MenuItem>
-                        <MenuItem value={"C"}>C</MenuItem>
-                        <MenuItem value={"C#"}>C#</MenuItem>
-                        <MenuItem value={"C++"}>C++</MenuItem>
-                        <MenuItem value={"PHP"}>PHP</MenuItem>
-                        <MenuItem value={"Ruby"}>Ruby</MenuItem>
-                        <MenuItem value={"Rust"}>Rust</MenuItem>
-                        <MenuItem value={"Golang"}>Golang</MenuItem>
-                        <MenuItem value={"Perl"}>Perl</MenuItem>
-                        <MenuItem value={"SQL"}>SQL</MenuItem>
-                        <MenuItem value={"Haskell"}>Haskell</MenuItem>
-                        <MenuItem value={"Scala"}>Scala</MenuItem>
+                        {
+                            programmingLanguages.map((language) => {
+                                return <MenuItem key={"keyId:" + language} value={language}>{language}</MenuItem>
+                            })
+                        }
                     </Select>
                 </FormControl>
 
