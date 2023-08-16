@@ -32,9 +32,9 @@ export default function WorkshopList() {
                     <Link to="/create"><Button variant="contained">Create Workshop</Button></Link>
                     :
                     <Tooltip title="You need to be logged in to create a workshop">
-                <span>
-            <Button disabled variant="contained">Create Workshop</Button>
-                </span>
+                        <span>
+                            <Button disabled variant="contained">Create Workshop</Button>
+                        </span>
                     </Tooltip>
                 }
             </StyledTitleContainer>
