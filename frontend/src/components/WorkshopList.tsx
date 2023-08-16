@@ -4,15 +4,12 @@ import {useEffect} from "react";
 import WorkshopPreview from "./WorkshopPreview.tsx";
 import styled from "@emotion/styled";
 import UserInfo from "./UserInfo.tsx";
-import {Link} from "react-router-dom";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
+import ListHeader from "./ListHeader.tsx";
 
 export default function WorkshopList() {
     const workshops = useStore(state => state.workshops);
     const isReadingWorkshops = useStore(state => state.isReadingWorkshops);
     const readWorkshops = useStore(state => state.readWorkshops);
-    const isLoggedIn = useStore(state => state.isLoggedIn);
 
     useEffect(readWorkshops, [readWorkshops]);
 
@@ -26,18 +23,7 @@ export default function WorkshopList() {
                 <h1>Craft Your Knowledge</h1>
                 <UserInfo/>
             </StyledHeader>
-            <StyledTitleContainer>
-                <h3>Available workshops to explore</h3>
-                {isLoggedIn() ?
-                    <Link to="/create"><Button variant="contained">Create Workshop</Button></Link>
-                    :
-                    <Tooltip title="You need to be logged in to create a workshop">
-                        <span>
-                            <Button disabled variant="contained">Create Workshop</Button>
-                        </span>
-                    </Tooltip>
-                }
-            </StyledTitleContainer>
+            <ListHeader/>
             <StyledContainer>
                 {workshops.map((workshop: Workshop) => {
                     return (
@@ -56,27 +42,6 @@ const StyledContainer = styled.section`
   justify-content: space-between;
 
   @media (max-width: 768px) {
-    width: 90vw;
-  }
-`;
-
-const StyledTitleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  width: 80vw;
-  gap: 1rem;
-  margin: 2rem 0;
-  background: var(--color3);
-  border-radius: 10px;
-  padding: 1rem 2rem;
-
-  h3 {
-    margin: 0;
-    white-space: nowrap;
-  }
-
-  @media (max-width: 768px) {
-    flex-direction: column-reverse;
     width: 90vw;
   }
 `;

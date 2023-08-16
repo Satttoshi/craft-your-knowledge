@@ -117,7 +117,7 @@ export default function CreateForm() {
                     startIcon={<Save/>}
                     variant="contained"
                 >
-                    <span>Save</span>
+                    <span>CRAFT</span>
                 </StyledButton>
 
             </StyledForm></> : <StyledButton
