@@ -59,13 +59,19 @@ const StyledTitleContainer = styled.div`
   display: flex;
   align-items: center;
   width: 80vw;
-  gap: 2rem;
+  gap: 1rem;
   margin: 2rem 0;
   background: var(--color3);
   border-radius: 10px;
-  padding: 0.5rem 2rem;
+  padding: 1rem 2rem;
+  
+  h3 {
+    margin: 0;
+    white-space: nowrap;
+  }
 
   @media (max-width: 768px) {
+    flex-direction: column-reverse;
     width: 90vw;
   }
 `;
