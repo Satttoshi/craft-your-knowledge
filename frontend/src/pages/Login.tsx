@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import {ChangeEvent, FormEvent, useState} from "react";
 import {useStore} from "../hooks/useStore.ts";
 import {Link, useNavigate, useLocation} from "react-router-dom";
-import PasswordValidator from "../utils/passwordValidator.ts";
+import PasswordValidator from "../utils/PasswordValidator.ts";
 import {ReactComponent as Back} from "../assets/back.svg";
 
 export default function Login() {

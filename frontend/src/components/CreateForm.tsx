@@ -10,6 +10,7 @@ import {useNavigate} from "react-router-dom";
 import UserInfo from "./UserInfo.tsx";
 import {ReactComponent as Back} from "../assets/back.svg";
 import programmingLanguages from "../utils/programmingLanguages.ts";
+import FormArticle from "./FormArticle.tsx";
 
 export default function CreateForm() {
     const [language, setLanguage] = useState<string>("")
@@ -54,6 +55,7 @@ export default function CreateForm() {
                 <h1>Craft Your Knowledge</h1>
                 <UserInfo/>
             </StyledHeader>
+            <FormArticle/>
             <StyledForm onSubmit={handleSubmit}>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="language">Language</InputLabel>
