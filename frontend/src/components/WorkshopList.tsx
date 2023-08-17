@@ -4,8 +4,7 @@ import {useEffect} from "react";
 import WorkshopPreview from "./WorkshopPreview.tsx";
 import styled from "@emotion/styled";
 import UserInfo from "./UserInfo.tsx";
-import {Link} from "react-router-dom";
-import Button from "@mui/material/Button";
+import ListHeader from "./ListHeader.tsx";
 
 export default function WorkshopList() {
     const workshops = useStore(state => state.workshops);
@@ -24,9 +23,7 @@ export default function WorkshopList() {
                 <h1>Craft Your Knowledge</h1>
                 <UserInfo/>
             </StyledHeader>
-
-            <h3>Workshops</h3>
-            <Link to="/create"><Button variant="contained">Create Workshop</Button></Link>
+            <ListHeader/>
             <StyledContainer>
                 {workshops.map((workshop: Workshop) => {
                     return (
@@ -43,6 +40,13 @@ const StyledContainer = styled.section`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  
+  @media (min-width: 1025px) {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    place-items: center;
+    gap: 1rem;
+  }
 
   @media (max-width: 768px) {
     width: 90vw;
@@ -62,7 +66,7 @@ const StyledHeader = styled.header`
     font-weight: 300;
     text-align: center;
 
-    font-size: clamp(1.2rem, 4.5vw, 3rem);
+    font-size: clamp(1.1rem, 4.3vw, 3rem);
     white-space: nowrap;
     flex: 1;
   }
@@ -71,7 +75,7 @@ const StyledHeader = styled.header`
     position: absolute;
     right: 0;
   }
-  
+
   button {
     height: 2rem;
   }

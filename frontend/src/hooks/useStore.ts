@@ -23,7 +23,9 @@ type State = {
     jwt: string,
     me: () => void,
     login: (userName: string, password: string, navigate: NavigateFunction) => Promise<void>,
+    logout: () => void,
     register: (userName: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => Promise<void>,
+    isLoggedIn: () => boolean,
 }
 
 export const useStore = create<State>((set, get) => ({
@@ -129,15 +131,16 @@ export const useStore = create<State>((set, get) => ({
 
     me: () => {
         const storedJwt = localStorage.getItem("jwt");
-        const jwt = storedJwt ?? get().jwt;
+        const jwt = !storedJwt ? get().jwt : storedJwt;
+        set({jwt: jwt});
         axios.get("/api/user/me", authorisationHeader(jwt))
             .then(response => {
-                    set({username: response.data});
-                    localStorage.setItem("jwt", jwt);
+                set({username: response.data});
+                localStorage.setItem("jwt", jwt);
             })
             .catch(error => {
                 if (error.response && error.response.status === 403) {
-                    if(storedJwt) {
+                    if (storedJwt) {
                         set({username: "anonymousUser"});
                         set({jwt: ""});
                         localStorage.removeItem("jwt");
@@ -155,12 +158,19 @@ export const useStore = create<State>((set, get) => ({
         try {
             const response = await axios.post("/api/user/login", {username, password});
             set({jwt: response.data});
-            get().me();
             navigate("/");
+            get().me();
         } catch (error) {
             console.error(error);
             throw new Error("Login failed");
         }
+    },
+
+    logout: () => {
+        set({username: "anonymousUser"});
+        set({jwt: ""});
+        localStorage.removeItem("jwt");
+        alert("You have been logged out");
     },
 
     register: async (username: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => {
@@ -181,6 +191,10 @@ export const useStore = create<State>((set, get) => ({
                     throw new Error("Registration failed");
                 })
         }
+    },
+
+    isLoggedIn: () => {
+        return get().username !== "anonymousUser";
     },
 
     // STORE END

@@ -9,6 +9,8 @@ import GearsLoading from "./GearsLoading.tsx";
 import {useNavigate} from "react-router-dom";
 import UserInfo from "./UserInfo.tsx";
 import {ReactComponent as Back} from "../assets/back.svg";
+import programmingLanguages from "../utils/programmingLanguages.ts";
+import FormArticle from "./FormArticle.tsx";
 
 export default function CreateForm() {
     const [language, setLanguage] = useState<string>("")
@@ -40,7 +42,6 @@ export default function CreateForm() {
 
     return (<>
 
-
         {isCreatingWorkshop && (<>
             <StyledLoadingHeader>Generating...</StyledLoadingHeader>
             <GearsLoading/>
@@ -52,8 +53,9 @@ export default function CreateForm() {
                     <Back/>
                 </StyledBackButton>
                 <h1>Craft Your Knowledge</h1>
-                <UserInfo />
+                <UserInfo/>
             </StyledHeader>
+            <FormArticle/>
             <StyledForm onSubmit={handleSubmit}>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="language">Language</InputLabel>
@@ -61,14 +63,15 @@ export default function CreateForm() {
                         labelId="language"
                         id="language"
                         value={language}
+                        required
                         label="Language"
                         onChange={(e) => setLanguage(e.target.value)}
                     >
-                        <MenuItem value={"JavaScript"}>JavaScript</MenuItem>
-                        <MenuItem value={"Java"}>Java</MenuItem>
-                        <MenuItem value={"Python"}>Python</MenuItem>
-                        <MenuItem value={"C"}>C</MenuItem>
-                        <MenuItem value={"C#"}>C#</MenuItem>
+                        {
+                            programmingLanguages.map((language) => {
+                                return <MenuItem key={"keyId:" + language} value={language}>{language}</MenuItem>
+                            })
+                        }
                     </Select>
                 </FormControl>
 
@@ -77,6 +80,7 @@ export default function CreateForm() {
                     name="topic"
                     label="Topic"
                     value={topic}
+                    required
                     onChange={(e) => setTopic(e.target.value)}
                 />
 
@@ -113,7 +117,7 @@ export default function CreateForm() {
                     startIcon={<Save/>}
                     variant="contained"
                 >
-                    <span>Save</span>
+                    <span>CRAFT</span>
                 </StyledButton>
 
             </StyledForm></> : <StyledButton
@@ -143,7 +147,7 @@ const StyledHeader = styled.header`
     position: absolute;
     left: 0;
   }
-  
+
   .userInfo {
     position: absolute;
     right: 0;
@@ -183,7 +187,9 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 60vw;
+  width: 50vw;
+  min-width: 20rem;
+  max-width: 30rem;
   gap: 2rem;
 `;
 

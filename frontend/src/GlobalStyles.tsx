@@ -39,7 +39,7 @@ export default function GlobalStyles() {
         font-family: var(--fontSans);
         color: var(--colorWhite);
         background-color: var(--color1);
-
+        
         display: flex;
         flex-direction: column;
         align-items: center;
