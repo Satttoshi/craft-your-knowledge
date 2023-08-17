@@ -10,7 +10,7 @@ export default function ListHeader() {
     return <StyledTitleContainer>
         <h3>Available workshops to explore</h3>
         {isLoggedIn() ?
-            <Link to="/create"><Button variant="contained" size="large">CRAFT</Button></Link>
+            <Link to="/create"><StyledAvailableButton variant="contained" size="large">CRAFT</StyledAvailableButton></Link>
             :
             <Tooltip title="You need to be logged in to craft a workshop">
                         <span>
@@ -20,6 +20,17 @@ export default function ListHeader() {
         }
     </StyledTitleContainer>
 }
+
+const StyledAvailableButton = styled(Button)`
+
+  @media (min-width: 769px) {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: clamp(5rem, 10vw, 15rem);
+  }
+`;
 
 const StyledTitleContainer = styled.div`
   position: relative;
