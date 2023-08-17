@@ -23,6 +23,7 @@ type State = {
     jwt: string,
     me: () => void,
     login: (userName: string, password: string, navigate: NavigateFunction) => Promise<void>,
+    logout: () => void,
     register: (userName: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => Promise<void>,
     isLoggedIn: () => boolean,
 }
@@ -133,12 +134,12 @@ export const useStore = create<State>((set, get) => ({
         const jwt = storedJwt ?? get().jwt;
         axios.get("/api/user/me", authorisationHeader(jwt))
             .then(response => {
-                    set({username: response.data});
-                    localStorage.setItem("jwt", jwt);
+                set({username: response.data});
+                localStorage.setItem("jwt", jwt);
             })
             .catch(error => {
                 if (error.response && error.response.status === 403) {
-                    if(storedJwt) {
+                    if (storedJwt) {
                         set({username: "anonymousUser"});
                         set({jwt: ""});
                         localStorage.removeItem("jwt");
@@ -162,6 +163,12 @@ export const useStore = create<State>((set, get) => ({
             console.error(error);
             throw new Error("Login failed");
         }
+    },
+
+    logout: () => {
+        set({username: "anonymousUser"});
+        set({jwt: ""});
+        localStorage.removeItem("jwt");
     },
 
     register: async (username: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => {

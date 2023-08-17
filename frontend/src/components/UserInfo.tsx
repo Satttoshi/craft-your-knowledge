@@ -3,13 +3,28 @@ import styled from "@emotion/styled";
 import {useStore} from "../hooks/useStore.ts";
 import {Link} from "react-router-dom";
 import Button from "@mui/material/Button";
+import {useState} from "react";
 
 export default function UserInfo() {
     const user = useStore((state) => state.username);
+    const isLoggedIn = useStore((state) => state.isLoggedIn);
+    const [isLogout, setIsLogout] = useState<boolean>(false);
 
-    return <StyledUserInfo className="userInfo">
+    function handleLogout() {
+        setIsLogout(false);
+    }
+
+    if (isLogout) {
+        return <StyledUserInfo className="userInfo">
+            <Button onClick={handleLogout} variant="outlined">logout</Button>
+        </StyledUserInfo>;
+    }
+
+    return <StyledUserInfo onClick={() => {
+        isLoggedIn() && setIsLogout(true)
+    }} className="userInfo">
         {
-            user === "" || user === "anonymousUser"
+            !isLoggedIn()
                 ?
                 <Link to={"/login"}><Button variant="contained">login</Button></Link>
                 :
