@@ -16,7 +16,9 @@ class WorkshopPrompter {
     ];
 
     getRandomText(): string {
-        const randomIndex = Math.floor(Math.random() * this.prompts.length);
+        const currentTimestamp = new Date().getTime();
+        const seed = currentTimestamp % this.prompts.length;
+        const randomIndex = Math.floor(seed);
         return this.prompts[randomIndex];
     }
 }
