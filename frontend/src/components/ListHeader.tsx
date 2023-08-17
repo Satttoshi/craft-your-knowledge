@@ -44,13 +44,18 @@ const StyledTitleContainer = styled.div`
     }
   }
 
-  button {
+  span {
+    display: grid;
+    place-items: center;
+
     @media (min-width: 769px) {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: clamp(5rem, 10vw, 15rem);
+      button {
+        width: clamp(5rem, 10vw, 15rem);
+      }
     }
   }
 
