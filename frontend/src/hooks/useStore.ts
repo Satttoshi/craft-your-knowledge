@@ -131,7 +131,8 @@ export const useStore = create<State>((set, get) => ({
 
     me: () => {
         const storedJwt = localStorage.getItem("jwt");
-        const jwt = storedJwt ?? get().jwt;
+        const jwt = !storedJwt ? get().jwt : storedJwt;
+        set({jwt: jwt});
         axios.get("/api/user/me", authorisationHeader(jwt))
             .then(response => {
                 set({username: response.data});
