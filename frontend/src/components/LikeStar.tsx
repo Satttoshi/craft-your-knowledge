@@ -1,6 +1,6 @@
 import {useStore} from "../hooks/useStore.ts";
 import {Workshop} from "../utils/types.ts";
-import {useState} from "react";
+import React, {useState} from "react";
 import styled from "@emotion/styled";
 
 type Props = {
@@ -12,7 +12,9 @@ export default function LikeStar({workshop}: Props) {
     const updatePersonalStatus = useStore(state => state.updatePersonalStatus);
     const [isLiked, setIsLiked] = useState<boolean>(workshop.personalStatuses[0]?.isLiked);
 
-    function handleClick() {
+    function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+
+        event.stopPropagation();
 
         if (!workshop.personalStatuses[0]) {
             updatePersonalStatus(workshop.id, {
