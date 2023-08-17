@@ -8,10 +8,16 @@ import {useState} from "react";
 export default function UserInfo() {
     const user = useStore((state) => state.username);
     const isLoggedIn = useStore((state) => state.isLoggedIn);
+    const logout = useStore((state) => state.logout);
     const [isLogout, setIsLogout] = useState<boolean>(false);
+
+    function handleClick() {
+        isLoggedIn() && setIsLogout(true);
+    }
 
     function handleLogout() {
         setIsLogout(false);
+        logout();
     }
 
     if (isLogout) {
@@ -20,9 +26,7 @@ export default function UserInfo() {
         </StyledUserInfo>;
     }
 
-    return <StyledUserInfo onClick={() => {
-        isLoggedIn() && setIsLogout(true)
-    }} className="userInfo">
+    return <StyledUserInfo onClick={handleClick} className="userInfo">
         {
             !isLoggedIn()
                 ?
