@@ -9,24 +9,31 @@ export default function UserInfo() {
     const user = useStore((state) => state.username);
     const isLoggedIn = useStore((state) => state.isLoggedIn);
     const logout = useStore((state) => state.logout);
-    const [isLogout, setIsLogout] = useState<boolean>(false);
-
-    function handleClick() {
-        isLoggedIn() && setIsLogout(true);
-    }
+    const [isHovered, setIsHovered] = useState<boolean>(false);
 
     function handleLogout() {
-        setIsLogout(false);
         logout();
     }
 
-    if (isLogout) {
+    function handleMouseEnter() {
+        isLoggedIn() && setIsHovered(true);
+    }
+
+    function handleMouseLeave() {
+        setIsHovered(false);
+    }
+
+    if (isHovered) {
         return <StyledUserInfo className="userInfo">
-            <Button onClick={handleLogout} variant="outlined">logout</Button>
+            <Button onMouseLeave={handleMouseLeave} onClick={handleLogout} variant="outlined">logout</Button>
         </StyledUserInfo>;
     }
 
-    return <StyledUserInfo onClick={handleClick} className="userInfo">
+    return <StyledUserInfo
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="userInfo"
+    >
         {
             !isLoggedIn()
                 ?
