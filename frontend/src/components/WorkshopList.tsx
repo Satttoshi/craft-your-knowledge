@@ -66,7 +66,7 @@ const StyledHeader = styled.header`
     font-weight: 300;
     text-align: center;
 
-    font-size: clamp(1.2rem, 4.5vw, 3rem);
+    font-size: clamp(1.1rem, 4.3vw, 3rem);
     white-space: nowrap;
     flex: 1;
   }
