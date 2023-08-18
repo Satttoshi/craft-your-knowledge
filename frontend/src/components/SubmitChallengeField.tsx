@@ -20,7 +20,7 @@ export default function SubmitChallengeField({handleSubmit, isValidatingChalleng
             <LoadingButton type="submit" color="secondary" loading={isValidatingChallenge} variant="outlined"
                            endIcon={<LibraryAddCheckIcon/>}>Check Challenge</LoadingButton>
             {challengeResponse &&
-                <Button style={{width: "9rem", minWidth: "9rem", marginLeft: "1rem"}}
+                <Button style={{width: "9rem", minWidth: "9rem"}}
                         onClick={() => setIsModalOpen(!isModalOpen)}
                         variant={isModalOpen ? "outlined" : "contained"}>
                     {isModalOpen ? "Hide Details" : "Show Details"}
@@ -48,7 +48,7 @@ const StyledForm = styled.form`
   flex-wrap: wrap;
 
   h3 {
-    margin: 0;
+    margin: 0 1rem 0 0;
     padding: 0;
   }
 
@@ -72,6 +72,10 @@ const StyledButtonGroup = styled.div`
   align-items: center;
   flex-direction: row-reverse;
   gap: 1rem;
-  height: 4rem;
+  height: 3rem;
   white-space: nowrap;
+  
+    @media (max-width: 768px) {
+      scale: 0.9;
+    }
 `;
