@@ -1,5 +1,6 @@
 import {useStore} from "../hooks/useStore.ts";
 import {PersonalStatus, Workshop} from "../utils/types.ts";
+import Tooltip from "@mui/material/Tooltip";
 import React, {useState} from "react";
 import styled from "@emotion/styled";
 
@@ -7,7 +8,7 @@ type Props = {
     workshop: Workshop;
 }
 
-function resolvePersonalStatus(workshop: Workshop, username: string): boolean{
+function resolvePersonalStatus(workshop: Workshop, username: string): boolean {
     const isLiked = workshop.personalStatuses.find((status: PersonalStatus) => status.user.username === username)?.isLiked;
     return isLiked ?? false;
 }
@@ -17,14 +18,13 @@ export default function LikeStar({workshop}: Props) {
     const likeAndUnlikeWorkshop = useStore(state => state.likeAndUnlikeWorkshop);
     const [isLiked, setIsLiked] = useState<boolean>(resolvePersonalStatus(workshop, useStore(state => state.username)));
     const [currentLikes, setCurrentLikes] = useState<number>(workshop.likes);
-    const isLoggedIn = useStore(state => state.isLoggedIn);
+    const isLoggedIn = useStore(state => state.isLoggedIn)();
     const username = useStore(state => state.username);
 
     function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
         event.stopPropagation();
 
-        if (!isLoggedIn()) {
-            alert("You need to be logged in to like a workshop!");
+        if (!isLoggedIn) {
             return;
         }
 
@@ -43,7 +43,9 @@ export default function LikeStar({workshop}: Props) {
     }
 
     return (<>
-        <StyledButton onClick={handleClick}>
+        <Tooltip title="You need to be logged in to like a workshop!" disableHoverListener={isLoggedIn}>
+            <StyledSpan>
+        <StyledButton onClick={handleClick} variant={isLoggedIn}>
             {
                 isLiked ?
 
@@ -62,23 +64,34 @@ export default function LikeStar({workshop}: Props) {
                     </svg>
             }<span>{currentLikes}</span>
         </StyledButton>
-
+                </StyledSpan>
+        </Tooltip>
     </>)
 }
 
-const StyledButton = styled.button`
+const StyledSpan = styled.span`
+  position: absolute;
+    bottom: 1rem;
+    right: 2rem;
+`;
+
+type StyledButtonProps = {
+    variant: boolean;
+}
+
+const StyledButton = styled.button<StyledButtonProps>`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  
+
   background: none;
   border: none;
-  cursor: pointer;
+  cursor: ${props => props.variant ? "pointer" : "default"};
   padding: 0;
 
   color: var(--colorWhite);
   font-family: var(--fontSans);
   position: absolute;
-  bottom: 1rem;
-  right: 2rem;
+  bottom: 0;
+  right:0;
 `;
