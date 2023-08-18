@@ -104,7 +104,7 @@ export const useStore = create<State>((set, get) => ({
     },
 
     likeAndUnlikeWorkshop: (workshopId: string) => {
-        axios.put(`/api/workshop/${workshopId}/like`, null, authorisationHeader(get().jwt))
+        axios.put(`/api/workshop/like/${workshopId}`, null, authorisationHeader(get().jwt))
             .catch(console.error)
     },
 
