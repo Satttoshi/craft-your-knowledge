@@ -12,9 +12,10 @@ type Props = {
     challengeResponse: string | undefined;
     setIsModalOpen: (isModalOpen: boolean) => void;
     isModalOpen: boolean;
+    isUserInputLongEnough: boolean;
 }
 
-export default function SubmitChallengeField({handleSubmit, isValidatingChallenge, challengeResponse, setIsModalOpen, isModalOpen}: Props) {
+export default function SubmitChallengeField({handleSubmit, isValidatingChallenge, challengeResponse, setIsModalOpen, isModalOpen, isUserInputLongEnough}: Props) {
 
     return <StyledForm onSubmit={handleSubmit}>
         {isValidatingChallenge ?
@@ -25,7 +26,7 @@ export default function SubmitChallengeField({handleSubmit, isValidatingChalleng
                     <Button
                         type="submit"
                         color="secondary"
-                        variant="outlined"
+                        variant={isUserInputLongEnough ? "contained" : "outlined"}
                         endIcon={<LibraryAddCheckIcon/>}
                     >
                         Check Challenge
@@ -96,6 +97,10 @@ const StyledButtonGroup = styled.div`
   gap: 1rem;
   height: 3rem;
   white-space: nowrap;
+  
+  button {
+    font-weight: bold;
+  }
 
   @media (max-width: 768px) {
     scale: 0.9;

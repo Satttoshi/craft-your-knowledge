@@ -18,6 +18,7 @@ export default function CodeEditor({workshop}: Props) {
     const [challengeResponse, setChallengeResponse] = useState<string | undefined>("");
     const isValidatingChallenge = useStore((state) => state.isValidatingChallenge);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isUserInputLongEnough, setIsUserInputLongEnough] = useState<boolean>(false);
 
     const editorLanguage = workshop.language.toLowerCase();
 
@@ -48,6 +49,15 @@ export default function CodeEditor({workshop}: Props) {
         });
     }
 
+    function handleEditorChange(value: string | undefined) {
+        setCode(value);
+        if (value?.length && value.length > 100) {
+            setIsUserInputLongEnough(true);
+        } else {
+            setIsUserInputLongEnough(false);
+        }
+    }
+
     const content: string = (challengeResponse ?? "").replace(">>>PASS<<<", "").replace(">>>FAIL<<<", "");
 
     return <StyledContainer>
@@ -70,7 +80,7 @@ export default function CodeEditor({workshop}: Props) {
                 theme="vs-dark"
                 defaultLanguage={editorLanguage}
                 defaultValue="// start coding here ..."
-                onChange={(value) => setCode(value)}
+                onChange={handleEditorChange}
                 options={{minimap: {enabled: false}}}
             />
         </StyledEditorContainer>
@@ -80,6 +90,7 @@ export default function CodeEditor({workshop}: Props) {
             challengeResponse={challengeResponse}
             setIsModalOpen={setIsModalOpen}
             isModalOpen={isModalOpen}
+            isUserInputLongEnough={isUserInputLongEnough}
         />
     </StyledContainer>
 }
