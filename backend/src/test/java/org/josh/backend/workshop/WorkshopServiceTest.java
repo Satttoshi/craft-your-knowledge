@@ -7,6 +7,7 @@ import org.josh.backend.dto.WorkshopFormData;
 import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.exception.NoSuchWorkshopException;
 import org.josh.backend.openai.*;
+import org.josh.backend.security.MongoUserDetailsService;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.josh.backend.utils.ProgressStatus;
@@ -24,10 +25,9 @@ class WorkshopServiceTest {
     WorkshopRepository workshopRepo = mock(WorkshopRepository.class);
     IdService idService = mock(IdService.class);
     OpenAiService openAiService = mock(OpenAiService.class);
-
     PromptBuilder promptBuilder = mock(PromptBuilder.class);
-    WorkshopService workshopService = new WorkshopService(workshopRepo, idService, openAiService, promptBuilder);
-
+    MongoUserDetailsService mongoUserDetailsService = mock(MongoUserDetailsService.class);
+    WorkshopService workshopService = new WorkshopService(workshopRepo, idService, openAiService, promptBuilder, mongoUserDetailsService);
 
     PersonalStatus testPersonalStatus = new PersonalStatus(
         new MongoUserWithoutPassword(

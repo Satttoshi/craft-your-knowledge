@@ -39,5 +39,4 @@ public class MongoUserDetailsService implements UserDetailsService{
             new UsernameNotFoundException("Username" + username + "not found"));
         return mongoUser.id();
     }
-
 }
