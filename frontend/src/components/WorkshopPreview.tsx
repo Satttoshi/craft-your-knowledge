@@ -19,7 +19,6 @@ export default function WorkshopPreview({workshop}: Props) {
         return progressStatus.replace(/_/g, " ").toLowerCase();
     }
 
-
     const personalStatus = workshop.personalStatuses.find(status => status.user.username === username);
     const progressStatus = formatProgressStatusEnum(personalStatus?.progressStatus);
 
