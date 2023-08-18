@@ -12,7 +12,11 @@ import {ReactComponent as Back} from "../assets/back.svg";
 import programmingLanguages from "../utils/programmingLanguages.ts";
 import FormArticle from "./FormArticle.tsx";
 
-export default function CreateForm() {
+type Props = {
+    randomText: string;
+}
+
+export default function CreateForm({randomText}: Props) {
     const [language, setLanguage] = useState<string>("")
     const [topic, setTopic] = useState<string>("");
     const [buzzWords, setBuzzWords] = useState<string[]>([]);
@@ -47,7 +51,7 @@ export default function CreateForm() {
             <GearsLoading/>
         </>)}
 
-        {!isCreatingWorkshop ? <>
+        {!isCreatingWorkshop && <>
             <StyledHeader>
                 <StyledBackButton className="backButton" onClick={handleBack} variant="outlined">
                     <Back/>
@@ -55,7 +59,7 @@ export default function CreateForm() {
                 <h1>Craft Your Knowledge</h1>
                 <UserInfo/>
             </StyledHeader>
-            <FormArticle/>
+            <FormArticle randomText={randomText}/>
             <StyledForm onSubmit={handleSubmit}>
                 <FormControl fullWidth>
                     <InputLabel htmlFor="language">Language</InputLabel>
@@ -119,17 +123,8 @@ export default function CreateForm() {
                 >
                     <span>CRAFT</span>
                 </StyledButton>
-
-            </StyledForm></> : <StyledButton
-            type="submit"
-            color="primary"
-            loading={isCreatingWorkshop}
-            loadingPosition="start"
-            startIcon={<Save/>}
-            variant="contained"
-        >
-            <span>Save</span>
-        </StyledButton>}
+            </StyledForm>
+        </>}
 
     </>)
 }

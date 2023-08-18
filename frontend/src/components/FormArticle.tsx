@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
-import WorkshopPrompter from "../utils/WorkshopPrompter.ts";
 
-export default function FormArticle() {
+type Props = {
+    randomText: string;
+}
 
-    const prompter = new WorkshopPrompter();
+export default function FormArticle({randomText} : Props) {
 
     return <StyledArticle>
-        <p>{prompter.getRandomText()}
+        <p>{randomText}
         </p><h2>Imagine...</h2>
     </StyledArticle>
 }
