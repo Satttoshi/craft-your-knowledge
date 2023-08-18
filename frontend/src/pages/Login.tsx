@@ -69,7 +69,7 @@ export default function Login() {
         setRepeatPassword(repeatPassword);
         if (password === repeatPassword) {
             setIsValidRepeatPassword(true);
-            setErrorsRepeatPassword("Correct repeating password")
+            setErrorsRepeatPassword("Looks good!")
         } else {
             setIsValidRepeatPassword(false);
             setErrorsRepeatPassword("Password must match")

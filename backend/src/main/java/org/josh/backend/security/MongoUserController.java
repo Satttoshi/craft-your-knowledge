@@ -38,7 +38,6 @@ public class MongoUserController {
     public String register(@Valid @RequestBody UserWithoutId userWithoutId) {
         mongoUserDetailsService.registerNewUser(userWithoutId);
         return "registered user " + userWithoutId.username();
-
     }
 
 }

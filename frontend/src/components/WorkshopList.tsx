@@ -1,5 +1,4 @@
 import {useStore} from "../hooks/useStore.ts";
-import {Workshop} from "../utils/types.ts";
 import {useEffect} from "react";
 import WorkshopPreview from "./WorkshopPreview.tsx";
 import styled from "@emotion/styled";
@@ -17,6 +16,8 @@ export default function WorkshopList() {
         return null;
     }
 
+    const sortedWorkshops = [...workshops].sort((a, b) => b.likes - a.likes);
+
     return (
         <>
             <StyledHeader>
@@ -25,11 +26,9 @@ export default function WorkshopList() {
             </StyledHeader>
             <ListHeader/>
             <StyledContainer>
-                {workshops.map((workshop: Workshop) => {
-                    return (
-                        <WorkshopPreview key={"preview" + workshop.id} workshop={workshop}/>
-                    )
-                })}
+                {sortedWorkshops.map((workshop) => (
+                    <WorkshopPreview key={"preview" + workshop.id} workshop={workshop} />
+                ))}
             </StyledContainer>
         </>
     )

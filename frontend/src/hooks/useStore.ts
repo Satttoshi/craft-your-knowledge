@@ -16,6 +16,7 @@ type State = {
     readWorkshopById: (id: string) => void,
     getWorkshopById: (id: string) => Workshop,
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => void,
+    likeAndUnlikeWorkshop: (workshopId: string) => void,
     deleteWorkshop: (workshopId: string) => void,
     validateChallenge: (workshopId: string, workshopUserChallenge: WorkshopUserChallenge) => Promise<Gpt3TurboResponse>
 
@@ -102,6 +103,11 @@ export const useStore = create<State>((set, get) => ({
             .catch(console.error)
     },
 
+    likeAndUnlikeWorkshop: (workshopId: string) => {
+        axios.put(`/api/workshop/like/${workshopId}`, null, authorisationHeader(get().jwt))
+            .catch(console.error)
+    },
+
     deleteWorkshop: (workshopId: string) => {
         const readWorkshops = get().readWorkshops;
         axios.delete(`/api/workshop/${workshopId}`, authorisationHeader(get().jwt))
@@ -170,7 +176,7 @@ export const useStore = create<State>((set, get) => ({
         set({username: "anonymousUser"});
         set({jwt: ""});
         localStorage.removeItem("jwt");
-        alert("You have been logged out");
+        window.location.reload();
     },
 
     register: async (username: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => {

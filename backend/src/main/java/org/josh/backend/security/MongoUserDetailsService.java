@@ -14,7 +14,7 @@ import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
-public class MongoUserDetailsService implements UserDetailsService{
+public class MongoUserDetailsService implements UserDetailsService {
 
     private final MongoUserRepository mongoUserRepository;
     private final IdService idService;
@@ -34,4 +34,9 @@ public class MongoUserDetailsService implements UserDetailsService{
         mongoUserRepository.save(newUser);
     }
 
+    public String getUserIdByUsername(String username) {
+        MongoUser mongoUser = mongoUserRepository.findByUsername(username).orElseThrow(() ->
+            new UsernameNotFoundException("Username" + username + "not found"));
+        return mongoUser.id();
+    }
 }

@@ -5,6 +5,7 @@ import org.josh.backend.dto.Gpt3TurboRequest;
 import org.josh.backend.dto.Gpt3TurboResponse;
 import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.openai.*;
+import org.josh.backend.security.MongoUserDetailsService;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +43,9 @@ class WorkshopControllerTest {
 
     @MockBean
     PromptBuilder promptBuilder;
+
+    @MockBean
+    MongoUserDetailsService mongoUserDetailsService;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -92,6 +96,8 @@ class WorkshopControllerTest {
             ));
 
         Mockito.when(promptBuilder.buildChallengeRequestWithPreviousData(any(Gpt3TurboResponse.class))).thenReturn(gpt3TurboRequest);
+
+        Mockito.when(mongoUserDetailsService.getUserIdByUsername(any(String.class))).thenReturn("fakeUserId69");
     }
 
     String testWorkshopFormData = """
@@ -234,8 +240,76 @@ class WorkshopControllerTest {
             .andExpect(MockMvcResultMatchers.content().json(expect));
     }
 
-    @DirtiesContext
     @Test
+    @DirtiesContext
+    void expectPersonalStatusUpdate_whenLikeAndUnlikeWorkshop() throws Exception {
+
+        String result = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/workshop")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(testWorkshopFormData))
+            .andReturn().getResponse().getContentAsString();
+
+        Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
+        String id = saveResultWorkshop.id();
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/workshop/like/%s".formatted(id)))
+
+            //THEN
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().json("""
+                    {
+                        "id": "%s",
+                        "author": {
+                            "id": "adminId",
+                            "username": "AdminName"
+                        },
+                        "language": "fizz",
+                        "topic": "buzz",
+                        "buzzWords": ["foo", "bar"],
+                        "likes": 1,
+                        "personalStatuses": [
+                            {
+                                "user": {
+                                    "id": "fakeUserId69",
+                                    "username": "testUser"
+                                },
+                                "progressStatus": "NOT_STARTED",
+                                "isLiked": true
+                            }
+                        ]
+                    }
+                """.formatted(id)));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/workshop/like/%s".formatted(id)))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().json("""
+                    {
+                        "id": "%s",
+                        "author": {
+                            "id": "adminId",
+                            "username": "AdminName"
+                        },
+                        "language": "fizz",
+                        "topic": "buzz",
+                        "buzzWords": ["foo", "bar"],
+                        "likes": 0,
+                        "personalStatuses": [
+                            {
+                                "user": {
+                                    "id": "fakeUserId69",
+                                    "username": "testUser"
+                                },
+                                "progressStatus": "NOT_STARTED",
+                                "isLiked": false
+                            }
+                        ]
+                    }
+                """.formatted(id)));
+    }
+
+    @Test
+    @DirtiesContext
     void expectEmptyList_whenDeleteWorkshopById() throws Exception {
 
         //GIVEN

@@ -32,7 +32,6 @@ export type GptMessage = {
     content: string
 }
 
-
 export type PersonalStatus = {
     user: {
         id: string,

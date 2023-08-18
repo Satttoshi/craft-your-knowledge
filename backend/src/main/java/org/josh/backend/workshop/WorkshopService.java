@@ -8,11 +8,13 @@ import org.josh.backend.dto.Gpt3TurboRequest;
 import org.josh.backend.dto.Gpt3TurboResponse;
 import org.josh.backend.openai.OpenAiService;
 import org.josh.backend.openai.PromptBuilder;
+import org.josh.backend.security.MongoUserDetailsService;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.josh.backend.utils.ProgressStatus;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class WorkshopService {
     private final IdService idService;
     private final OpenAiService openAiService;
     private final PromptBuilder promptBuilder;
+    private final MongoUserDetailsService mongoUserDetailsService;
 
     public Workshop createWorkshop(WorkshopFormData workshopFormData) {
 
@@ -74,10 +77,53 @@ public class WorkshopService {
         return workshopRepository.save(workshopToSave);
     }
 
+    public Workshop likeAndUnlikeWorkshop(String workshopId, Principal principal) {
+        Workshop workshopBefore = workshopRepository.findById(workshopId).orElseThrow();
+        String username = principal.getName();
+        String userId = mongoUserDetailsService.getUserIdByUsername(username);
+
+        PersonalStatus currentUserPersonalStatus = null;
+        for (PersonalStatus personalStatus : workshopBefore.personalStatuses()) {
+            if (personalStatus.user().id().equals(userId)) {
+                currentUserPersonalStatus = personalStatus;
+                break;
+            }
+        }
+
+        if (currentUserPersonalStatus == null) {
+           currentUserPersonalStatus = new PersonalStatus(
+               new MongoUserWithoutPassword(userId, username),
+               ProgressStatus.NOT_STARTED,
+               false
+           );
+        }
+
+        currentUserPersonalStatus = new PersonalStatus(
+            currentUserPersonalStatus.user(),
+            currentUserPersonalStatus.progressStatus(),
+            !currentUserPersonalStatus.isLiked()
+        );
+
+        List<PersonalStatus> personalStatuses = alterPersonalStatuses(currentUserPersonalStatus, workshopBefore);
+
+        Workshop workshopToSave = new Workshop(
+            workshopBefore.id(),
+            workshopBefore.author(),
+            workshopBefore.language(),
+            workshopBefore.topic(),
+            workshopBefore.buzzWords(),
+            currentUserPersonalStatus.isLiked() ? workshopBefore.likes() + 1 : workshopBefore.likes() - 1,
+            personalStatuses,
+            workshopBefore.article(),
+            workshopBefore.challenge()
+        );
+
+        return workshopRepository.save(workshopToSave);
+    }
+
     private static List<PersonalStatus> alterPersonalStatuses(PersonalStatus workshopPersonalStatus,
                                                               Workshop workshopBefore) {
         // Search if user already has a personal status for this workshop and update it if so or add it if not
-
         List<PersonalStatus> personalStatuses = new ArrayList<>(workshopBefore.personalStatuses());
         int indexToUpdate = -1;
         for (int i = 0; i < personalStatuses.size(); i++) {
@@ -116,4 +162,5 @@ public class WorkshopService {
         }
         return validationResponse;
     }
+
 }

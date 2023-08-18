@@ -9,6 +9,7 @@ import org.josh.backend.dto.Gpt3TurboResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequestMapping("api/workshop")
@@ -36,6 +37,11 @@ public class WorkshopController {
     @PutMapping("/{id}")
     public Workshop updatePersonalStatus(@PathVariable String id, @RequestBody PersonalStatus personalStatus) {
         return workshopService.updatePersonalStatus(id, personalStatus);
+    }
+
+    @PutMapping("/like/{workshopId}")
+    public Workshop likeWorkshop(@PathVariable String workshopId, Principal principal) {
+        return workshopService.likeAndUnlikeWorkshop(workshopId, principal);
     }
 
     @DeleteMapping("/{id}")

@@ -7,11 +7,13 @@ import org.josh.backend.dto.WorkshopFormData;
 import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.exception.NoSuchWorkshopException;
 import org.josh.backend.openai.*;
+import org.josh.backend.security.MongoUserDetailsService;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.josh.backend.utils.IdService;
 import org.josh.backend.utils.ProgressStatus;
 import org.junit.jupiter.api.Test;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,10 +26,11 @@ class WorkshopServiceTest {
     WorkshopRepository workshopRepo = mock(WorkshopRepository.class);
     IdService idService = mock(IdService.class);
     OpenAiService openAiService = mock(OpenAiService.class);
-
     PromptBuilder promptBuilder = mock(PromptBuilder.class);
-    WorkshopService workshopService = new WorkshopService(workshopRepo, idService, openAiService, promptBuilder);
-
+    MongoUserDetailsService mongoUserDetailsService = mock(MongoUserDetailsService.class);
+    WorkshopService workshopService = new WorkshopService(workshopRepo, idService, openAiService, promptBuilder,
+        mongoUserDetailsService);
+    Principal principal = mock(Principal.class);
 
     PersonalStatus testPersonalStatus = new PersonalStatus(
         new MongoUserWithoutPassword(
@@ -136,6 +139,23 @@ class WorkshopServiceTest {
     }
 
     @Test
+    void test_likeAndUnlikeWorkshop() {
+        // Given
+        String id = "fakeId69";
+        when(principal.getName()).thenReturn("fakeUserName69");
+        when(workshopRepo.findById(id)).thenReturn(Optional.of(testWorkshop));
+        when(mongoUserDetailsService.getUserIdByUsername("fakeUserName69")).thenReturn("fakeUserId69");
+        when(workshopRepo.save(any())).thenReturn(testWorkshop);
+
+        // When
+        Workshop actual = workshopService.likeAndUnlikeWorkshop(id, principal);
+
+        // Then
+        Assertions.assertThat(actual).isEqualTo(testWorkshop);
+        verify(workshopRepo).save(any());
+    }
+
+    @Test
     void test_deleteWorkshop() {
         //Given
         String id = "fakeId69";
@@ -214,7 +234,8 @@ class WorkshopServiceTest {
         String invalidId = "invalidId";
         //When
         //Then
-        assertThrows(NoSuchWorkshopException.class, () -> workshopService.validateChallenge(invalidId, workshopUserChallenge));
+        assertThrows(NoSuchWorkshopException.class, () -> workshopService.validateChallenge(invalidId,
+            workshopUserChallenge));
     }
 
 }
