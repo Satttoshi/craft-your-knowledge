@@ -9,10 +9,11 @@ type Props = {
 
 export default function LikeStar({workshop}: Props) {
 
-    const updatePersonalStatus = useStore(state => state.updatePersonalStatus);
+    const likeAndUnlikeWorkshop = useStore(state => state.likeAndUnlikeWorkshop);
     const [isLiked, setIsLiked] = useState<boolean>(workshop.personalStatuses[0]?.isLiked);
     const [currentLikes, setCurrentLikes] = useState<number>(workshop.likes);
     const isLoggedIn = useStore(state => state.isLoggedIn);
+    const username = useStore(state => state.username);
 
     function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
         event.stopPropagation();
@@ -22,25 +23,16 @@ export default function LikeStar({workshop}: Props) {
             return;
         }
 
-        if (!workshop.personalStatuses[0]) {
-            updatePersonalStatus(workshop.id, {
-                user: {
-                    id: "1",
-                    username: "Default User",
-                },
-                progressStatus: "NOT_STARTED",
-                isLiked: true
-            })
+        const personalStatus = workshop.personalStatuses.find(status => status.user.username === username);
+
+        if (!personalStatus) {
+            likeAndUnlikeWorkshop(workshop.id)
             setIsLiked(!isLiked);
             setCurrentLikes(isLiked ? currentLikes - 1 : currentLikes + 1);
             return;
         }
 
-        const newPersonalStatus = {
-            ...workshop.personalStatuses[0],
-            isLiked: !isLiked,
-        }
-        updatePersonalStatus(workshop.id, newPersonalStatus)
+        likeAndUnlikeWorkshop(workshop.id)
         setIsLiked(!isLiked);
         setCurrentLikes(isLiked ? currentLikes - 1 : currentLikes + 1);
     }

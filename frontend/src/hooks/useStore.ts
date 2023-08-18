@@ -16,6 +16,7 @@ type State = {
     readWorkshopById: (id: string) => void,
     getWorkshopById: (id: string) => Workshop,
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => void,
+    likeAndUnlikeWorkshop: (workshopId: string) => void,
     deleteWorkshop: (workshopId: string) => void,
     validateChallenge: (workshopId: string, workshopUserChallenge: WorkshopUserChallenge) => Promise<Gpt3TurboResponse>
 
@@ -99,6 +100,11 @@ export const useStore = create<State>((set, get) => ({
 
     updatePersonalStatus: (workshopId: string, personalStatus: PersonalStatus) => {
         axios.put(`/api/workshop/${workshopId}`, personalStatus, authorisationHeader(get().jwt))
+            .catch(console.error)
+    },
+
+    likeAndUnlikeWorkshop: (workshopId: string) => {
+        axios.put(`/api/workshop/${workshopId}/like`, null, authorisationHeader(get().jwt))
             .catch(console.error)
     },
 
