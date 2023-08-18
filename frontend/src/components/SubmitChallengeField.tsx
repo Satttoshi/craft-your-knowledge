@@ -1,9 +1,10 @@
-import LoadingButton from "@mui/lab/LoadingButton";
 import LibraryAddCheckIcon from "@mui/icons-material/LibraryAddCheck";
 import Button from "@mui/material/Button";
 import ChallengeResponse from "./ChallengeResponse.tsx";
 import {FormEvent} from "react";
 import styled from "@emotion/styled";
+import scanningAnimation from "../assets/animations/scanning.json";
+import Lottie from "lottie-react";
 
 type Props = {
     handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
@@ -13,22 +14,43 @@ type Props = {
     isModalOpen: boolean;
 }
 
-export default function SubmitChallengeField({handleSubmit, isValidatingChallenge, challengeResponse, setIsModalOpen, isModalOpen}: Props){
+export default function SubmitChallengeField({handleSubmit, isValidatingChallenge, challengeResponse, setIsModalOpen, isModalOpen}: Props) {
 
     return <StyledForm onSubmit={handleSubmit}>
-        <StyledButtonGroup>
-            <LoadingButton type="submit" color="secondary" loading={isValidatingChallenge} variant="outlined"
-                           endIcon={<LibraryAddCheckIcon/>}>Check Challenge</LoadingButton>
-            {challengeResponse &&
-                <Button style={{width: "9rem", minWidth: "9rem"}}
-                        onClick={() => setIsModalOpen(!isModalOpen)}
-                        variant={isModalOpen ? "outlined" : "contained"}>
-                    {isModalOpen ? "Hide Details" : "Show Details"}
-                </Button>}
-        </StyledButtonGroup>
-        <ChallengeResponse challengeResponse={challengeResponse}/>
+        {isValidatingChallenge ?
+            <StyledLottie animationData={scanningAnimation} loop={true}/>
+            :
+            <>
+                <StyledButtonGroup>
+                    <Button
+                        type="submit"
+                        color="secondary"
+                        variant="outlined"
+                        endIcon={<LibraryAddCheckIcon/>}
+                    >
+                        Check Challenge
+                    </Button>
+                    {challengeResponse &&
+                        <Button style={{width: "9rem", minWidth: "9rem"}}
+                                onClick={() => setIsModalOpen(!isModalOpen)}
+                                variant={isModalOpen ? "outlined" : "contained"}>
+                            {isModalOpen ? "Hide Details" : "Show Details"}
+                        </Button>}
+                </StyledButtonGroup>
+                <ChallengeResponse challengeResponse={challengeResponse}/>
+            </>
+        }
     </StyledForm>
 }
+
+const StyledLottie = styled(Lottie)`
+  width: 7rem;
+  height: 7rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+`;
 
 const StyledForm = styled.form`
   padding: 0 2rem;
@@ -39,7 +61,7 @@ const StyledForm = styled.form`
   margin-bottom: 2.5vh;
   box-shadow: var(--shadow1);
 
-  position: inherit;
+  position: relative;
 
   display: flex;
   flex-direction: row-reverse;
@@ -74,8 +96,8 @@ const StyledButtonGroup = styled.div`
   gap: 1rem;
   height: 3rem;
   white-space: nowrap;
-  
-    @media (max-width: 768px) {
-      scale: 0.9;
-    }
+
+  @media (max-width: 768px) {
+    scale: 0.9;
+  }
 `;
