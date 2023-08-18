@@ -1,5 +1,5 @@
 import {useStore} from "../hooks/useStore.ts";
-import {Workshop} from "../utils/types.ts";
+import {PersonalStatus, Workshop} from "../utils/types.ts";
 import React, {useState} from "react";
 import styled from "@emotion/styled";
 
@@ -7,10 +7,15 @@ type Props = {
     workshop: Workshop;
 }
 
+function resolvePersonalStatus(workshop: Workshop, username: string): boolean{
+    const isLiked = workshop.personalStatuses.find((status: PersonalStatus) => status.user.username === username)?.isLiked;
+    return isLiked ?? false;
+}
+
 export default function LikeStar({workshop}: Props) {
 
     const likeAndUnlikeWorkshop = useStore(state => state.likeAndUnlikeWorkshop);
-    const [isLiked, setIsLiked] = useState<boolean>(workshop.personalStatuses[0]?.isLiked);
+    const [isLiked, setIsLiked] = useState<boolean>(resolvePersonalStatus(workshop, useStore(state => state.username)));
     const [currentLikes, setCurrentLikes] = useState<number>(workshop.likes);
     const isLoggedIn = useStore(state => state.isLoggedIn);
     const username = useStore(state => state.username);

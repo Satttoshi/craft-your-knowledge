@@ -3,6 +3,7 @@ import DeleteButton from "./DeleteButton.tsx";
 import type {Workshop} from "../utils/types.ts";
 import styled from "@emotion/styled";
 import {useNavigate} from "react-router-dom";
+import {useStore} from "../hooks/useStore.ts";
 
 type Props = {
     workshop: Workshop;
@@ -11,13 +12,16 @@ type Props = {
 export default function WorkshopPreview({workshop}: Props) {
 
     const navigate = useNavigate();
+    const username = useStore(state => state.username);
 
-    function formatProgressStatusEnum(progressStatus: string) {
+    function formatProgressStatusEnum(progressStatus: string | undefined) {
         if (!progressStatus) return "";
         return progressStatus.replace(/_/g, " ").toLowerCase();
     }
 
-    const progressStatus = formatProgressStatusEnum(workshop.personalStatuses[0]?.progressStatus)
+
+    const personalStatus = workshop.personalStatuses.find(status => status.user.username === username);
+    const progressStatus = formatProgressStatusEnum(personalStatus?.progressStatus);
 
     function handleOnClick() {
         navigate(`/workshop/${workshop.id}`)
