@@ -3,13 +3,10 @@ import {FormEvent, useState} from "react";
 import styled from "@emotion/styled";
 import {Workshop} from "../utils/types.ts";
 import {useStore} from "../hooks/useStore.ts";
-import LoadingButton from '@mui/lab/LoadingButton';
-import LibraryAddCheckIcon from '@mui/icons-material/LibraryAddCheck';
 import remarkGfm from "remark-gfm";
 import {CodeBlock} from "./CodeBlock.tsx";
 import ReactMarkdown from "react-markdown";
-import ChallengeResponse from "./ChallengeResponse.tsx";
-import Button from "@mui/material/Button";
+import SubmitChallengeField from "./SubmitChallengeField.tsx";
 
 type Props = {
     workshop: Workshop;
@@ -77,29 +74,17 @@ export default function CodeEditor({workshop}: Props) {
                 options={{minimap: {enabled: false}}}
             />
         </StyledEditorContainer>
-        <StyledForm onSubmit={handleSubmit}>
-            <StyledButtonGroup>
-                <LoadingButton type="submit" color="secondary" loading={isValidatingChallenge} variant="outlined"
-                               endIcon={<LibraryAddCheckIcon/>}>Submit</LoadingButton>
-                {challengeResponse &&
-                    <Button style={{width: "9rem", minWidth: "9rem", marginLeft: "1rem"}}
-                            onClick={() => setIsModalOpen(!isModalOpen)}
-                            variant={isModalOpen ? "outlined" : "contained"}>
-                        {isModalOpen ? "Hide Details" : "Show Details"}
-                    </Button>}
-            </StyledButtonGroup>
-            <ChallengeResponse challengeResponse={challengeResponse}/>
-        </StyledForm>
+        <SubmitChallengeField
+            handleSubmit={handleSubmit}
+            isValidatingChallenge={isValidatingChallenge}
+            challengeResponse={challengeResponse}
+            setIsModalOpen={setIsModalOpen}
+            isModalOpen={isModalOpen}
+        />
     </StyledContainer>
 }
 
-const StyledButtonGroup = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: row-reverse;
-  gap: 1rem;
-  height: 4rem;
-`;
+
 
 const StyledContainer = styled.div`
   padding: 0;
@@ -149,43 +134,6 @@ const StyledEditorContainer = styled.section`
 
   @media (max-width: 768px) {
     padding: 2rem 1rem 2rem 0.5rem;
-    border-radius: 0;
-  }
-`;
-
-const StyledForm = styled.form`
-  padding: 0 2rem;
-  background-color: var(--color2);
-  overflow: hidden;
-  border-radius: 10px;
-  height: 15vh;
-  margin-bottom: 2.5vh;
-  box-shadow: var(--shadow1);
-
-  position: inherit;
-
-  display: flex;
-  flex-direction: row-reverse;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-
-  h3 {
-    margin: 0;
-    padding: 0;
-  }
-
-  .monaco-editor-background {
-    background-color: var(--color2);
-  }
-
-  .margin {
-    background-color: var(--color2) !important;
-  }
-
-  @media (max-width: 768px) {
-    height: 18vh;
-    margin-bottom: 0.5vh;
     border-radius: 0;
   }
 `;
