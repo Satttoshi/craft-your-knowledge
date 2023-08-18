@@ -6,7 +6,6 @@ import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.exception.ErrorMessage;
 import org.josh.backend.exception.NoSuchWorkshopException;
 import org.josh.backend.dto.Gpt3TurboResponse;
-import org.josh.backend.security.MongoUserDetailsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
