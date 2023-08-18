@@ -176,7 +176,7 @@ export const useStore = create<State>((set, get) => ({
         set({username: "anonymousUser"});
         set({jwt: ""});
         localStorage.removeItem("jwt");
-        alert("You have been logged out");
+        window.location.reload();
     },
 
     register: async (username: string, password: string, repeatedPassword: string, navigate: NavigateFunction) => {
