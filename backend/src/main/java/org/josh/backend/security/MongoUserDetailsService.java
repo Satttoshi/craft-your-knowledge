@@ -34,4 +34,10 @@ public class MongoUserDetailsService implements UserDetailsService{
         mongoUserRepository.save(newUser);
     }
 
+    public String getUserIdByUsername(String username) {
+        MongoUser mongoUser = mongoUserRepository.findByUsername(username).orElseThrow(() ->
+            new UsernameNotFoundException("Username" + username + "not found"));
+        return mongoUser.id();
+    }
+
 }
