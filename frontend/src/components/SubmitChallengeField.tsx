@@ -1,10 +1,13 @@
 import LibraryAddCheckIcon from "@mui/icons-material/LibraryAddCheck";
 import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
 import ChallengeResponse from "./ChallengeResponse.tsx";
 import {FormEvent} from "react";
 import styled from "@emotion/styled";
 import scanningAnimation from "../assets/animations/scanning.json";
 import Lottie from "lottie-react";
+import {useStore} from "../hooks/useStore.ts";
+
 
 type Props = {
     handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
@@ -16,6 +19,7 @@ type Props = {
 }
 
 export default function SubmitChallengeField({handleSubmit, isValidatingChallenge, challengeResponse, setIsModalOpen, isModalOpen, isUserInputLongEnough}: Props) {
+    const isLoggedIn = useStore(state => state.isLoggedIn)();
 
     return <StyledForm onSubmit={handleSubmit}>
         {isValidatingChallenge ?
@@ -23,14 +27,19 @@ export default function SubmitChallengeField({handleSubmit, isValidatingChalleng
             :
             <>
                 <StyledButtonGroup>
-                    <Button
-                        type="submit"
-                        color="secondary"
-                        variant={isUserInputLongEnough ? "contained" : "outlined"}
-                        endIcon={<LibraryAddCheckIcon/>}
-                    >
-                        Check Challenge
-                    </Button>
+                    <Tooltip title="You need to be logged in to check your challenge" disableHoverListener={isLoggedIn}>
+                        <span>
+                            <Button
+                                type="submit"
+                                color="secondary"
+                                disabled={!isLoggedIn}
+                                variant={isUserInputLongEnough ? "contained" : "outlined"}
+                                endIcon={<LibraryAddCheckIcon/>}
+                            >
+                                Check Challenge
+                            </Button>
+                        </span>
+                    </Tooltip>
                     {challengeResponse &&
                         <Button style={{width: "9rem", minWidth: "9rem"}}
                                 onClick={() => setIsModalOpen(!isModalOpen)}
@@ -97,7 +106,7 @@ const StyledButtonGroup = styled.div`
   gap: 1rem;
   height: 3rem;
   white-space: nowrap;
-  
+
   button {
     font-weight: bold;
   }
