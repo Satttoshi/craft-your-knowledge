@@ -252,7 +252,12 @@ class WorkshopControllerTest {
 
         Workshop saveResultWorkshop = objectMapper.readValue(result, Workshop.class);
         String id = saveResultWorkshop.id();
-        String expect = """
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/workshop/like/%s".formatted(id)))
+
+            //THEN
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().json("""
                 {
                     "id": "%s",
                     "author": {
@@ -274,15 +279,34 @@ class WorkshopControllerTest {
                         }
                     ]
                 }
-            """.formatted(id);
+            """.formatted(id)));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/workshop/like/%s".formatted(id)))
-
-            //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
-            .andExpect(MockMvcResultMatchers.content().json(expect));
+            .andExpect(MockMvcResultMatchers.content().json("""
+                {
+                    "id": "%s",
+                    "author": {
+                        "id": "adminId",
+                        "username": "AdminName"
+                    },
+                    "language": "fizz",
+                    "topic": "buzz",
+                    "buzzWords": ["foo", "bar"],
+                    "likes": 0,
+                    "personalStatuses": [
+                        {
+                            "user": {
+                                "id": "fakeUserId69",
+                                "username": "testUser"
+                            },
+                            "progressStatus": "NOT_STARTED",
+                            "isLiked": false
+                        }
+                    ]
+                }
+            """.formatted(id)));
     }
-
 
     @Test
     @DirtiesContext
