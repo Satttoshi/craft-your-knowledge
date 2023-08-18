@@ -258,54 +258,54 @@ class WorkshopControllerTest {
             //THEN
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().json("""
-                {
-                    "id": "%s",
-                    "author": {
-                        "id": "adminId",
-                        "username": "AdminName"
-                    },
-                    "language": "fizz",
-                    "topic": "buzz",
-                    "buzzWords": ["foo", "bar"],
-                    "likes": 1,
-                    "personalStatuses": [
-                        {
-                            "user": {
-                                "id": "fakeUserId69",
-                                "username": "testUser"
-                            },
-                            "progressStatus": "NOT_STARTED",
-                            "isLiked": true
-                        }
-                    ]
-                }
-            """.formatted(id)));
+                    {
+                        "id": "%s",
+                        "author": {
+                            "id": "adminId",
+                            "username": "AdminName"
+                        },
+                        "language": "fizz",
+                        "topic": "buzz",
+                        "buzzWords": ["foo", "bar"],
+                        "likes": 1,
+                        "personalStatuses": [
+                            {
+                                "user": {
+                                    "id": "fakeUserId69",
+                                    "username": "testUser"
+                                },
+                                "progressStatus": "NOT_STARTED",
+                                "isLiked": true
+                            }
+                        ]
+                    }
+                """.formatted(id)));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/workshop/like/%s".formatted(id)))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andExpect(MockMvcResultMatchers.content().json("""
-                {
-                    "id": "%s",
-                    "author": {
-                        "id": "adminId",
-                        "username": "AdminName"
-                    },
-                    "language": "fizz",
-                    "topic": "buzz",
-                    "buzzWords": ["foo", "bar"],
-                    "likes": 0,
-                    "personalStatuses": [
-                        {
-                            "user": {
-                                "id": "fakeUserId69",
-                                "username": "testUser"
-                            },
-                            "progressStatus": "NOT_STARTED",
-                            "isLiked": false
-                        }
-                    ]
-                }
-            """.formatted(id)));
+                    {
+                        "id": "%s",
+                        "author": {
+                            "id": "adminId",
+                            "username": "AdminName"
+                        },
+                        "language": "fizz",
+                        "topic": "buzz",
+                        "buzzWords": ["foo", "bar"],
+                        "likes": 0,
+                        "personalStatuses": [
+                            {
+                                "user": {
+                                    "id": "fakeUserId69",
+                                    "username": "testUser"
+                                },
+                                "progressStatus": "NOT_STARTED",
+                                "isLiked": false
+                            }
+                        ]
+                    }
+                """.formatted(id)));
     }
 
     @Test

@@ -28,7 +28,8 @@ class WorkshopServiceTest {
     OpenAiService openAiService = mock(OpenAiService.class);
     PromptBuilder promptBuilder = mock(PromptBuilder.class);
     MongoUserDetailsService mongoUserDetailsService = mock(MongoUserDetailsService.class);
-    WorkshopService workshopService = new WorkshopService(workshopRepo, idService, openAiService, promptBuilder, mongoUserDetailsService);
+    WorkshopService workshopService = new WorkshopService(workshopRepo, idService, openAiService, promptBuilder,
+        mongoUserDetailsService);
     Principal principal = mock(Principal.class);
 
     PersonalStatus testPersonalStatus = new PersonalStatus(
@@ -233,7 +234,8 @@ class WorkshopServiceTest {
         String invalidId = "invalidId";
         //When
         //Then
-        assertThrows(NoSuchWorkshopException.class, () -> workshopService.validateChallenge(invalidId, workshopUserChallenge));
+        assertThrows(NoSuchWorkshopException.class, () -> workshopService.validateChallenge(invalidId,
+            workshopUserChallenge));
     }
 
 }
