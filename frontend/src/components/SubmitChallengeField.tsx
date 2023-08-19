@@ -84,16 +84,8 @@ const StyledForm = styled.form`
     padding: 0;
   }
 
-  .monaco-editor-background {
-    background-color: var(--color2);
-  }
-
-  .margin {
-    background-color: var(--color2) !important;
-  }
-
   @media (max-width: 768px) {
-    height: 18vh;
+    height: 16vh;
     margin-bottom: 0.5vh;
     border-radius: 0;
   }

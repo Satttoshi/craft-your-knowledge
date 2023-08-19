@@ -106,6 +106,10 @@ const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  
+  @media (max-width: 768px) {
+    height: 90vh;
+  }
 `;
 
 const StyledChallengeResponse = styled.div`
