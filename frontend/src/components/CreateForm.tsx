@@ -131,9 +131,8 @@ export default function CreateForm({randomText}: Props) {
 
 const StyledHeader = styled.header`
   display: flex;
-  height: 4rem;
   width: 80vw;
-  margin-bottom: 2rem;
+  margin: 2rem 0 3rem 0;
   align-items: center;
   justify-content: space-between;
   position: relative;
@@ -154,7 +153,7 @@ const StyledHeader = styled.header`
     font-weight: 300;
     text-align: center;
 
-    font-size: clamp(1.2rem, 4.5vw, 3rem);
+    font-size: clamp(1.1rem, 4.3vw, 3rem);
     white-space: nowrap;
     flex: 1;
   }

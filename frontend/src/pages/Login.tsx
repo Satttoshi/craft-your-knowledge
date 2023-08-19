@@ -169,10 +169,10 @@ const StyledHeader = styled.header`
   }
 
   h1 {
-    margin: 0;
     font-family: var(--fontCode);
     font-weight: 300;
     text-align: center;
+    margin: 2rem 0;
 
     font-size: clamp(1.2rem, 4.5vw, 3rem);
     white-space: nowrap;
@@ -184,6 +184,7 @@ const StyledHeader = styled.header`
     width: 90vw;
     h1 {
       text-align: right;
+      margin: 0;
     }
   }
 `;

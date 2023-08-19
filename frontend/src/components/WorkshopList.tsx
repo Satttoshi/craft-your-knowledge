@@ -60,10 +60,11 @@ const StyledHeader = styled.header`
   position: relative;
 
   h1 {
-    margin: 0;
+
     font-family: var(--fontCode);
     font-weight: 300;
     text-align: center;
+    margin: 2rem 0;
 
     font-size: clamp(1.1rem, 4.3vw, 3rem);
     white-space: nowrap;
@@ -84,6 +85,7 @@ const StyledHeader = styled.header`
     width: 90vw;
     h1 {
       text-align: left;
+      margin: 0;
     }
   }
 `;

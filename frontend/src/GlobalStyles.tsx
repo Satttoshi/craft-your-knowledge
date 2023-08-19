@@ -39,6 +39,7 @@ export default function GlobalStyles() {
         font-family: var(--fontSans);
         color: var(--colorWhite);
         background-color: var(--color1);
+        margin: 0;
         
         display: flex;
         flex-direction: column;

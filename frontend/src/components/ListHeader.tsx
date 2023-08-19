@@ -38,7 +38,7 @@ const StyledTitleContainer = styled.div`
   align-items: center;
   width: 80vw;
   gap: 1rem;
-  margin: 2rem 0;
+  margin: 0 0 2rem 0;
   background: var(--color3);
   border-radius: 10px;
   padding: 1rem 2rem;
