@@ -1,6 +1,6 @@
 # Craft Your Knowledge
 
-You can find the deployed project at [Craft Your Knowledge](https://craft-your-knowledge.joshua-stolle.de/).
+You can find the deployed project at [Craft Your Knowledge](https://craft-your-knowledge.joshua-stolle.de/). Deployment is offline atm.
 
 Welcome to **Craft Your Knowledge**, where your passion for coding and thirst for knowledge converge. Dive deep into our GPT-powered workshops and experience coding challenges tailored just like technical interviews. Whether you're a learner, a teacher, or just curious about programming, this platform is crafted especially for you.
 
