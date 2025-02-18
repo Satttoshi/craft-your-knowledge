@@ -1,3 +1,4 @@
+spring.profiles.active=prod
 spring.data.mongodb.uri=mongodb+srv://<user>:<password>@<clustername>.<clusteraddress>.mongodb.net/cykDB
 openai.api.key=<YOUR_OPENAI_API_KEY>
 jwt.secret=<JWT_SECRET>
