@@ -1,8 +1,8 @@
 package org.josh.backend.workshop;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.josh.backend.dto.Gpt3TurboRequest;
-import org.josh.backend.dto.Gpt3TurboResponse;
+import org.josh.backend.dto.GptRequest;
+import org.josh.backend.dto.GptResponse;
 import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.openai.*;
 import org.josh.backend.security.MongoUserDetailsService;
@@ -30,8 +30,6 @@ import static org.mockito.ArgumentMatchers.any;
 @WithMockUser(username = "testUser", password = "secretPass3")
 class WorkshopControllerTest {
 
-    // Flapdoodle Test-Dependency -> empty MongoDB will be used for testing
-
     @Autowired
     MockMvc mockMvc;
 
@@ -47,9 +45,11 @@ class WorkshopControllerTest {
     @MockBean
     MongoUserDetailsService mongoUserDetailsService;
 
+    private static final String MODEL = "gpt-4o-mini";
+    private static final double TEMPERATURE = 0.7;
+
     @BeforeEach
     void setUp() throws Exception {
-
         String testUserWithoutId = """
                 {
                     "username": "testUser",
@@ -58,46 +58,54 @@ class WorkshopControllerTest {
             """;
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/user/register")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(testUserWithoutId)).andExpect(MockMvcResultMatchers.status().isOk());
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(testUserWithoutId)).andExpect(MockMvcResultMatchers.status().isOk());
 
-        Gpt3TurboRequest gpt3TurboRequest = new Gpt3TurboRequest(
-            "gpt-3.5-turbo",
-            List.of(
-                new PromptMessage(
-                    "system",
-                    "testSystemPrompt"
+        GptRequest gptRequest = new GptRequest(
+                MODEL,
+                List.of(
+                        new PromptMessage(
+                                "system",
+                                "testSystemPrompt"
+                        ),
+                        new PromptMessage(
+                                "user",
+                                "testUserPrompt"
+                        )
                 ),
-                new PromptMessage(
-                    "user",
-                    "testUserPrompt"
-                )
-            )
+                TEMPERATURE
         );
 
+        GptResponse.Usage.CompletionTokensDetails tokenDetails =
+                new GptResponse.Usage.CompletionTokensDetails(0, 0, 0);
+
         Mockito.when(openAiService.getResponse(Mockito.any()))
-            .thenReturn(new Gpt3TurboResponse(
-                "fakeId69",
-                "chat.completion",
-                42069,
-                List.of(new Gpt3TurboResponse.Choices(
-                    0,
-                    new PromptMessage(
-                        "assistant",
-                        ">>>PASS<<<You did it!"
-                    ),
-                    "stop")
-                ),
-                new Gpt3TurboResponse.Usage(
-                    42069,
-                    42069,
-                    42069)
+                .thenReturn(new GptResponse(
+                        "fakeId69",
+                        "chat.completion",
+                        42069,
+                        MODEL,
+                        List.of(new GptResponse.Choices(
+                                new PromptMessage(
+                                        "assistant",
+                                        ">>>PASS<<<You did it!"
+                                ),
+                                null, // logprobs
+                                "stop",
+                                0)
+                        ),
+                        new GptResponse.Usage(
+                                42069,
+                                42069,
+                                42069,
+                                tokenDetails)
+                ));
 
-            ));
+        Mockito.when(promptBuilder.buildChallengeRequestWithPreviousData(any(GptResponse.class)))
+                .thenReturn(gptRequest);
 
-        Mockito.when(promptBuilder.buildChallengeRequestWithPreviousData(any(Gpt3TurboResponse.class))).thenReturn(gpt3TurboRequest);
-
-        Mockito.when(mongoUserDetailsService.getUserIdByUsername(any(String.class))).thenReturn("fakeUserId69");
+        Mockito.when(mongoUserDetailsService.getUserIdByUsername(any(String.class)))
+                .thenReturn("fakeUserId69");
     }
 
     String testWorkshopFormData = """

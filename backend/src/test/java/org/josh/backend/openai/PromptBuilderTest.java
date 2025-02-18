@@ -1,8 +1,8 @@
 package org.josh.backend.openai;
 
 import org.assertj.core.api.Assertions;
-import org.josh.backend.dto.Gpt3TurboRequest;
-import org.josh.backend.dto.Gpt3TurboResponse;
+import org.josh.backend.dto.GptRequest;
+import org.josh.backend.dto.GptResponse;
 import org.josh.backend.dto.WorkshopFormData;
 import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.security.MongoUserWithoutPassword;
@@ -13,14 +13,16 @@ import java.util.List;
 class PromptBuilderTest {
 
     private final PromptBuilder promptBuilder = new PromptBuilder();
+    private static final double DEFAULT_TEMPERATURE = 0.7;
+    private static final String DEFAULT_MODEL = "gpt-4o-mini";
 
     @Test
     void test_buildArticleRequestWithFormData() {
         // given
         WorkshopFormData workshopFormData = new WorkshopFormData(
-            "testTopic",
-            "testSubTopic",
-            List.of("testBuzzWord1", "testBuzzWord2")
+                "testTopic",
+                "testSubTopic",
+                List.of("testBuzzWord1", "testBuzzWord2")
         );
 
         String systemPrompt = """
@@ -45,47 +47,51 @@ class PromptBuilderTest {
             Do take note of the following keywords/buzzwords: [%s]. If no keywords are provided in the aforementioned list, feel free to disregard it.
             If keywords or buzzwords are provided, you should try to include them in your article.
             """.formatted(workshopFormData.topic(),
-            workshopFormData.buzzWords().toString());
+                workshopFormData.buzzWords().toString());
 
-        Gpt3TurboRequest expectedRequest = new Gpt3TurboRequest(
-            "gpt-3.5-turbo",
-            List.of(
-                new PromptMessage(
-                    "system",
-                    systemPrompt
+        GptRequest expectedRequest = new GptRequest(
+                DEFAULT_MODEL,
+                List.of(
+                        new PromptMessage(
+                                "system",
+                                systemPrompt
+                        ),
+                        new PromptMessage(
+                                "user",
+                                prompt
+                        )
                 ),
-                new PromptMessage(
-                    "user",
-                    prompt
-                )
-            )
+                DEFAULT_TEMPERATURE
         );
 
         // when
-        Gpt3TurboRequest request = promptBuilder.buildRequestWithFormData(workshopFormData);
+        GptRequest request = promptBuilder.buildRequestWithFormData(workshopFormData);
 
         // then
         Assertions.assertThat(request)
-            .isNotNull()
-            .isEqualTo(expectedRequest);
+                .isNotNull()
+                .isEqualTo(expectedRequest);
     }
 
     @Test
     void test_buildChallengeRequestWithPreviousData() {
         // given
-        Gpt3TurboResponse previousResponse = new Gpt3TurboResponse(
-            "testId",
-            "chat.completion",
-            42069,
-            List.of(new Gpt3TurboResponse.Choices(
-                0, new PromptMessage(
-                "testPrompt", "testContent"),
-                "stop")),
-            new Gpt3TurboResponse.Usage(
-                69,
-                420,
-                42069
-            ));
+        GptResponse previousResponse = new GptResponse(
+                "testId",
+                "chat.completion",
+                42069,
+                DEFAULT_MODEL,
+                List.of(new GptResponse.Choices(
+                        new PromptMessage("testPrompt", "testContent"),
+                        null,
+                        "stop",
+                        0)),
+                new GptResponse.Usage(
+                        69,
+                        420,
+                        42069,
+                        new GptResponse.Usage.CompletionTokensDetails(0, 0, 0)
+                ));
 
         String previousArticle = previousResponse.choices().get(0).message().content();
 
@@ -124,43 +130,44 @@ class PromptBuilderTest {
             ###
             """.formatted(previousArticle);
 
-        Gpt3TurboRequest expectedRequest = new Gpt3TurboRequest(
-            "gpt-3.5-turbo",
-            List.of(
-                new PromptMessage(
-                    "system",
-                    systemPrompt
+        GptRequest expectedRequest = new GptRequest(
+                DEFAULT_MODEL,
+                List.of(
+                        new PromptMessage(
+                                "system",
+                                systemPrompt
+                        ),
+                        new PromptMessage(
+                                "user",
+                                prompt
+                        )
                 ),
-                new PromptMessage(
-                    "user",
-                    prompt
-                )
-            )
+                DEFAULT_TEMPERATURE
         );
 
         // when
-        Gpt3TurboRequest request = promptBuilder.buildChallengeRequestWithPreviousData(previousResponse);
+        GptRequest request = promptBuilder.buildChallengeRequestWithPreviousData(previousResponse);
 
         // then
         Assertions.assertThat(request)
-            .isNotNull()
-            .isEqualTo(expectedRequest);
+                .isNotNull()
+                .isEqualTo(expectedRequest);
     }
 
     @Test
     void test_buildChallengeValidationRequest() {
         // given
         MongoUserWithoutPassword user = new MongoUserWithoutPassword(
-            "testId",
-            "testUsername"
+                "testId",
+                "testUsername"
         );
 
         WorkshopUserChallenge workshopUserChallenge = new WorkshopUserChallenge(
-            user,
-            "testTopic",
-            "testSubTopic",
-            "do a back flip",
-            "for(int i = 0; i < 10; i++) {\n\tSystem.out.println(\"Back Flip!\");\n}"
+                user,
+                "testTopic",
+                "testSubTopic",
+                "do a back flip",
+                "for(int i = 0; i < 10; i++) {\n\tSystem.out.println(\"Back Flip!\");\n}"
         );
 
         String systemPrompt = """
@@ -217,26 +224,27 @@ class PromptBuilderTest {
             Leave a short motivational message at the end.
             """.formatted(workshopUserChallenge.challenge(), workshopUserChallenge.answer());
 
-        Gpt3TurboRequest expectedRequest = new Gpt3TurboRequest(
-            "gpt-3.5-turbo",
-            List.of(
-                new PromptMessage(
-                    "system",
-                    systemPrompt
+        GptRequest expectedRequest = new GptRequest(
+                DEFAULT_MODEL,
+                List.of(
+                        new PromptMessage(
+                                "system",
+                                systemPrompt
+                        ),
+                        new PromptMessage(
+                                "user",
+                                prompt
+                        )
                 ),
-                new PromptMessage(
-                    "user",
-                    prompt
-                )
-            )
+                DEFAULT_TEMPERATURE
         );
 
         // when
-        Gpt3TurboRequest request = promptBuilder.buildChallengeValidationRequest(workshopUserChallenge);
+        GptRequest request = promptBuilder.buildChallengeValidationRequest(workshopUserChallenge);
 
         // then
         Assertions.assertThat(request)
-            .isNotNull()
-            .isEqualTo(expectedRequest);
+                .isNotNull()
+                .isEqualTo(expectedRequest);
     }
 }
