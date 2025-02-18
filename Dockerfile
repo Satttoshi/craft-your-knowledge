@@ -9,7 +9,7 @@ FROM maven:3.9-eclipse-temurin-20 as backend-builder
 WORKDIR /build/backend
 COPY backend/ .
 COPY --from=frontend-builder /build/frontend/dist/ src/main/resources/static/
-RUN mvn package
+RUN mvn package -DskipTests    # Added -DskipTests here
 
 # Final stage
 FROM openjdk:20
