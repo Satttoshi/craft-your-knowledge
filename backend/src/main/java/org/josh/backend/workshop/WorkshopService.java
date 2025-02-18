@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.josh.backend.dto.WorkshopFormData;
 import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.exception.NoSuchWorkshopException;
-import org.josh.backend.dto.Gpt3TurboRequest;
-import org.josh.backend.dto.Gpt3TurboResponse;
+import org.josh.backend.dto.GptRequest;
+import org.josh.backend.dto.GptResponse;
 import org.josh.backend.openai.OpenAiService;
 import org.josh.backend.openai.PromptBuilder;
 import org.josh.backend.security.MongoUserDetailsService;
@@ -30,11 +30,11 @@ public class WorkshopService {
 
     public Workshop createWorkshop(WorkshopFormData workshopFormData) {
 
-        Gpt3TurboRequest articleRequest = promptBuilder.buildRequestWithFormData(workshopFormData);
-        Gpt3TurboResponse articleResponse = openAiService.getResponse(articleRequest);
+        GptRequest articleRequest = promptBuilder.buildRequestWithFormData(workshopFormData);
+        GptResponse articleResponse = openAiService.getResponse(articleRequest);
 
-        Gpt3TurboRequest challengeRequest = promptBuilder.buildChallengeRequestWithPreviousData(articleResponse);
-        Gpt3TurboResponse challengeResponse = openAiService.getResponse(challengeRequest);
+        GptRequest challengeRequest = promptBuilder.buildChallengeRequestWithPreviousData(articleResponse);
+        GptResponse challengeResponse = openAiService.getResponse(challengeRequest);
 
         Workshop workshopToSave = new Workshop(
             idService.createId(),
@@ -149,12 +149,12 @@ public class WorkshopService {
         workshopRepository.deleteById(id);
     }
 
-    public Gpt3TurboResponse validateChallenge(String id, WorkshopUserChallenge workshopUserChallenge) {
+    public GptResponse validateChallenge(String id, WorkshopUserChallenge workshopUserChallenge) {
         if (!workshopRepository.existsById(id)) {
             throw new NoSuchWorkshopException("No workshop found with Id: " + id);
         }
-        Gpt3TurboRequest validationRequest = promptBuilder.buildChallengeValidationRequest(workshopUserChallenge);
-        Gpt3TurboResponse validationResponse = openAiService.getResponse(validationRequest);
+        GptRequest validationRequest = promptBuilder.buildChallengeValidationRequest(workshopUserChallenge);
+        GptResponse validationResponse = openAiService.getResponse(validationRequest);
         if (validationResponse.choices().get(0).message().content().contains(">>>PASS<<<")) {
             PersonalStatus personalStatus = new PersonalStatus(workshopUserChallenge.user(), ProgressStatus.COMPLETED
                 , true);
