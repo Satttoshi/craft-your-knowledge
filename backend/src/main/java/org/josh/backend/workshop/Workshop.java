@@ -1,6 +1,6 @@
 package org.josh.backend.workshop;
 
-import org.josh.backend.dto.Gpt3TurboResponse;
+import org.josh.backend.dto.GptResponse;
 import org.josh.backend.security.MongoUserWithoutPassword;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,7 +18,7 @@ public record Workshop(
     List<String> buzzWords,
     int likes,
     List<PersonalStatus> personalStatuses,
-    Gpt3TurboResponse article,
-    Gpt3TurboResponse challenge
+    GptResponse article,
+    GptResponse challenge
 ) {
 }

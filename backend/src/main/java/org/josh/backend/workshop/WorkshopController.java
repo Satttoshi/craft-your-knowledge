@@ -5,7 +5,7 @@ import org.josh.backend.dto.WorkshopFormData;
 import org.josh.backend.dto.WorkshopUserChallenge;
 import org.josh.backend.exception.ErrorMessage;
 import org.josh.backend.exception.NoSuchWorkshopException;
-import org.josh.backend.dto.Gpt3TurboResponse;
+import org.josh.backend.dto.GptResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +50,7 @@ public class WorkshopController {
     }
 
     @PostMapping("/{id}/validate")
-    public Gpt3TurboResponse validateChallenge(@PathVariable String id, @RequestBody WorkshopUserChallenge workshopUserChallenge) {
+    public GptResponse validateChallenge(@PathVariable String id, @RequestBody WorkshopUserChallenge workshopUserChallenge) {
         return workshopService.validateChallenge(id, workshopUserChallenge);
     }
 
